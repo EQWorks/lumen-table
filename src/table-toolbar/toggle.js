@@ -13,8 +13,7 @@ import Switch from '@material-ui/core/Switch'
 import Badge from '@material-ui/core/Badge'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { makeStyles } from '@material-ui/core/styles'
-
-import { Button } from '../../index'
+import Button from '@eqworks/react-labs/dist/button'
 
 
 const useStyles = makeStyles(() => ({
@@ -24,7 +23,7 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const Toggle = ({ allColumns, toggleHideColumn }) => {
+export const Toggle = ({ allColumns, toggleHideColumn }) => {
   const classes = useStyles()
   const anchorRef = useRef(null)
   const [open, setOpen] = useState(false)

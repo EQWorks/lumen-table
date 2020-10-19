@@ -9,8 +9,7 @@ import MenuList from '@material-ui/core/MenuList'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Badge from '@material-ui/core/Badge'
 import SaveAltIcon from '@material-ui/icons/SaveAlt'
-
-import { Button } from '../../index'
+import Button from '@eqworks/react-labs/dist/button'
 
 
 const saveData = ({ data, rows, allColumns, visibleColumns, visCols = false, filteredRows = false }) => {

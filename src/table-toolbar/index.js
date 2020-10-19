@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import { makeStyles } from '@material-ui/core/styles'
 
 import Download from './download'
-import Toggle from './toggle'
+import { Toggle } from './toggle'
 import DefaultFilter from '../filters/default-filter'
 
 

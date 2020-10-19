@@ -81,7 +81,7 @@ const useTableConfig = ({ data, hiddenColumns, children, columns, remember }) =>
   }
 }
 
-const Table = ({
+export const Table = ({
   columns,
   data,
   children,
