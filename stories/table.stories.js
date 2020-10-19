@@ -9,21 +9,13 @@ import provincesDates from './data/province-dates'
 import { DateRangeFilter, filterDates } from './data/date-range-filter'
 
 export default {
-  title: 'Data Display/Table',
+  title: 'Table',
   component: Table,
 }
 
 export const empty = () => <Table />
 
-empty.parameters = {
-  controls: { hideNoControlsWarning: true },
-}
-
 export const normal = () => <Table data={provinces} />
-
-normal.parameters = {
-  controls: { hideNoControlsWarning: true },
-}
 
 export const columns = () => (
   <Table
@@ -36,10 +28,6 @@ export const columns = () => (
     ]}
   />
 )
-
-columns.parameters = {
-  controls: { hideNoControlsWarning: true },
-}
 
 export const columnsChildren = () => (
   <Table data={provinces}>
@@ -54,10 +42,6 @@ export const columnsChildren = () => (
   </Table>
 )
 
-columnsChildren.parameters = {
-  controls: { hideNoControlsWarning: true },
-}
-
 export const noToggle = () => (
   <Table data={provinces}>
     <Table.Column Header="New cases" accessor="new_cases" noToggle={true} />
@@ -70,10 +54,6 @@ export const noToggle = () => (
     />
   </Table>
 )
-
-noToggle.parameters = {
-  controls: { hideNoControlsWarning: true },
-}
 
 export const initialHidden = () => (
   <Table
@@ -99,10 +79,6 @@ export const initialHidden = () => (
   />
 )
 
-initialHidden.parameters = {
-  controls: { hideNoControlsWarning: true },
-}
-
 export const initialHiddenColumns = () => (
   <Table
     data={provinces}
@@ -124,10 +100,6 @@ export const initialHiddenColumns = () => (
   </Table>
 )
 
-initialHiddenColumns.parameters = {
-  controls: { hideNoControlsWarning: true },
-}
-
 export const disableGlobalFilter = () => (
   <Table
     data={provinces}
@@ -139,10 +111,6 @@ export const disableGlobalFilter = () => (
     ].map((c) => ({ ...c, disableGlobalFilter: true }))}
   />
 )
-
-disableGlobalFilter.parameters = {
-  controls: { hideNoControlsWarning: true },
-}
 
 export const disableFilters = () => (
   <Table
@@ -160,10 +128,6 @@ export const disableFilters = () => (
     ]}
   />
 )
-
-disableFilters.parameters = {
-  controls: { hideNoControlsWarning: true },
-}
 
 export const disableSortBy = () => (
   <Table
@@ -192,10 +156,6 @@ export const disableSortBy = () => (
   />
 )
 
-disableSortBy.parameters = {
-  controls: { hideNoControlsWarning: true },
-}
-
 export const SelectionFilter = () => (
   <Table
     data={provinces}
@@ -212,10 +172,6 @@ export const SelectionFilter = () => (
     ]}
   />
 )
-
-SelectionFilter.parameters = {
-  controls: { hideNoControlsWarning: true },
-}
 
 export const RangeFilter = () => (
   <Table
@@ -245,10 +201,6 @@ export const RangeFilter = () => (
     ]}
   />
 )
-
-RangeFilter.parameters = {
-  controls: { hideNoControlsWarning: true },
-}
 
 export const CustomDateRangeFilter = () => (
   // pass a custom Component and a custom filter to a column, following react-table documentation
@@ -284,17 +236,9 @@ export const CustomDateRangeFilter = () => (
   />
 )
 
-CustomDateRangeFilter.parameters = {
-  controls: { hideNoControlsWarning: true },
-}
-
 export const initialSortBy = () => (
   <Table data={provinces} sortBy={{ id: 'new_cases', desc: true }} />
 )
-
-initialSortBy.parameters = {
-  controls: { hideNoControlsWarning: true },
-}
 
 export const tableProps = () => (
   <Table
@@ -312,10 +256,6 @@ export const tableProps = () => (
     }}
   />
 )
-
-tableProps.parameters = {
-  controls: { hideNoControlsWarning: true },
-}
 
 export const rememberHidden = () => {
   const remember = {
@@ -347,10 +287,6 @@ export const rememberHidden = () => {
   )
 }
 
-rememberHidden.parameters = {
-  controls: { hideNoControlsWarning: true },
-}
-
 export const rememberHiddenWithInitHiddenColumns = () => {
   const remember = {
     key: 'DEMO_REMEMBER_HIDDEN2',
@@ -370,10 +306,6 @@ export const rememberHiddenWithInitHiddenColumns = () => {
       />
     </>
   )
-}
-
-rememberHiddenWithInitHiddenColumns.parameters = {
-  controls: { hideNoControlsWarning: true },
 }
 
 export const rememberSortBy = () => {
@@ -397,10 +329,6 @@ export const rememberSortBy = () => {
   )
 }
 
-rememberSortBy.parameters = {
-  controls: { hideNoControlsWarning: true },
-}
-
 export const dynamicSortBy = () => {
   const [sort, setSort] = useState('province')
 
@@ -418,10 +346,6 @@ export const dynamicSortBy = () => {
       <Table data={provinces} sortBy={[{ id: sort, desc: true }]} />
     </>
   )
-}
-
-dynamicSortBy.parameters = {
-  controls: { hideNoControlsWarning: true },
 }
 export const caseInsensitiveSort = () => {
   const _provinces = provinces.map((p) => {
@@ -450,6 +374,22 @@ export const caseInsensitiveSort = () => {
   )
 }
 
-dynamicSortBy.parameters = {
-  controls: { hideNoControlsWarning: true },
-}
+export const extendColumns = () => (
+  <Table
+    data={provinces}
+    columns={[
+      { Header: 'Rate Extended', accessor: 'rate', Cell: ({ value }) => `${value}%` },
+    ]}
+    extendColumns
+  />
+)
+
+export const extendColumnsChildren = () => (
+  <Table data={provinces} extendColumns>
+    <Table.Column
+      Header="Rate Extended"
+      accessor="rate"
+      Cell={({ value }) => `${value}%`}
+    />
+  </Table>
+)
