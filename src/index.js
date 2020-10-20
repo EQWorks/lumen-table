@@ -48,21 +48,32 @@ const getHeader = (s) => [
   s.slice(1).replace(/_/g, ' '),
 ].join('')
 
-const useTableConfig = ({ data, hiddenColumns, children, columns, remember }) => {
+const inferColumns = (data) => Object.keys(data[0] || {}).map((accessor) => ({
+  accessor,
+  Header: getHeader(accessor),
+}))
+const colFilter = (c) => c.type === TableColumn || c.type.name === 'TableColumn'
+
+const useTableConfig = ({ data, hiddenColumns, children, columns, remember, extendColumns = false }) => {
   // memoized columns and data for useTable hook
   const _data = useMemo(() => data, [data])
   const _cols = useMemo(() => {
+    const inferred = inferColumns(data)
     if (!children && !columns) {
-      return Object.keys(data[0] || {}).map((accessor) => ({
-        accessor,
-        Header: getHeader(accessor),
-      }))
+      return inferred
     }
-    return Array.isArray(columns) && columns.length > 0
+    const explicit = Array.isArray(columns) && columns.length > 0
       ? columns
-      : Children.toArray(children)
-        .filter((c) => c.type === TableColumn || c.type.name === 'TableColumn')
-        .map((c) => c.props)
+      : Children.toArray(children).filter(colFilter).map((c) => c.props)
+
+    if (extendColumns) {
+      const expCols = explicit.map(v => v.id || v.accessor)
+      return [
+        ...inferred.filter((v) => !expCols.includes(v.accessor)),
+        ...explicit,
+      ]
+    }
+    return explicit
   }, [columns, data, children])
   // cached hidden state
   const [hidden, setHiddenCache] = cached({
@@ -91,6 +102,7 @@ export const Table = ({
   headerGroupProps,
   sortBy,
   remember,
+  extendColumns,
 }) => {
   const classes = useStyles()
   // custom table config hook
@@ -99,7 +111,7 @@ export const Table = ({
     _data,
     hidden,
     setHiddenCache,
-  } = useTableConfig({ data, hiddenColumns, children, columns, remember })
+  } = useTableConfig({ data, hiddenColumns, children, columns, remember, extendColumns })
   // remember me
   const [cachedSortBy, setCachedSortBy] = cached({
     ...remember,
@@ -281,6 +293,7 @@ Table.propTypes = {
     hidden: PropTypes.bool,
     sortBy: PropTypes.bool,
   }),
+  extendColumns: PropTypes.bool,
 }
 Table.defaultProps = {
   columns: null,
@@ -292,6 +305,7 @@ Table.defaultProps = {
   headerGroupProps: {},
   sortBy: {},
   remember: {},
+  extendColumns: false,
 }
 Table.Column = TableColumn
 Table.filters = { DefaultFilter, SelectionFilter, RangeFilter }
