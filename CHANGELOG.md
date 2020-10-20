@@ -8,6 +8,10 @@ All non-core API/package changes (i.e. changes that do not affect the package de
 
 ## [Unreleased]
 
+## [1.1.0] - 2020-10-20
+### FEATURES
+* columns - extendColumns to allow explicit cols to extend inferred (6b571f4 by Runzhou Li (woozyking))
+
 ## [1.0.0] - 2020-10-19
-### Changed
+
 - `<Table />` component ported from [react-labs](https://github.com/EQWorks/react-labs).
