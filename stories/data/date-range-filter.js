@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
-import moment from 'moment'
 
 DateRangeFilter.propTypes = {
   column: PropTypes.object.isRequired,
@@ -21,26 +20,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const reducer = (id) => (acc, row) => {
+  if (!Object.values(acc).length) {
+    acc.min = row.values[id]
+    acc.max = row.values[id]
+    return acc
+  }
+  const curr = new Date(row.values.date)
+  const min = new Date(acc.min)
+  const max = new Date(acc.max)
+  if (curr < min) {
+    acc.min = row.values[id]
+  }
+  if (curr > max) {
+    acc.max = row.values[id]
+  }
+  return acc
+}
+
 export function DateRangeFilter({ column: { filterValue, preFilteredRows, setFilter, id } }) {
   const classes = useStyles()
-  const reducer = (acc, row) => {
-    if (Object.values(acc).length) {
-      moment(row.values.date).isAfter(acc.min) ?
-        moment(row.values.date).isAfter(acc.max) ?
-          acc.max = row.values[id]
-          : null
-        : acc.min = row.values[id]
-      return acc
-    } else {
-      acc.min = row.values[id]
-      acc.max = row.values[id]
-      return acc
-    }
-  }
-
-  const { min, max } = useMemo(() => {
-    return preFilteredRows.reduce(reducer, {})
-  })
+  const { min, max } = useMemo(() => preFilteredRows.reduce(reducer(id), {}))
 
   return (
     <form className={classes.container} noValidate>
@@ -74,10 +74,5 @@ export function DateRangeFilter({ column: { filterValue, preFilteredRows, setFil
   )
 }
 
-export const filterDates = (rows, _, filterValue) => {
-  return rows.filter(row => {
-    const rowValue = row.values.date
-    return moment(rowValue).isSameOrAfter(filterValue[0]) && moment(rowValue).isSameOrBefore(filterValue[1])
-  })
-}
-
+export const filterDates = (rows, _, [min, max]) => rows
+  .filter(({ values: { date } }) => new Date(date) >= new Date(min) && new Date(date) <= new Date(max))
