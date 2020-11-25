@@ -1,11 +1,16 @@
 import React, { useState } from 'react'
 
 import Typography from '@material-ui/core/Typography'
+import Accordion from '@material-ui/core/Accordion'
+import AccordionSummary from '@material-ui/core/AccordionSummary'
+import AccordionDetails from '@material-ui/core/AccordionDetails'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Table } from '../src'
 
 import provinces from './data/provinces'
 import provincesRange from './data/provinces-range'
 import provincesDates from './data/province-dates'
+import provincesJson from './data/provinces-json'
 import { DateRangeFilter, filterDates } from './data/date-range-filter'
 
 export default {
@@ -390,6 +395,35 @@ export const extendColumnsChildren = () => (
       Header="Rate Extended"
       accessor="rate"
       Cell={({ value }) => `${value}%`}
+    />
+  </Table>
+)
+export const renderJson = () => (
+  <Table data={provincesJson}>
+    <Table.Column Header="New cases" accessor="new_cases" />
+    <Table.Column Header="Total cases" accessor="total_cases" />
+    <Table.Column Header="Province" accessor="province" />
+    <Table.Column
+      Header="Info"
+      accessor="info"
+      Cell={({ value }) => {
+        // if value type is json, just pass a node that can render it
+        if (typeof value === 'object') {
+          return (
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+              >
+                JSON
+              </AccordionSummary>
+              <AccordionDetails>
+                <pre>{JSON.stringify(value, undefined, 2)}</pre>
+              </AccordionDetails>
+            </Accordion>
+          )
+        }
+        return `${value}%`
+      }}
     />
   </Table>
 )
