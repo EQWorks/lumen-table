@@ -9,7 +9,7 @@ module.exports = {
     react: {
       pragma: 'React',
       version: 'detect',
-    }
+    },
   },
   extends: ['eslint:recommended', 'plugin:react/recommended'],
   globals: {
@@ -20,7 +20,7 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 2018,
+    ecmaVersion: 2020,
     sourceType: 'module',
   },
   plugins: ['react'],
