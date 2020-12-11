@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+import { Parser, transforms } from 'json2csv'
 import Typography from '@material-ui/core/Typography'
 import Accordion from '@material-ui/core/Accordion'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
@@ -398,32 +399,70 @@ export const extendColumnsChildren = () => (
     />
   </Table>
 )
-export const renderJson = () => (
-  <Table data={provincesJson}>
-    <Table.Column Header="New cases" accessor="new_cases" />
-    <Table.Column Header="Total cases" accessor="total_cases" />
-    <Table.Column Header="Province" accessor="province" />
-    <Table.Column
-      Header="Info"
-      accessor="info"
-      Cell={({ value }) => {
+export const renderJson = () => {
+  const downloadToCsv = ({ data, rows, visibleColumns, visCols = false, filteredRows = false }) => {
+    /* if row value is of type json and any columns are filtered or
+      declared, the json values won't be downloaded - as the flattened values
+      generate new columns and those are not declared inside `fields`
+      https://github.com/zemirco/json2csv/issues/505#issuecomment-741835714
+    */
+    const cols = (visCols && visibleColumns.length > 0) ? visibleColumns : null
+    /* if columns are filtered, csv will contain labeled value:
+    value = new_cases
+    label = New Cases
+    */
+    const fields = cols?.map(({ id: value, Header: label }) => ({ value, label }))
+    const _rows = filteredRows ? rows.map((r) => r.values) : data
+    const { flatten } = transforms
+    const json2csvParser = new Parser({
+      fields, // if undefined, download all
+      transforms: [
+        flatten({
+          separator: '_',
+          objects: true,
+          arrays: true,
+        }),
+      ],
+    })
+    const csv = json2csvParser.parse(_rows)
+    const url = `data:text/csv;charset=utf-8,${encodeURIComponent(csv)}`
+    const link = document.createElement('a')
+    link.setAttribute('href', url)
+    link.setAttribute('download', 'data.csv')
+    document.body.appendChild(link)
+
+    link.click()
+    link.remove()
+  }
+
+  return (
+    <Table data={provincesJson} downloadFn={downloadToCsv} >
+      <Table.Column Header="New cases" accessor="new_cases" />
+      <Table.Column Header="Total cases" accessor="total_cases" />
+      <Table.Column Header="Province" accessor="province" />
+      <Table.Column
+        Header="Info"
+        accessor="info"
+        Cell={({ value }) => {
         // if value type is json, just pass a node that can render it
-        if (typeof value === 'object') {
-          return (
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-              >
-                JSON
-              </AccordionSummary>
-              <AccordionDetails>
-                <pre>{JSON.stringify(value, undefined, 2)}</pre>
-              </AccordionDetails>
-            </Accordion>
-          )
-        }
-        return `${value}%`
-      }}
-    />
-  </Table>
-)
+          if (typeof value === 'object') {
+            return (
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                >
+                Details
+                </AccordionSummary>
+                <AccordionDetails>
+                  <pre>{JSON.stringify(value, undefined, 2)}</pre>
+                </AccordionDetails>
+              </Accordion>
+            )
+          }
+          return `${value}%`
+        }}
+      />
+    </Table>
+  )
+}
+

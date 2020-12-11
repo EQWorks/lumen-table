@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import { Parser, transforms } from 'json2csv'
 import Grow from '@material-ui/core/Grow'
 import Paper from '@material-ui/core/Paper'
 import Popper from '@material-ui/core/Popper'
@@ -13,31 +12,28 @@ import SaveAltIcon from '@material-ui/icons/SaveAlt'
 import Button from '@eqworks/react-labs/dist/button'
 
 
-const saveData = ({ data, rows, visibleColumns, visCols = false, filteredRows = false }) => {
-  /* if row value is of type json and any columns are filtered,
-    those values won't be downloaded as the flattened values generates new columns and those are not declared inside `fields`
-    https://github.com/zemirco/json2csv/issues/505#issuecomment-741835714
-  */
-  const cols = (visCols && visibleColumns.length > 0) ? visibleColumns : null
-  /* if columns are filtered, csv will contain labeled value:
-  value = new_cases
-  label = New Cases
-  */
-  const fields = cols?.map(({ id: value, Header: label }) => ({ value, label }))
-  const _rows = filteredRows ? rows.map((r) => r.values) : data
-  const { flatten } = transforms
-  const json2csvParser = new Parser({
-    fields,
-    transforms: [
-      flatten({
-        separator: '_',
-        objects: true,
-        arrays: true,
-      }),
-    ],
+export const saveData = ({ data, rows, allColumns, visibleColumns, visCols = false, filteredRows = false }) => {
+  const cols = (visCols && visibleColumns.length > 0) ? visibleColumns : allColumns
+  const headers = cols.map((c) => c.render('Header'))
+  const valueKeys = cols.map((c) => c.id)
+
+  let csvContent = ''
+
+  headers.forEach((h) => {
+    csvContent += `"${String(h).replace(/"/g, '""')}",`
   })
-  const csv = json2csvParser.parse(_rows)
-  const url = `data:text/csv;charset=utf-8,${encodeURIComponent(csv)}`
+  csvContent = csvContent.slice(0, -1)
+  csvContent += '\r\n'
+
+  ;(filteredRows ? rows.map((r) => r.values) : data).forEach((d) => {
+    valueKeys.forEach((x) => {
+      csvContent += `"${String(d[x]).replace(/"/g, '""')}",`
+    })
+    csvContent = csvContent.slice(0, -1)
+    csvContent += '\r\n'
+  })
+
+  const url = `data:text/csv;charset=utf-8,${encodeURIComponent(csvContent)}`
   const link = document.createElement('a')
   link.setAttribute('href', url)
   link.setAttribute('download', 'data.csv')
@@ -47,7 +43,7 @@ const saveData = ({ data, rows, visibleColumns, visCols = false, filteredRows = 
   link.remove()
 }
 
-const Download = ({ data, allColumns, visibleColumns, rows }) => {
+const Download = ({ data, allColumns, visibleColumns, rows, downloadFn }) => {
   const anchorRef = useRef(null)
   const [open, setOpen] = useState(false)
   const allowVisCols = 0 < visibleColumns.length && visibleColumns.length < allColumns.length
@@ -56,7 +52,7 @@ const Download = ({ data, allColumns, visibleColumns, rows }) => {
 
   const handleDownload = ({ visCols = false, filteredRows = false }) => (e) => {
     e.stopPropagation()
-    saveData({ data, rows, allColumns, visibleColumns, visCols, filteredRows })
+    downloadFn({ data, rows, allColumns, visibleColumns, visCols, filteredRows })
   }
 
   const handleToggle = () => {
@@ -144,12 +140,14 @@ Download.propTypes = {
   allColumns: PropTypes.array,
   visibleColumns: PropTypes.array,
   rows: PropTypes.array,
+  downloadFn: PropTypes.func,
 }
 Download.defaultProps = {
   data: [],
   allColumns: null,
   visibleColumns: [],
   rows: [],
+  downloadFn: saveData,
 }
 
 export default Download

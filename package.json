@@ -20,7 +20,6 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "json2csv": "^5.0.5",
     "prop-types": "^15.7.2",
     "react-table": "^7.6.0",
     "use-cached": "^2.0.0"
@@ -43,6 +42,7 @@
     "babel-loader": "^8.1.0",
     "eslint": "^7.11.0",
     "eslint-plugin-react": "^7.21.4",
+    "json2csv": "^5.0.5",
     "react": "^16.14.0",
     "size-limit": "^4.6.0"
   },
