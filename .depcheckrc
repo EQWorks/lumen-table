@@ -9,4 +9,5 @@ ignores: [
     "eslint-*",
     "jest",
     "size-limit",
+    "json2csv",
 ]

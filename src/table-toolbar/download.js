@@ -12,7 +12,7 @@ import SaveAltIcon from '@material-ui/icons/SaveAlt'
 import Button from '@eqworks/react-labs/dist/button'
 
 
-const saveData = ({ data, rows, allColumns, visibleColumns, visCols = false, filteredRows = false }) => {
+export const saveData = ({ data, rows, allColumns, visibleColumns, visCols = false, filteredRows = false }) => {
   const cols = (visCols && visibleColumns.length > 0) ? visibleColumns : allColumns
   const headers = cols.map((c) => c.render('Header'))
   const valueKeys = cols.map((c) => c.id)
@@ -43,7 +43,7 @@ const saveData = ({ data, rows, allColumns, visibleColumns, visCols = false, fil
   link.remove()
 }
 
-const Download = ({ data, allColumns, visibleColumns, rows }) => {
+const Download = ({ data, allColumns, visibleColumns, rows, downloadFn }) => {
   const anchorRef = useRef(null)
   const [open, setOpen] = useState(false)
   const allowVisCols = 0 < visibleColumns.length && visibleColumns.length < allColumns.length
@@ -52,7 +52,7 @@ const Download = ({ data, allColumns, visibleColumns, rows }) => {
 
   const handleDownload = ({ visCols = false, filteredRows = false }) => (e) => {
     e.stopPropagation()
-    saveData({ data, rows, allColumns, visibleColumns, visCols, filteredRows })
+    downloadFn({ data, rows, allColumns, visibleColumns, visCols, filteredRows })
   }
 
   const handleToggle = () => {
@@ -140,12 +140,14 @@ Download.propTypes = {
   allColumns: PropTypes.array,
   visibleColumns: PropTypes.array,
   rows: PropTypes.array,
+  downloadFn: PropTypes.func,
 }
 Download.defaultProps = {
   data: [],
   allColumns: null,
   visibleColumns: [],
   rows: [],
+  downloadFn: saveData,
 }
 
 export default Download

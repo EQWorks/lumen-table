@@ -29,6 +29,7 @@ import TableFilterLabel from './table-filter-label'
 import DefaultFilter from './filters/default-filter'
 import SelectionFilter from './filters/selection-filter'
 import RangeFilter from './filters/range-filter'
+import { saveData } from './table-toolbar/download'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -103,6 +104,7 @@ export const Table = ({
   sortBy,
   remember,
   extendColumns,
+  downloadFn,
 }) => {
   const classes = useStyles()
   // custom table config hook
@@ -190,6 +192,7 @@ export const Table = ({
           preGlobalFilteredRows={preGlobalFilteredRows}
           globalFilter={globalFilter || ''}
           setGlobalFilter={setGlobalFilter}
+          downloadFn={downloadFn}
         />
       )}
       {visibleColumns.length > 0 ? (
@@ -294,6 +297,7 @@ Table.propTypes = {
     sortBy: PropTypes.bool,
   }),
   extendColumns: PropTypes.bool,
+  downloadFn: PropTypes.func,
 }
 Table.defaultProps = {
   columns: null,
@@ -306,6 +310,7 @@ Table.defaultProps = {
   sortBy: {},
   remember: {},
   extendColumns: false,
+  downloadFn: saveData,
 }
 Table.Column = TableColumn
 Table.filters = { DefaultFilter, SelectionFilter, RangeFilter }
