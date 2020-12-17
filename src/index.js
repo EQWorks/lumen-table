@@ -37,6 +37,10 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: theme.typography.fontWeightBold,
     backgroundColor: theme.palette.grey[50],
   },
+  body: {
+    whiteSpace: 'normal',
+    wordBreak: 'break-word',
+  },
   grow: {
     flexGrow: 1,
   },
@@ -215,7 +219,7 @@ export const Table = ({
                 </TableRow>
               ))}
             </TableHead>
-            <TableBody {...getTableBodyProps()}>
+            <TableBody {...getTableBodyProps()} className={classes.body}>
               {page.map((row, i) => {
                 prepareRow(row)
                 return (
