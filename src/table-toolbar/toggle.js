@@ -13,7 +13,7 @@ import Switch from '@material-ui/core/Switch'
 import Badge from '@material-ui/core/Badge'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { makeStyles } from '@material-ui/core/styles'
-import Button from '@eqworks/react-labs/dist/button'
+import Button from '@eqworks/lumen-ui/dist/button'
 
 
 const useStyles = makeStyles(() => ({
