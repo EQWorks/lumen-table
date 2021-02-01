@@ -23,6 +23,8 @@ export const empty = () => <Table />
 
 export const normal = () => <Table data={provinces} />
 
+export const noToolbar = () => <Table data={provinces} toolbar={false}/>
+
 export const columns = () => (
   <Table
     data={provinces}

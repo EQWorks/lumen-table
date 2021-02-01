@@ -100,6 +100,7 @@ const useTableConfig = ({ data, hiddenColumns, children, columns, remember, exte
 export const Table = ({
   columns,
   data,
+  toolbar,
   children,
   downloadable,
   hiddenColumns,
@@ -185,7 +186,7 @@ export const Table = ({
   }, [sortBy])
   return (
     <>
-      {(_data.length > 0) && (
+      {(_data.length > 0 && toolbar) && (
         <TableToolbar
           rows={rows}
           allColumns={allColumns}
@@ -291,6 +292,7 @@ Table.propTypes = {
   downloadable: PropTypes.bool,
   hiddenColumns: PropTypes.arrayOf(PropTypes.string),
   tableProps: PropTypes.object,
+  toolbar: PropTypes.bool,
   headerGroupProps: PropTypes.object,
   sortBy: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.object), PropTypes.object]),
   remember: PropTypes.shape({
@@ -310,6 +312,7 @@ Table.defaultProps = {
   downloadable: true,
   hiddenColumns: [],
   tableProps: {},
+  toolbar: true,
   headerGroupProps: {},
   sortBy: {},
   remember: {},
