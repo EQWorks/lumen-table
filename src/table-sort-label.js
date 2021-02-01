@@ -20,7 +20,7 @@ const TableSortLabel = ({ isSorted, isSortedDesc }) => {
 
   const renderIcon = () => {
     if (!isSorted) {
-      return (<ImportExportIcon color='disabled' />)
+      return (<ImportExportIcon fontSize='small' color='disabled' />)
     }
     return isSortedDesc ? (
       <ArrowDownwardIcon fontSize='small' color='primary' />

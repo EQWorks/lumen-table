@@ -201,7 +201,7 @@ export const Table = ({
       )}
       {visibleColumns.length > 0 ? (
         <TableContainer>
-          <MUITable {...getTableProps(tableProps)}>
+          <MUITable style={{ tableLayout: 'fixed' }} {...getTableProps(tableProps)}>
             <TableHead>
               {headerGroups.map((headerGroup, i) => (
                 <TableRow key={i} {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
