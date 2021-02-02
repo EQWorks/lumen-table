@@ -36,6 +36,8 @@ const useStyles = makeStyles((theme) => ({
   head: {
     fontWeight: theme.typography.fontWeightBold,
     backgroundColor: theme.palette.grey[50],
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
   },
   body: {
     whiteSpace: 'normal',
@@ -46,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
   },
   spacer: { flex: 'inherit' },
   root: { overflow: 'visible' },
+  table: {
+    tableLayout: 'fixed',
+  },
 }))
 
 const getHeader = (s) => [
@@ -167,6 +172,7 @@ export const Table = ({
     useSortBy,
     usePagination,
   )
+
   // remember hidden
   useEffect(() => {
     if (remember.hidden) {
@@ -184,6 +190,7 @@ export const Table = ({
       toggleSortBy(sortBy[0].id, sortBy[0].desc, false)
     }
   }, [sortBy])
+  
   return (
     <>
       {(_data.length > 0 && toolbar) && (
@@ -202,7 +209,7 @@ export const Table = ({
       )}
       {visibleColumns.length > 0 ? (
         <TableContainer>
-          <MUITable style={{ tableLayout: 'fixed' }} {...getTableProps(tableProps)}>
+          <MUITable className={classes.table} {...getTableProps(tableProps)}>
             <TableHead>
               {headerGroups.map((headerGroup, i) => (
                 <TableRow key={i} {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
