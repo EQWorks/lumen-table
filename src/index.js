@@ -36,6 +36,8 @@ const useStyles = makeStyles((theme) => ({
   head: {
     fontWeight: theme.typography.fontWeightBold,
     backgroundColor: theme.palette.grey[50],
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
   },
   body: {
     whiteSpace: 'normal',
@@ -46,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
   },
   spacer: { flex: 'inherit' },
   root: { overflow: 'visible' },
+  table: {
+    tableLayout: 'fixed',
+  },
 }))
 
 const getHeader = (s) => [
@@ -100,6 +105,7 @@ const useTableConfig = ({ data, hiddenColumns, children, columns, remember, exte
 export const Table = ({
   columns,
   data,
+  toolbar,
   children,
   downloadable,
   hiddenColumns,
@@ -166,6 +172,7 @@ export const Table = ({
     useSortBy,
     usePagination,
   )
+
   // remember hidden
   useEffect(() => {
     if (remember.hidden) {
@@ -183,9 +190,10 @@ export const Table = ({
       toggleSortBy(sortBy[0].id, sortBy[0].desc, false)
     }
   }, [sortBy])
+  
   return (
     <>
-      {(_data.length > 0) && (
+      {(_data.length > 0 && toolbar) && (
         <TableToolbar
           rows={rows}
           allColumns={allColumns}
@@ -201,7 +209,7 @@ export const Table = ({
       )}
       {visibleColumns.length > 0 ? (
         <TableContainer>
-          <MUITable {...getTableProps(tableProps)}>
+          <MUITable className={classes.table} {...getTableProps(tableProps)}>
             <TableHead>
               {headerGroups.map((headerGroup, i) => (
                 <TableRow key={i} {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
@@ -291,6 +299,7 @@ Table.propTypes = {
   downloadable: PropTypes.bool,
   hiddenColumns: PropTypes.arrayOf(PropTypes.string),
   tableProps: PropTypes.object,
+  toolbar: PropTypes.bool,
   headerGroupProps: PropTypes.object,
   sortBy: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.object), PropTypes.object]),
   remember: PropTypes.shape({
@@ -310,6 +319,7 @@ Table.defaultProps = {
   downloadable: true,
   hiddenColumns: [],
   tableProps: {},
+  toolbar: true,
   headerGroupProps: {},
   sortBy: {},
   remember: {},
