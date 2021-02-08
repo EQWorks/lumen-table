@@ -36,8 +36,11 @@ const useStyles = makeStyles((theme) => ({
   head: {
     fontWeight: theme.typography.fontWeightBold,
     backgroundColor: theme.palette.grey[50],
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
+    whiteSpace: 'wrap',
+    height: '100%',
+  },
+  columnContainer: {
+    display: 'flex',
   },
   body: {
     whiteSpace: 'normal',
@@ -219,9 +222,11 @@ export const Table = ({
                       className={classes.head}
                       {...column.getHeaderProps(column.getSortByToggleProps())}
                     >
-                      {column.render('Header')}
-                      {column.canSort && (<TableSortLabel {...column} />)}
-                      {column.canFilter && (<TableFilterLabel column={column} />)}
+                      <div className={classes.columnContainer}>  
+                        {column.render('Header')}
+                        {column.canSort && (<TableSortLabel {...column} />)}
+                        {column.canFilter && (<TableFilterLabel column={column} />)}
+                      </div>
                     </TableCell>
                   ))}
                 </TableRow>
