@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import TextField from '@material-ui/core/TextField'
@@ -19,6 +19,7 @@ const DefaultFilter = ({ filterValue, preFilteredRows, setFilter, id, globalFilt
     _setFilter(value)
   }
 
+  // testing re-apply filter
   // if (value !== globalFilter) {
   //   console.log('different')
   //   _setFilter(value)
