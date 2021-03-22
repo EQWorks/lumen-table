@@ -35,6 +35,7 @@ const TableToolbar = ({
 }) => {
   const classes = useStyles()
 
+  console.log('global filter: ', globalFilter)
   return (
     <Toolbar>
       {allColumns.some((c) => !c.disableGlobalFilter) && (
