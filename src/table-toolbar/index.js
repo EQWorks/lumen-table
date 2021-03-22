@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React from 'react'
-=======
-import React, { useEffect } from 'react'
->>>>>>> testing filter and sort states
 import PropTypes from 'prop-types'
 
 import Toolbar from '@material-ui/core/Toolbar'
@@ -39,10 +35,7 @@ const TableToolbar = ({
 }) => {
   const classes = useStyles()
 
-<<<<<<< HEAD
-=======
   console.log('global filter: ', globalFilter)
->>>>>>> testing filter and sort states
   return (
     <Toolbar>
       {allColumns.some((c) => !c.disableGlobalFilter) && (
