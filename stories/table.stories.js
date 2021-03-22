@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import { Parser, transforms } from 'json2csv'
 import Typography from '@material-ui/core/Typography'
@@ -37,10 +37,22 @@ export const normal = () => {
     return () => clearInterval(interval)
   }, [])
 
+  // prev state to keep track of the data changes
+  // const usePrev = (value) => {
+  //   const ref = useRef()
+
+  //   useEffect(() => {
+  //     ref.current = value
+  //   })
+
+  //   return ref.current
+  // }
+
+  // const prevData = usePrev(data);
 
   // render the table with `data`
   return (
-    <Table data={data} />
+    <Table data={data} prevData={prevData} />
   )
 }
 
