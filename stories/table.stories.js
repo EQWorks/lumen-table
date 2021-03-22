@@ -38,17 +38,17 @@ export const normal = () => {
   }, [])
 
   // prev state to keep track of the data changes
-  // const usePrev = (value) => {
-  //   const ref = useRef()
+  const usePrev = (value) => {
+    const ref = useRef()
 
-  //   useEffect(() => {
-  //     ref.current = value
-  //   })
+    useEffect(() => {
+      ref.current = value
+    })
 
-  //   return ref.current
-  // }
+    return ref.current
+  }
 
-  // const prevData = usePrev(data);
+  const prevData = usePrev(data);
 
   // render the table with `data`
   return (
