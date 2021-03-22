@@ -108,7 +108,6 @@ const useTableConfig = ({ data, hiddenColumns, children, columns, remember, exte
 export const Table = ({
   columns,
   data,
-  prevData,
   toolbar,
   children,
   downloadable,
@@ -202,12 +201,6 @@ export const Table = ({
     setGlobalFilter(globalFilter)
   }
 
-  // if (data !== prevData) {
-  //   console.log('global filter: ', globalFilter);
-  // }
-  // console.log('new data!: ', data)
-  // console.log('global filter: ', globalFilter);
-
   return (
     <>
       {(_data.length > 0 && toolbar) && (
@@ -218,7 +211,6 @@ export const Table = ({
           toggleHideColumn={toggleHideColumn}
           downloadable={downloadable}
           data={data}
-          prevData={prevData}
           preGlobalFilteredRows={preGlobalFilteredRows}
           globalFilter={globalFilter || ''}
           setGlobalFilter={setGlobalFilter}
