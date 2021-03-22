@@ -108,6 +108,7 @@ const useTableConfig = ({ data, hiddenColumns, children, columns, remember, exte
 export const Table = ({
   columns,
   data,
+  prevData,
   toolbar,
   children,
   downloadable,
@@ -159,7 +160,7 @@ export const Table = ({
       },
       sortTypes: {
         caseInsensitive: (row1, row2, columnName) => {
-          if(row1.original[columnName].toLowerCase() > row2.original[columnName].toLowerCase()){
+          if (row1.original[columnName].toLowerCase() > row2.original[columnName].toLowerCase()) {
             return 1
           } else if (row2.original[columnName].toLowerCase() > row1.original[columnName].toLowerCase()) {
             return -1
@@ -193,7 +194,20 @@ export const Table = ({
       toggleSortBy(sortBy[0].id, sortBy[0].desc, false)
     }
   }, [sortBy])
-  
+
+
+  const customClick = () => {
+    data.push({ new_cases: 5270, total_cases: 15383, province: 'Ontario', rate: 5 })
+    console.log('data: ', data)
+    setGlobalFilter(globalFilter)
+  }
+
+  // if (data !== prevData) {
+  //   console.log('global filter: ', globalFilter);
+  // }
+  // console.log('new data!: ', data)
+  // console.log('global filter: ', globalFilter);
+
   return (
     <>
       {(_data.length > 0 && toolbar) && (
@@ -204,6 +218,7 @@ export const Table = ({
           toggleHideColumn={toggleHideColumn}
           downloadable={downloadable}
           data={data}
+          prevData={prevData}
           preGlobalFilteredRows={preGlobalFilteredRows}
           globalFilter={globalFilter || ''}
           setGlobalFilter={setGlobalFilter}
@@ -212,6 +227,8 @@ export const Table = ({
       )}
       {visibleColumns.length > 0 ? (
         <TableContainer>
+          {console.log('re-render')}
+          <div className="click" onClick={() => customClick()}>click</div>
           <MUITable className={classes.table} {...getTableProps(tableProps)}>
             <TableHead>
               {headerGroups.map((headerGroup, i) => (
@@ -222,7 +239,7 @@ export const Table = ({
                       className={classes.head}
                       {...column.getHeaderProps(column.getSortByToggleProps())}
                     >
-                      <div className={classes.columnContainer}>  
+                      <div className={classes.columnContainer}>
                         {column.render('Header')}
                         {column.canSort && (<TableSortLabel {...column} />)}
                         {column.canFilter && (<TableFilterLabel column={column} />)}
@@ -282,7 +299,7 @@ export const Table = ({
         <Card>
           <CardContent>
             <Typography variant='body1'>
-                No visible columns
+              No visible columns
             </Typography>
           </CardContent>
         </Card>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import { Parser, transforms } from 'json2csv'
 import Typography from '@material-ui/core/Typography'
@@ -21,9 +21,41 @@ export default {
 
 export const empty = () => <Table />
 
-export const normal = () => <Table data={provinces} />
+export const normal = () => {
+  const randGen = [{ new_cases: 527, total_cases: 15383, province: 'Ontario', rate: 4 },
+  { new_cases: 50, total_cases: 1998, province: 'British Columbia', rate: 3 },
+  { new_cases: 27, total_cases: 900, province: 'Nova Scotia', rate: 3 }]
+  // within the story
+  const [data, setData] = useState(provinces)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // some random generation of data
+      setData(randGen)
+      console.log('update 10 seconds')
+    }, 10000) // adjust the interval in ms
+    // cleanup
+    return () => clearInterval(interval)
+  }, [])
 
-export const noToolbar = () => <Table data={provinces} toolbar={false}/>
+  const usePrev = (value) => {
+    const ref = useRef()
+
+    useEffect(() => {
+      ref.current = value
+    })
+
+    return ref.current
+  }
+
+  const prevData = usePrev(data);
+
+  // render the table with `data`
+  return (
+    <Table data={data} prevData={prevData} />
+  )
+}
+
+export const noToolbar = () => <Table data={provinces} toolbar={false} />
 
 export const columns = () => (
   <Table
@@ -357,7 +389,7 @@ export const dynamicSortBy = () => {
 }
 export const caseInsensitiveSort = () => {
   const _provinces = provinces.map((p) => {
-    if (p.province.startsWith('B')) p.province =  p.province.toLowerCase()
+    if (p.province.startsWith('B')) p.province = p.province.toLowerCase()
     return { ...p }
   })
   return (
@@ -446,14 +478,14 @@ export const renderJson = () => {
         Header="Info"
         accessor="info"
         Cell={({ value }) => {
-        // if value type is json, just pass a node that can render it
+          // if value type is json, just pass a node that can render it
           if (typeof value === 'object') {
             return (
               <Accordion>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                 >
-                Details
+                  Details
                 </AccordionSummary>
                 <AccordionDetails>
                   <pre>{JSON.stringify(value, undefined, 2)}</pre>

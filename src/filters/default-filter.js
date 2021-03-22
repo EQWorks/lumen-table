@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import TextField from '@material-ui/core/TextField'
@@ -7,15 +7,22 @@ import SearchIcon from '@material-ui/icons/Search'
 import { useAsyncDebounce } from 'react-table'
 
 
-const DefaultFilter = ({ filterValue, preFilteredRows, setFilter, id }) => {
-  const [value, setValue] = useState(filterValue)
+const DefaultFilter = ({ filterValue, preFilteredRows, setFilter, id, globalFilter }) => {
+  const [value, setValue] = useState(globalFilter)
+  console.log('default-filter local state: ', value)
   const _setFilter = useAsyncDebounce(value => {
     setFilter(value || undefined)
+    //console.log('globalstate: ', globalFilter)
   }, 200)
   const search = ({ target: { value } }) => {
     setValue(value)
     _setFilter(value)
   }
+
+  // if (value !== globalFilter) {
+  //   console.log('different')
+  //   _setFilter(value)
+  // }
 
   // Global filter only works with pagination from the first page.
   // This may not be a problem for server side pagination when
