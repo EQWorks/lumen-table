@@ -32,43 +32,48 @@ import RangeFilter from './filters/range-filter'
 import { saveData } from './table-toolbar/download'
 
 
-const useStyles = makeStyles((theme) => ({
-  head: {
-    fontWeight: theme.typography.fontWeightBold,
-    backgroundColor: theme.palette.grey[50],
-    whiteSpace: 'wrap',
-    height: '100%',
-  },
-  columnContainer: {
-    display: 'flex',
-  },
-  body: {
-    whiteSpace: 'normal',
-    wordBreak: 'break-word',
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  spacer: { flex: 'inherit' },
-  root: { overflow: 'visible' },
-  table: {
-    tableLayout: 'fixed',
-
+const useStyles = (borderRadius) => makeStyles((theme) => {
+  const roundBorder = borderRadius > 0 && {
     '& thead tr:last-child th:first-child': {
-      backgroundColor: '#FF0000',
-      'border-top-left-radius': 10,
+      'border-top-left-radius': borderRadius,
     },
 
     '& thead tr:last-child th:last-child': {
-      backgroundColor: '#FF0000',
-      'border-top-right-radius': 10,
+      'border-top-right-radius': borderRadius,
     },
 
     '& tfoot tr:last-child td:first-child': {
       'border-bottom': 0,
     },
-  },
-}))
+  }
+
+  return ({
+    head: {
+      fontWeight: theme.typography.fontWeightBold,
+      backgroundColor: theme.palette.grey[50],
+      whiteSpace: 'wrap',
+      height: '100%',
+    },
+    columnContainer: {
+      display: 'flex',
+    },
+    body: {
+      whiteSpace: 'normal',
+      wordBreak: 'break-word',
+    },
+    grow: {
+      flexGrow: 1,
+    },
+    spacer: { flex: 'inherit' },
+    root: {
+      overflow: 'visible',
+    },
+    table: {
+      tableLayout: 'fixed',
+      ...roundBorder,
+    },
+  })
+})
 
 const getHeader = (s) => [
   s.charAt(0).toUpperCase(),
@@ -132,8 +137,9 @@ export const Table = ({
   remember,
   extendColumns,
   downloadFn,
+  borderRadius,
 }) => {
-  const classes = useStyles()
+  const classes = useStyles(borderRadius)()
   // custom table config hook
   const {
     _cols,
@@ -330,6 +336,7 @@ Table.propTypes = {
   }),
   extendColumns: PropTypes.bool,
   downloadFn: PropTypes.func,
+  borderRadius: PropTypes.number,
 }
 Table.defaultProps = {
   columns: null,
@@ -344,6 +351,7 @@ Table.defaultProps = {
   remember: {},
   extendColumns: false,
   downloadFn: saveData,
+  borderRadius: 0,
 }
 Table.Column = TableColumn
 Table.filters = { DefaultFilter, SelectionFilter, RangeFilter }
