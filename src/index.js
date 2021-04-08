@@ -33,30 +33,7 @@ import useStyles from './useStyles'
 import QuantitaveFilter from './filters/quantitave-filter'
 import QualitativeFilter from './filters/qualitative-filter'
 
-
-const useStyles = makeStyles((theme) => ({
-  head: {
-    fontWeight: theme.typography.fontWeightBold,
-    backgroundColor: theme.palette.grey[50],
-    whiteSpace: 'wrap',
-    height: '100%',
-  },
-  columnContainer: {
-    display: 'flex',
-  },
-  body: {
-    whiteSpace: 'normal',
-    wordBreak: 'break-word',
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  spacer: { flex: 'inherit' },
-  root: { overflow: 'visible' },
-  table: {
-    tableLayout: 'fixed',
-  },
-}))
+import useStyles from './useStyles'
 
 const getHeader = (s) => [
   s.charAt(0).toUpperCase(),
