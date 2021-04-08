@@ -53,6 +53,20 @@ const useStyles = makeStyles((theme) => ({
   root: { overflow: 'visible' },
   table: {
     tableLayout: 'fixed',
+
+    '& thead tr:last-child th:first-child': {
+      backgroundColor: '#FF0000',
+      'border-top-left-radius': 10,
+    },
+
+    '& thead tr:last-child th:last-child': {
+      backgroundColor: '#FF0000',
+      'border-top-right-radius': 10,
+    },
+
+    '& tfoot tr:last-child td:first-child': {
+      'border-bottom': 0,
+    },
   },
 }))
 
@@ -159,7 +173,7 @@ export const Table = ({
       },
       sortTypes: {
         caseInsensitive: (row1, row2, columnName) => {
-          if(row1.original[columnName].toLowerCase() > row2.original[columnName].toLowerCase()){
+          if (row1.original[columnName].toLowerCase() > row2.original[columnName].toLowerCase()) {
             return 1
           } else if (row2.original[columnName].toLowerCase() > row1.original[columnName].toLowerCase()) {
             return -1
@@ -193,7 +207,7 @@ export const Table = ({
       toggleSortBy(sortBy[0].id, sortBy[0].desc, false)
     }
   }, [sortBy])
-  
+
   return (
     <>
       {(_data.length > 0 && toolbar) && (
@@ -222,7 +236,7 @@ export const Table = ({
                       className={classes.head}
                       {...column.getHeaderProps(column.getSortByToggleProps())}
                     >
-                      <div className={classes.columnContainer}>  
+                      <div className={classes.columnContainer}>
                         {column.render('Header')}
                         {column.canSort && (<TableSortLabel {...column} />)}
                         {column.canFilter && (<TableFilterLabel column={column} />)}
@@ -282,7 +296,7 @@ export const Table = ({
         <Card>
           <CardContent>
             <Typography variant='body1'>
-                No visible columns
+              No visible columns
             </Typography>
           </CardContent>
         </Card>
