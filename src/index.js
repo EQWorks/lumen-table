@@ -32,14 +32,19 @@ import RangeFilter from './filters/range-filter'
 import { saveData } from './table-toolbar/download'
 
 
-const useStyles = (borderRadius) => makeStyles((theme) => {
-  const roundBorder = borderRadius > 0 && {
+const useStyles = (borderStyle) => makeStyles((theme) => {
+  const containerBorderStyle = (borderStyle.size && borderStyle.type) && {
+    border: `${borderStyle.size + 'px'} ${borderStyle.type} ${borderStyle.color ? borderStyle.color : 'black'}`,
+    'border-radius': `${borderStyle.radius > 0 ? borderStyle.radius : 0}`,
+  }
+
+  const tableBorderRadius = borderStyle.radius > 0 && {
     '& thead tr:last-child th:first-child': {
-      'border-top-left-radius': borderRadius,
+      'border-top-left-radius': borderStyle.radius,
     },
 
     '& thead tr:last-child th:last-child': {
-      'border-top-right-radius': borderRadius,
+      'border-top-right-radius': borderStyle.radius,
     },
 
     '& tfoot tr:last-child td:first-child': {
@@ -70,8 +75,11 @@ const useStyles = (borderRadius) => makeStyles((theme) => {
     },
     table: {
       tableLayout: 'fixed',
-      ...roundBorder,
+      ...tableBorderRadius,
     },
+    tableMainContainer: {
+      ...containerBorderStyle
+    }
   })
 })
 
@@ -137,9 +145,9 @@ export const Table = ({
   remember,
   extendColumns,
   downloadFn,
-  borderRadius,
+  borderStyle,
 }) => {
-  const classes = useStyles(borderRadius)()
+  const classes = useStyles(borderStyle)()
   // custom table config hook
   const {
     _cols,
@@ -215,7 +223,7 @@ export const Table = ({
   }, [sortBy])
 
   return (
-    <>
+    <div className={'tableMainContainer ' + `${classes.tableMainContainer}`}>
       {(_data.length > 0 && toolbar) && (
         <TableToolbar
           rows={rows}
@@ -307,7 +315,7 @@ export const Table = ({
           </CardContent>
         </Card>
       )}
-    </>
+    </div>
   )
 }
 
@@ -336,7 +344,12 @@ Table.propTypes = {
   }),
   extendColumns: PropTypes.bool,
   downloadFn: PropTypes.func,
-  borderRadius: PropTypes.number,
+  borderStyle: PropTypes.shape({
+    size: PropTypes.number,
+    type: PropTypes.oneOf(['dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'none', 'hidden']),
+    color: PropTypes.string,
+    radius: PropTypes.number,
+  }),
 }
 Table.defaultProps = {
   columns: null,
@@ -351,7 +364,7 @@ Table.defaultProps = {
   remember: {},
   extendColumns: false,
   downloadFn: saveData,
-  borderRadius: 0,
+  borderStyle: {},
 }
 Table.Column = TableColumn
 Table.filters = { DefaultFilter, SelectionFilter, RangeFilter }
