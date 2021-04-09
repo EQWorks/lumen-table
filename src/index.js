@@ -12,7 +12,6 @@ import TableFooter from '@material-ui/core/TableFooter'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
 import TablePagination from '@material-ui/core/TablePagination'
-import { makeStyles } from '@material-ui/core/styles'
 import {
   useTable,
   useSortBy,
@@ -30,58 +29,7 @@ import DefaultFilter from './filters/default-filter'
 import SelectionFilter from './filters/selection-filter'
 import RangeFilter from './filters/range-filter'
 import { saveData } from './table-toolbar/download'
-
-
-const useStyles = (borderStyle) => makeStyles((theme) => {
-  const containerBorderStyle = (borderStyle.size && borderStyle.type) && {
-    border: `${borderStyle.size + 'px'} ${borderStyle.type} ${borderStyle.color ? borderStyle.color : 'black'}`,
-    'border-radius': `${borderStyle.radius > 0 ? borderStyle.radius : 0}`,
-  }
-
-  const tableBorderRadius = borderStyle.radius > 0 && {
-    '& thead tr:last-child th:first-child': {
-      'border-top-left-radius': borderStyle.radius,
-    },
-
-    '& thead tr:last-child th:last-child': {
-      'border-top-right-radius': borderStyle.radius,
-    },
-
-    '& tfoot tr:last-child td:first-child': {
-      'border-bottom': 0,
-    },
-  }
-
-  return ({
-    head: {
-      fontWeight: theme.typography.fontWeightBold,
-      backgroundColor: theme.palette.grey[50],
-      whiteSpace: 'wrap',
-      height: '100%',
-    },
-    columnContainer: {
-      display: 'flex',
-    },
-    body: {
-      whiteSpace: 'normal',
-      wordBreak: 'break-word',
-    },
-    grow: {
-      flexGrow: 1,
-    },
-    spacer: { flex: 'inherit' },
-    root: {
-      overflow: 'visible',
-    },
-    table: {
-      tableLayout: 'fixed',
-      ...tableBorderRadius,
-    },
-    tableMainContainer: {
-      ...containerBorderStyle
-    }
-  })
-})
+import useStyles from './useStyles'
 
 const getHeader = (s) => [
   s.charAt(0).toUpperCase(),
@@ -364,7 +312,11 @@ Table.defaultProps = {
   remember: {},
   extendColumns: false,
   downloadFn: saveData,
-  borderStyle: {},
+  borderStyle: {
+    size: 2,
+    type: 'solid',
+    radius: 10,
+  },
 }
 Table.Column = TableColumn
 Table.filters = { DefaultFilter, SelectionFilter, RangeFilter }
