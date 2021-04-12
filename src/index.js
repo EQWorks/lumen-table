@@ -191,6 +191,14 @@ export const Table = ({
           globalFilter={globalFilter || ''}
           setGlobalFilter={setGlobalFilter}
           downloadFn={downloadFn}
+          slider={slider}
+        />
+      )}
+      {(_data.length > 0 && slider) && (
+        <QualitativeFilter
+          allColumns={allColumns}
+          setFilter={setGlobalFilter}
+          filterValue={globalFilter || ''}
         />
       )}
       {visibleColumns.length > 0 ? (

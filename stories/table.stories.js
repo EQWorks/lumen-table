@@ -21,7 +21,7 @@ export default {
 
 export const empty = () => <Table />
 
-export const normal = () => <Table data={provinces} />
+export const normal = () => <Table data={provinces} slider={true} />
 
 export const noToolbar = () => <Table data={provinces} toolbar={false} />
 
@@ -34,6 +34,7 @@ export const columns = () => (
       { Header: 'Province', accessor: 'province' },
       { Header: 'Rate', accessor: 'rate', Cell: ({ value }) => `${value}%` },
     ]}
+    slider={true}
   />
 )
 
