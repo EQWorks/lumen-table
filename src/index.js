@@ -94,8 +94,15 @@ export const Table = ({
   extendColumns,
   downloadFn,
   borderStyle,
+  isBorder,
 }) => {
-  const classes = useStyles(borderStyle)()
+  const borderOptions = {
+    borderStyle,
+    toolbar,
+    isBorder,
+  }
+
+  const classes = useStyles(borderOptions)()
   // custom table config hook
   const {
     _cols,
@@ -298,6 +305,7 @@ Table.propTypes = {
     color: PropTypes.string,
     radius: PropTypes.number,
   }),
+  isBorder: PropTypes.bool,
 }
 Table.defaultProps = {
   columns: null,
@@ -315,8 +323,8 @@ Table.defaultProps = {
   borderStyle: {
     size: 2,
     type: 'solid',
-    radius: 10,
   },
+  isBorder: false,
 }
 Table.Column = TableColumn
 Table.filters = { DefaultFilter, SelectionFilter, RangeFilter }
