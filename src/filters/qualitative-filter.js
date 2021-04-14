@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 
 import Slider from '@material-ui/core/Slider'
 import { makeStyles } from '@material-ui/core/styles'
-import { ControlPointSharp } from '@material-ui/icons'
 
 
 // based on https://stackoverflow.com/a/10601315/158111
@@ -38,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
   },
 }))
+const filteredRows = []
 
 const filterNumColumns = (columns) => {
   const numColums = []
@@ -50,18 +50,17 @@ const filterNumColumns = (columns) => {
 }
 
 const QualitativeFilter = ({ allColumns, setFilter, filterValue }) => {
-  console.log('filterValue: ', filterValue)
-  console.log('allColumns: ', allColumns)
-  const classes = useStyles()
-  const filteredRows = []
+  // console.log('filterValue: ', filterValue)
+  // console.log('allColumns: ', allColumns)
+  const classes = useStyles();
 
   const [min, max] = useMemo(() => {
     let min = 0;
     let max = 0;
 
     filterNumColumns(allColumns).forEach(column => {
-      let filterMin = column.preFilteredRows.length ? column.preFilteredRows[1].values[column.id] : 0
-      let filterMax = column.preFilteredRows.length ? column.preFilteredRows[1].values[column.id] : 0
+      let filterMin = column.preFilteredRows.length ? column.preFilteredRows[0].values[column.id] : 0
+      let filterMax = column.preFilteredRows.length ? column.preFilteredRows[0].values[column.id] : 0
       filteredRows.push([column.id, column.preFilteredRows])
 
       column.preFilteredRows.forEach(row => {
@@ -77,10 +76,12 @@ const QualitativeFilter = ({ allColumns, setFilter, filterValue }) => {
     })
 
     return [min, max]
-  }, [filteredRows[1]])
+  }, [filteredRows])
   //console.log('ids: ', columnsId)
-  console.log('rows: ', filteredRows)
+  //console.log('rows: ', filteredRows)
   const handleOnChange = (_, newValue) => {
+    // console.log('new value: ', newValue);
+    // console.log("event: ", _)
     const [_min, _max] = newValue
     if (_min === min && _max === max) {
       setFilter(filterValue)
@@ -92,7 +93,7 @@ const QualitativeFilter = ({ allColumns, setFilter, filterValue }) => {
   return (
     <div className={classes.root} onClick={(e) => { e.stopPropagation() }} >
       <Slider
-        value={filterValue || [Math.ceil(max), Math.floor(min)]}
+        value={filterValue || [Math.ceil(min), Math.floor(max)]}
         onChange={(_, newValue) => handleOnChange(_, newValue)}
         max={Math.ceil(max)}
         min={Math.floor(min)}

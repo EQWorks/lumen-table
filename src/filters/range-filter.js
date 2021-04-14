@@ -49,14 +49,14 @@ const RangeFilter = ({ column: { filterValue, preFilteredRows, setFilter, id, pe
     })
     return [min, max]
   }, [id, preFilteredRows])
-  console.log('range: ', filterValue)
+
   return (
     <div className={classes.root} onClick={(e) => { e.stopPropagation() }} >
       <Slider
         value={filterValue || [Math.ceil(max), Math.floor(min)]}
         onChange={(_, newValue) => {
           const [_min, _max] = newValue
-          console.log('new value: ', newValue)
+
           if (_min === min && _max === max) {
             setFilter('')
           } else {
