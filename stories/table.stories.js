@@ -21,7 +21,7 @@ export default {
 
 export const empty = () => <Table />
 
-export const normal = () => <Table data={provinces} slider={true} />
+export const normal = () => <Table data={provinces} slider={false} />
 
 export const noToolbar = () => <Table data={provinces} toolbar={false} />
 
@@ -204,6 +204,35 @@ export const RangeFilter = () => (
         Cell: ({ value }) => `${value * 100}%`,
         Filter: Table.filters.RangeFilter,
         filter: Table.filters.RangeFilter.filterFn,
+        percentage: true,
+      },
+      { Header: 'Province', accessor: 'province' },
+    ]}
+  />
+)
+
+export const QuantitaveFilter = () => (
+  <Table
+    data={provincesRange}
+    columns={[
+      {
+        Header: 'New cases',
+        accessor: 'new_cases',
+        Filter: Table.filters.QuantitaveFilter,
+        filter: Table.filters.QuantitaveFilter.filterFn,
+      },
+      {
+        Header: 'Total cases',
+        accessor: 'total_cases',
+        Filter: Table.filters.QuantitaveFilter,
+        filter: Table.filters.QuantitaveFilter.filterFn,
+      },
+      {
+        Header: 'Rate',
+        accessor: 'rate',
+        Cell: ({ value }) => `${value * 100}%`,
+        Filter: Table.filters.QuantitaveFilter,
+        filter: Table.filters.QuantitaveFilter.filterFn,
         percentage: true,
       },
       { Header: 'Province', accessor: 'province' },

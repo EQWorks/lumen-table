@@ -47,82 +47,60 @@ const useStyles = makeStyles((theme) => ({
     textIndent: 5
   }
 }))
-const filteredRows = []
 
-const filterNumColumns = (columns) => {
-  const numColums = []
-  columns.forEach(column => {
-    column.preFilteredRows.length &&
-      isNaN(column.preFilteredRows[0].values[column.id]) === false && numColums.push(column)
-  })
-
-  return numColums
-}
-
-const QuantitaveFilter = ({ allColumns, setFilter, filterValue }) => {
+const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, id } }) => {
   const [minValue, setMinValue] = useState()
   const [maxValue, setMaxValue] = useState()
-  // console.log('filterValue: ', filterValue)
-  // console.log('allColumns: ', allColumns)
+
   const classes = useStyles();
 
   const [min, max] = useMemo(() => {
-    let min = 0;
-    let max = 0;
-
-    filterNumColumns(allColumns).forEach(column => {
-      let filterMin = column.preFilteredRows.length ? column.preFilteredRows[0].values[column.id] : 0
-      let filterMax = column.preFilteredRows.length ? column.preFilteredRows[0].values[column.id] : 0
-      filteredRows.push([column.id, column.preFilteredRows])
-
-      column.preFilteredRows.forEach(row => {
-        filterMin = Math.min(row.values[column.id], filterMin)
-        filterMax = Math.max(row.values[column.id], filterMax)
-
-        if (filterMin < min) {
-          min = filterMin
-        } else if (filterMax > max) {
-          max = filterMax
-        }
-      })
+    let min = preFilteredRows.length ? preFilteredRows[0].values[id] : 0
+    let max = preFilteredRows.length ? preFilteredRows[0].values[id] : 0
+    preFilteredRows.forEach(row => {
+      min = Math.min(row.values[id], min)
+      max = Math.max(row.values[id], max)
     })
-    setMaxValue(max)
-    setMinValue(min)
+
+    setMaxValue(Math.ceil(max))
+    setMinValue(Math.floor(min))
+
     return [min, max]
-  }, [filteredRows])
-  //console.log('ids: ', columnsId)
-  //console.log('rows: ', filteredRows)
-  const handleOnChange = (_, newValue) => {
-    // console.log('new value: ', newValue);
-    // console.log("event: ", _)
-    const [_min, _max] = newValue
+  }, [id, preFilteredRows])
+
+  const sliderOnChange = (_, newValue) => {
     setMaxValue(newValue[1])
     setMinValue(newValue[0])
+    console.log('slider change')
+    const [_min, _max] = newValue
+
     if (_min === min && _max === max) {
-      setFilter(filterValue)
+      setFilter('')
     } else {
       setFilter(newValue)
     }
   }
 
   const minOnChange = ({ target: { value } }) => {
-    setMinValue(value)
+    setMinValue(Number(value))
     console.log('min value: ', value)
   }
 
   const maxOnChange = ({ target: { value } }) => {
-    setMaxValue(value)
+    setMaxValue(Number(value))
     console.log('max value: ', value)
   }
 
   return (
     <div className={classes.root} onClick={(e) => { e.stopPropagation() }} >
       {console.log('re-render')}
+      {console.log('state: ', maxValue)}
       <Slider
         value={filterValue || [Math.ceil(min), Math.floor(max)]}
-        onChange={(_, newValue) => handleOnChange(_, newValue)}
-        max={Math.ceil(max)}
-        min={Math.floor(min)}
+        onChange={(_, newValue) => sliderOnChange(_, newValue)}
+        max={max}
+        min={min}
+        valueLabelDisplay="on"
         step={max - min <= 1 ? 0.1 : 1}
       />
       <div className={classes.range}>
@@ -132,6 +110,7 @@ const QuantitaveFilter = ({ allColumns, setFilter, filterValue }) => {
             size='small'
             value={minValue}
             onChange={minOnChange}
+            onKeyUp={() => setFilter([minValue, maxValue])}
           />
         </div>
         <div className="max">
@@ -140,6 +119,7 @@ const QuantitaveFilter = ({ allColumns, setFilter, filterValue }) => {
             size='small'
             value={maxValue}
             onChange={maxOnChange}
+            onKeyUp={() => setFilter([minValue, maxValue])}
           />
         </div>
       </div>
@@ -148,7 +128,7 @@ const QuantitaveFilter = ({ allColumns, setFilter, filterValue }) => {
 }
 
 QuantitaveFilter.propTypes = {
-  allColumns: PropTypes.array.isRequired
+  column: PropTypes.object.isRequired
 }
 
 QuantitaveFilter.filterFn = 'between'

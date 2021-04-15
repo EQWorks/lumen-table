@@ -222,7 +222,7 @@ export const Table = ({
       )}
       {(_data.length > 0 && slider) && (
         <QuantitaveFilter
-          allColumns={allColumns}
+          column={testColumns}
           setFilter={setGlobalFilter}
           filterValue={globalFilter || ''}
         />
@@ -359,6 +359,6 @@ Table.defaultProps = {
   isBorder: false,
 }
 Table.Column = TableColumn
-Table.filters = { DefaultFilter, SelectionFilter, RangeFilter }
+Table.filters = { DefaultFilter, SelectionFilter, RangeFilter, QuantitaveFilter }
 
 export default Table
