@@ -30,6 +30,32 @@ import SelectionFilter from './filters/selection-filter'
 import RangeFilter from './filters/range-filter'
 import { saveData } from './table-toolbar/download'
 import useStyles from './useStyles'
+import QuantitaveFilter from './filters/quantitave-filter'
+
+
+const useStyles = makeStyles((theme) => ({
+  head: {
+    fontWeight: theme.typography.fontWeightBold,
+    backgroundColor: theme.palette.grey[50],
+    whiteSpace: 'wrap',
+    height: '100%',
+  },
+  columnContainer: {
+    display: 'flex',
+  },
+  body: {
+    whiteSpace: 'normal',
+    wordBreak: 'break-word',
+  },
+  grow: {
+    flexGrow: 1,
+  },
+  spacer: { flex: 'inherit' },
+  root: { overflow: 'visible' },
+  table: {
+    tableLayout: 'fixed',
+  },
+}))
 
 const getHeader = (s) => [
   s.charAt(0).toUpperCase(),
@@ -195,7 +221,7 @@ export const Table = ({
         />
       )}
       {(_data.length > 0 && slider) && (
-        <QualitativeFilter
+        <QuantitaveFilter
           allColumns={allColumns}
           setFilter={setGlobalFilter}
           filterValue={globalFilter || ''}
