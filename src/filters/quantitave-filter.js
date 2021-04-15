@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import Slider from '@material-ui/core/Slider'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
+import { Button } from '@material-ui/core'
 
 
 // based on https://stackoverflow.com/a/10601315/158111
@@ -83,20 +84,19 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
 
   const minOnChange = ({ target: { value } }) => {
     setMinValue(Number(value))
-    console.log('min value: ', value)
+    //console.log('min value: ', value)
   }
 
   const maxOnChange = ({ target: { value } }) => {
     setMaxValue(Number(value))
-    console.log('max value: ', value)
+    //console.log('max value: ', value)
   }
 
   return (
     <div className={classes.root} onClick={(e) => { e.stopPropagation() }} >
       {console.log('re-render')}
-      {console.log('state: ', maxValue)}
       <Slider
-        value={filterValue || [Math.ceil(min), Math.floor(max)]}
+        value={filterValue || [minValue, maxValue]}
         onChange={(_, newValue) => sliderOnChange(_, newValue)}
         max={max}
         min={min}
@@ -110,7 +110,7 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
             size='small'
             value={minValue}
             onChange={minOnChange}
-            onKeyUp={() => setFilter([minValue, maxValue])}
+
           />
         </div>
         <div className="max">
@@ -119,13 +119,23 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
             size='small'
             value={maxValue}
             onChange={maxOnChange}
-            onKeyUp={() => setFilter([minValue, maxValue])}
+
           />
         </div>
+      </div>
+      <div className="buttonContainer">
+        <Button variant="contained" color="primary">
+          SAVE
+        </Button>
+        <Button variant="outlined" color="primary">
+          CANCEL
+        </Button>
       </div>
     </div>
   )
 }
+
+//onKeyUp={() => setFilter([minValue, maxValue])}
 
 QuantitaveFilter.propTypes = {
   column: PropTypes.object.isRequired
