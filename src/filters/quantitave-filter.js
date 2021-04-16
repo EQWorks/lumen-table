@@ -6,32 +6,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import { Button } from '@material-ui/core'
 
-
-// based on https://stackoverflow.com/a/10601315/158111
-function abbreviateNumber(value) {
-  const suffixes = ['', 'k', 'm', 'b', 't']
-  let newValue = value
-  if (value >= 1000) {
-    const suffixNum = Math.floor(String(Math.floor(value)).length / 3)
-    let shortValue = ''
-    for (var precision = 2; precision >= 1; precision--) {
-      shortValue = (suffixNum !== 0 ? (value / Math.pow(1000, suffixNum)) : value)
-      shortValue = parseFloat(shortValue.toPrecision(precision))
-      const dotLessShortValue = String(shortValue).replace(/[^a-zA-Z 0-9]+/g, '')
-      if (dotLessShortValue.length <= 2) {
-        break
-      }
-    }
-    if (shortValue % 1 != 0) {
-      shortValue = shortValue.toFixed(1)
-    }
-    newValue = `${shortValue}${suffixes[suffixNum]}`
-  } else if (value % 1 != 0 && value > 1) { //to account for float numbers
-    newValue = Math.floor(value).toString()
-  }
-  return newValue
-}
-
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '40ch',
@@ -40,18 +14,25 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
   },
 
-  range: {
+  rangeContainer: {
     display: 'grid',
     'grid-template-columns': '1fr 1fr',
     columnGap: 10,
     textAlign: 'left',
     textIndent: 5
-  }
+  },
+
+  buttonContainer: {
+    marginTop: 20,
+    display: 'grid',
+    'grid-template-columns': '1fr 1fr',
+    columnGap: 10,
+  },
 }))
 
-const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, id } }) => {
-  const [minValue, setMinValue] = useState()
-  const [maxValue, setMaxValue] = useState()
+const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, id, percentage } }) => {
+  const [minValue, setMinValue] = useState('')
+  const [maxValue, setMaxValue] = useState('')
 
   const classes = useStyles();
 
@@ -63,79 +44,77 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
       max = Math.max(row.values[id], max)
     })
 
-    setMaxValue(Math.ceil(max))
-    setMinValue(Math.floor(min))
+    if (!filterValue) {
+      setMinValue(min)
+      setMaxValue(max)
+    } else if (filterValue) {
+      setMinValue(filterValue[0])
+      setMaxValue(filterValue[1])
+    }
 
     return [min, max]
   }, [id, preFilteredRows])
 
   const sliderOnChange = (_, newValue) => {
-    setMaxValue(newValue[1])
     setMinValue(newValue[0])
-    console.log('slider change')
-    const [_min, _max] = newValue
-
-    if (_min === min && _max === max) {
-      setFilter('')
-    } else {
-      setFilter(newValue)
-    }
+    setMaxValue(newValue[1])
   }
 
   const minOnChange = ({ target: { value } }) => {
     setMinValue(Number(value))
-    //console.log('min value: ', value)
   }
 
   const maxOnChange = ({ target: { value } }) => {
     setMaxValue(Number(value))
-    //console.log('max value: ', value)
+  }
+
+  const applyOnClick = () => {
+    setFilter([minValue, maxValue])
+  }
+
+  const cancelOnClick = () => {
+    setMinValue(filterValue ? filterValue[0] : min)
+    setMaxValue(filterValue ? filterValue[1] : max)
   }
 
   return (
     <div className={classes.root} onClick={(e) => { e.stopPropagation() }} >
-      {console.log('re-render')}
       <Slider
-        value={filterValue || [minValue, maxValue]}
+        value={[minValue, maxValue]}
         onChange={(_, newValue) => sliderOnChange(_, newValue)}
-        max={max}
-        min={min}
-        valueLabelDisplay="on"
+        min={Math.floor(min)}
+        max={Math.ceil(max)}
         step={max - min <= 1 ? 0.1 : 1}
       />
-      <div className={classes.range}>
+      <div className={classes.rangeContainer}>
         <div className="min">
-          min
+          Min
         <TextField variant='outlined'
             size='small'
-            value={minValue}
+            value={percentage ? minValue * 100 : Math.floor(minValue)}
             onChange={minOnChange}
-
           />
         </div>
         <div className="max">
-          max
+          Max
         <TextField variant='outlined'
             size='small'
-            value={maxValue}
+            value={percentage ? maxValue * 100 : Math.ceil(maxValue)}
             onChange={maxOnChange}
-
           />
         </div>
       </div>
-      <div className="buttonContainer">
-        <Button variant="contained" color="primary">
-          SAVE
+      <div className={classes.buttonContainer}>
+        <Button variant="contained" color="primary" onClick={applyOnClick}>
+          APPLY
         </Button>
-        <Button variant="outlined" color="primary">
+        <Button variant="outlined" color="primary" onClick={cancelOnClick}>
           CANCEL
         </Button>
       </div>
     </div>
   )
 }
-
-//onKeyUp={() => setFilter([minValue, maxValue])}
 
 QuantitaveFilter.propTypes = {
   column: PropTypes.object.isRequired
