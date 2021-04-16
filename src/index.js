@@ -31,6 +31,7 @@ import RangeFilter from './filters/range-filter'
 import { saveData } from './table-toolbar/download'
 import useStyles from './useStyles'
 import QuantitaveFilter from './filters/quantitave-filter'
+import QualitativeFilter from './filters/qualitative-filter'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -217,14 +218,6 @@ export const Table = ({
           globalFilter={globalFilter || ''}
           setGlobalFilter={setGlobalFilter}
           downloadFn={downloadFn}
-          slider={slider}
-        />
-      )}
-      {(_data.length > 0 && slider) && (
-        <QuantitaveFilter
-          column={testColumns}
-          setFilter={setGlobalFilter}
-          filterValue={globalFilter || ''}
         />
       )}
       {visibleColumns.length > 0 ? (
@@ -359,6 +352,6 @@ Table.defaultProps = {
   isBorder: false,
 }
 Table.Column = TableColumn
-Table.filters = { DefaultFilter, SelectionFilter, RangeFilter, QuantitaveFilter }
+Table.filters = { DefaultFilter, SelectionFilter, RangeFilter, QuantitaveFilter, QualitativeFilter }
 
 export default Table

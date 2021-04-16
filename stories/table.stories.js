@@ -21,7 +21,7 @@ export default {
 
 export const empty = () => <Table />
 
-export const normal = () => <Table data={provinces} slider={false} />
+export const normal = () => <Table data={provinces} />
 
 export const noToolbar = () => <Table data={provinces} toolbar={false} />
 
@@ -236,6 +236,23 @@ export const QuantitaveFilter = () => (
         percentage: true,
       },
       { Header: 'Province', accessor: 'province' },
+    ]}
+  />
+)
+
+export const QualitativeFilter = () => (
+  <Table
+    data={provinces}
+    columns={[
+      { Header: 'New cases', accessor: 'new_cases' },
+      { Header: 'Total cases', accessor: 'total_cases' },
+      { Header: 'Rate', accessor: 'rate', Cell: ({ value }) => `${value}%` },
+      {
+        Header: 'Province',
+        accessor: 'province',
+        Filter: Table.filters.QualitativeFilter,
+        filter: Table.filters.QualitativeFilter.filterFn,
+      },
     ]}
   />
 )

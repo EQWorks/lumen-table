@@ -1,113 +1,113 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import Slider from '@material-ui/core/Slider'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import Switch from '@material-ui/core/Switch'
 import { makeStyles } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import SearchIcon from '@material-ui/icons/Search'
 
 
-// based on https://stackoverflow.com/a/10601315/158111
-function abbreviateNumber(value) {
-  const suffixes = ['', 'k', 'm', 'b', 't']
-  let newValue = value
-  if (value >= 1000) {
-    const suffixNum = Math.floor(String(Math.floor(value)).length / 3)
-    let shortValue = ''
-    for (var precision = 2; precision >= 1; precision--) {
-      shortValue = (suffixNum !== 0 ? (value / Math.pow(1000, suffixNum)) : value)
-      shortValue = parseFloat(shortValue.toPrecision(precision))
-      const dotLessShortValue = String(shortValue).replace(/[^a-zA-Z 0-9]+/g, '')
-      if (dotLessShortValue.length <= 2) {
-        break
-      }
-    }
-    if (shortValue % 1 != 0) {
-      shortValue = shortValue.toFixed(1)
-    }
-    newValue = `${shortValue}${suffixes[suffixNum]}`
-  } else if (value % 1 != 0 && value > 1) { //to account for float numbers
-    newValue = Math.floor(value).toString()
-  }
-  return newValue
-}
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '40ch',
-    padding: theme.spacing(4, 2, 0, 2),
-    textAlign: 'center',
+const useStyles = makeStyles(() => ({
+  list: {
+    overflow: 'auto',
+    maxHeight: '60vh',
+    padding: '0 1.5em',
   },
 }))
-const filteredRows = []
 
-const filterNumColumns = (columns) => {
-  const numColums = []
-  columns.forEach(column => {
-    column.preFilteredRows.length &&
-      isNaN(column.preFilteredRows[0].values[column.id]) === false && numColums.push(column)
-  })
+const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, id } }) => {
+  const [value, setValue] = useState('')
 
-  return numColums
-}
+  const classes = useStyles()
 
-const QualitativeFilter = ({ allColumns, setFilter, filterValue }) => {
-  // console.log('filterValue: ', filterValue)
-  // console.log('allColumns: ', allColumns)
-  const classes = useStyles();
-
-  const [min, max] = useMemo(() => {
-    let min = 0;
-    let max = 0;
-
-    filterNumColumns(allColumns).forEach(column => {
-      let filterMin = column.preFilteredRows.length ? column.preFilteredRows[0].values[column.id] : 0
-      let filterMax = column.preFilteredRows.length ? column.preFilteredRows[0].values[column.id] : 0
-      filteredRows.push([column.id, column.preFilteredRows])
-
-      column.preFilteredRows.forEach(row => {
-        filterMin = Math.min(row.values[column.id], filterMin)
-        filterMax = Math.max(row.values[column.id], filterMax)
-
-        if (filterMin < min) {
-          min = filterMin
-        } else if (filterMax > max) {
-          max = filterMax
-        }
-      })
+  const options = useMemo(() => {
+    const opts = new Set()
+    preFilteredRows.forEach((row) => {
+      opts.add(row.values[id])
     })
+    return [...opts.values()]
+  }, [id, preFilteredRows])
 
-    return [min, max]
-  }, [filteredRows])
-  //console.log('ids: ', columnsId)
-  //console.log('rows: ', filteredRows)
-  const handleOnChange = (_, newValue) => {
-    // console.log('new value: ', newValue);
-    // console.log("event: ", _)
-    const [_min, _max] = newValue
-    if (_min === min && _max === max) {
-      setFilter(filterValue)
-    } else {
-      setFilter(newValue)
-    }
+  const handleOnSearch = ({ target: { value } }) => {
+    setValue(value)
   }
 
+  const filterList = () => {
+    console.log('value: ', value)
+  }
+
+  console.log('options: ', options)
   return (
-    <div className={classes.root} onClick={(e) => { e.stopPropagation() }} >
-      <Slider
-        value={filterValue || [Math.ceil(min), Math.floor(max)]}
-        onChange={(_, newValue) => handleOnChange(_, newValue)}
-        max={Math.ceil(max)}
-        min={Math.floor(min)}
-        valueLabelDisplay="on"
-        step={max - min <= 1 ? 0.1 : 1}
+    <List className={classes.list}>
+      <TextField variant='outlined'
+        size='small'
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position='end'>
+              <SearchIcon />
+            </InputAdornment>
+          ),
+          'aria-label': 'search',
+        }}
+        onClick={(e) => { e.stopPropagation() }}
+        onChange={handleOnSearch}
+        onKeyUp={filterList}
+        value={value || ''}
+        placeholder={`Search in ${options.length} records...`}
       />
-    </div>
+
+      {options.map((opt) => {
+        const labelID = `${id}-selection-label-${opt}`
+        return (
+          <ListItem
+            key={opt}
+            role={undefined}
+            dense
+            button
+            onClick={(e) => {
+              e.stopPropagation()
+              let arr = (filterValue || '').split(',').filter((v) => v)
+              if (!arr.length) {
+                arr = [...options]
+              }
+              const i = arr.indexOf(opt)
+              if (i > -1) {
+                arr.splice(i, 1)
+              } else {
+                arr.push(opt)
+              }
+              setFilter(arr.length && arr.length < options.length ? arr.join(',') : undefined)
+            }}
+          >
+            <ListItemIcon>
+              <Switch
+                color='primary'
+                edge='start'
+                checked={!filterValue || (filterValue || '').includes(opt)}
+                tabIndex={-1}
+                disableRipple
+                inputProps={{ 'aria-labelledby': labelID }}
+              />
+            </ListItemIcon>
+            <ListItemText id={labelID} primary={opt} />
+          </ListItem>
+        )
+      })}
+    </List>
   )
 }
 
 QualitativeFilter.propTypes = {
-  allColumns: PropTypes.array.isRequired
+  column: PropTypes.object.isRequired,
 }
-
-QualitativeFilter.filterFn = 'between'
+QualitativeFilter.filterFn = (rows, id, filterValue) => {
+  const arr = (filterValue || '').split(',')
+  return rows.filter((row) => arr.includes(row.values[id]))
+}
 
 export default QualitativeFilter
