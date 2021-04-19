@@ -76,7 +76,7 @@ const RangeFilter = ({ column: { filterValue, preFilteredRows, setFilter, id, pe
 }
 
 RangeFilter.propTypes = {
-  column: PropTypes.object.isRequired
+  column: PropTypes.object.isRequired,
 }
 RangeFilter.filterFn = 'between'
 

@@ -25,21 +25,28 @@ const useStyles = makeStyles(() => ({
   },
 
   MuiListItem: {
-    paddingLeft: 10
+    paddingLeft: 10,
   },
 
   MuiListItemIcon: {
-    minWidth: 0
+    minWidth: 0,
   },
 
   onlyButton: {
-    padding: '1em',
-    textTransform: 'capitalize'
-  }
+    textTransform: 'capitalize',
+  },
+
+  buttonContainer: {
+    marginTop: 20,
+    display: 'grid',
+    'grid-template-columns': '1fr 1fr',
+    columnGap: 10,
+  },
 }))
 
 const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, id } }) => {
   const [value, setValue] = useState('')
+  const [optionsValue, setOptionsValue] = useState('')
   const listItemRef = useRef(null)
 
   const classes = useStyles()
@@ -72,76 +79,108 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
       })
     }
   }
-  // console.log('options: ', options)
-  return (
-    <List ref={listItemRef} className={classes.list}>
-      <TextField fullWidth variant='outlined'
-        size='small'
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position='end'>
-              <SearchIcon />
-            </InputAdornment>
-          ),
-          'aria-label': 'search',
-        }}
-        onClick={(e) => { e.stopPropagation() }}
-        onChange={handleOnSearch}
-        onKeyUp={filterList}
-        value={value || ''}
-        placeholder={`Search in ${options.length} records...`}
-      />
 
-      {options.map((opt) => {
-        const labelID = `${id}-selection-label-${opt}`
-        return (
-          <div className={classes.listItemContainer}>
-            <ListItem
-              key={opt}
-              className={classes.MuiListItem}
-              role={undefined}
-              dense
-              button
-              onClick={(e) => {
-                e.stopPropagation()
-                let arr = (filterValue || '').split(',').filter((v) => v)
-                if (!arr.length) {
-                  arr = [...options]
-                }
-                const i = arr.indexOf(opt)
-                if (i > -1) {
-                  arr.splice(i, 1)
-                } else {
-                  arr.push(opt)
-                }
-                setFilter(arr.length && arr.length < options.length ? arr.join(',') : undefined)
-              }}
-            >
-              <ListItemIcon className={classes.MuiListItemIcon}>
-                <Checkbox
-                  color='primary'
-                  edge='start'
-                  checked={!filterValue || (filterValue || '').includes(opt)}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{ 'aria-labelledby': labelID }}
-                />
-              </ListItemIcon>
-              <ListItemText className='listItemText' id={labelID} primary={opt} />
-            </ListItem>
-            <Button
-              className={classes.onlyButton}
-              color="primary"
-              onClick={(e) => {
-                e.stopPropagation()
-              }}
-            >
-              Only
-            </Button>
-          </div>
-        )
-      })}
-    </List>
+  const handleListItemOnClick = (e, opt) => {
+    e.stopPropagation()
+
+    let arr = (optionsValue || '').split(',').filter((v) => v)
+    if (!arr.length) {
+      arr = [...options]
+    }
+
+    const i = arr.indexOf(opt)
+    if (i > -1) {
+      arr.splice(i, 1)
+    } else {
+      arr.push(opt)
+    }
+    setOptionsValue(arr.length && arr.length < options.length ? arr.join(',') : undefined)
+  }
+
+  const handleOnlyOnClick = (e, opt) => {
+    e.stopPropagation()
+    setOptionsValue(opt)
+  }
+
+  const applyOnClick = (e) => {
+    e.stopPropagation()
+    setFilter(optionsValue)
+  }
+
+  const cancelOnClick = (e) => {
+    e.stopPropagation()
+    setOptionsValue(filterValue)
+  }
+
+  return (
+    <div>
+      <List ref={listItemRef} className={classes.list}>
+        <TextField fullWidth variant='outlined'
+          size='small'
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position='end'>
+                <SearchIcon />
+              </InputAdornment>
+            ),
+            'aria-label': 'search',
+          }}
+          onClick={(e) => { e.stopPropagation() }}
+          onChange={handleOnSearch}
+          onKeyUp={filterList}
+          value={value || ''}
+          placeholder={`Search in ${options.length} records...`}
+        />
+
+        {options.map((opt) => {
+          const labelID = `${id}-selection-label-${opt}`
+          return (
+            <div key={opt} className={classes.listItemContainer}>
+              <ListItem
+                className={classes.MuiListItem}
+                role={undefined}
+                dense
+                button
+                onClick={(e) => {
+                  handleListItemOnClick(e, opt)
+                }}
+              >
+                <ListItemIcon className={classes.MuiListItemIcon}>
+                  <Checkbox
+                    color='primary'
+                    edge='start'
+                    checked={!optionsValue || (optionsValue || '').includes(opt)}
+                    tabIndex={-1}
+                    disableRipple
+                    inputProps={{ 'aria-labelledby': labelID }}
+                  />
+                </ListItemIcon>
+                <ListItemText className='listItemText' id={labelID} primary={opt} />
+              </ListItem>
+              {((!optionsValue || optionsValue.includes(opt)) &&
+                <Button
+                  className={classes.onlyButton}
+                  color="primary"
+                  onClick={(e) => {
+                    handleOnlyOnClick(e, opt)
+                  }}
+                >
+                  Only
+                </Button>
+              )}
+            </div>
+          )
+        })}
+      </List>
+      <div className={classes.buttonContainer}>
+        <Button variant="contained" color="primary" onClick={(e) => { applyOnClick(e) }}>
+          Apply
+        </Button>
+        <Button variant="outlined" color="primary" onClick={(e) => { cancelOnClick(e) }}>
+          Cancel
+        </Button>
+      </div>
+    </div>
   )
 }
 

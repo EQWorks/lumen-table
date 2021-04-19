@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     'grid-template-columns': '1fr 1fr',
     columnGap: 10,
     textAlign: 'left',
-    textIndent: 5
+    textIndent: 5,
   },
 
   buttonContainer: {
@@ -34,7 +34,7 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
   const [minValue, setMinValue] = useState('')
   const [maxValue, setMaxValue] = useState('')
 
-  const classes = useStyles();
+  const classes = useStyles()
 
   const [min, max] = useMemo(() => {
     let min = preFilteredRows.length ? preFilteredRows[0].values[id] : 0
@@ -68,11 +68,13 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
     setMaxValue(Number(value))
   }
 
-  const applyOnClick = () => {
+  const applyOnClick = (e) => {
+    e.stopPropagation()
     setFilter([minValue, maxValue])
   }
 
-  const cancelOnClick = () => {
+  const cancelOnClick = (e) => {
+    e.stopPropagation()
     setMinValue(filterValue ? filterValue[0] : min)
     setMaxValue(filterValue ? filterValue[1] : max)
   }
@@ -89,7 +91,7 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
       <div className={classes.rangeContainer}>
         <div className="min">
           Min
-        <TextField variant='outlined'
+          <TextField variant='outlined'
             size='small'
             value={percentage ? minValue * 100 : Math.floor(minValue)}
             onChange={minOnChange}
@@ -97,7 +99,7 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
         </div>
         <div className="max">
           Max
-        <TextField variant='outlined'
+          <TextField variant='outlined'
             size='small'
             value={percentage ? maxValue * 100 : Math.ceil(maxValue)}
             onChange={maxOnChange}
@@ -105,11 +107,11 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
         </div>
       </div>
       <div className={classes.buttonContainer}>
-        <Button variant="contained" color="primary" onClick={applyOnClick}>
-          APPLY
+        <Button variant="contained" color="primary" onClick={(e) => { applyOnClick(e) }}>
+          Apply
         </Button>
-        <Button variant="outlined" color="primary" onClick={cancelOnClick}>
-          CANCEL
+        <Button variant="outlined" color="primary" onClick={(e) => { cancelOnClick(e) }}>
+          Cancel
         </Button>
       </div>
     </div>
@@ -117,7 +119,7 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
 }
 
 QuantitaveFilter.propTypes = {
-  column: PropTypes.object.isRequired
+  column: PropTypes.object.isRequired,
 }
 
 QuantitaveFilter.filterFn = 'between'
