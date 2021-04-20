@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, id, percentage } }) => {
+const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, id, percentage }, closePopper }) => {
   const [minValue, setMinValue] = useState('')
   const [maxValue, setMaxValue] = useState('')
 
@@ -70,11 +70,13 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
 
   const applyOnClick = (e) => {
     e.stopPropagation()
+    closePopper && closePopper(e)
     setFilter([minValue, maxValue])
   }
 
   const cancelOnClick = (e) => {
     e.stopPropagation()
+    closePopper && closePopper(e)
     setMinValue(filterValue ? filterValue[0] : min)
     setMaxValue(filterValue ? filterValue[1] : max)
   }
@@ -120,6 +122,7 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
 
 QuantitaveFilter.propTypes = {
   column: PropTypes.object.isRequired,
+  closePopper: PropTypes.func
 }
 
 QuantitaveFilter.filterFn = 'between'
