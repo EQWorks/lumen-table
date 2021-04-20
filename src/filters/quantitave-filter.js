@@ -122,7 +122,7 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
 
 QuantitaveFilter.propTypes = {
   column: PropTypes.object.isRequired,
-  closePopper: PropTypes.func
+  closePopper: PropTypes.func,
 }
 
 QuantitaveFilter.filterFn = 'between'

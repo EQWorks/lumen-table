@@ -34,7 +34,7 @@ const useStyles = makeStyles(() => ({
 
   onlyButton: {
     textTransform: 'capitalize',
-    display: 'none'
+    display: 'none',
   },
 
   buttonContainer: {
@@ -211,7 +211,7 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
 
 QualitativeFilter.propTypes = {
   column: PropTypes.object.isRequired,
-  closePopper: PropTypes.func
+  closePopper: PropTypes.func,
 }
 QualitativeFilter.filterFn = (rows, id, filterValue) => {
   const arr = (filterValue || '').split(',')

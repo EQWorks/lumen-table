@@ -9,7 +9,6 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import FilterListIcon from '@material-ui/icons/FilterList'
 import { makeStyles } from '@material-ui/core/styles'
 
-import TableSortLabel from './table-sort-label'
 import SelectionFilter from './filters/selection-filter'
 import RangeFilter from './filters/range-filter'
 import QuantitaveFilter from './filters/quantitave-filter'
