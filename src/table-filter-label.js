@@ -41,16 +41,16 @@ const TableFilterLabel = ({ column }) => {
 
   const filterType = (type) => {
     switch (type) {
-      case 'SelectionFilter':
-        return <SelectionFilter column={column} />
-      case 'RangeFilter':
-        return <RangeFilter column={column} />
-      case 'QuantitaveFilter':
-        return <QuantitaveFilter column={column} closePopper={handleClose} />
-      case 'QualitativeFilter':
-        return <QualitativeFilter column={column} closePopper={handleClose} />
-      default:
-        { console.log('nothing: ', type) }
+    case 'SelectionFilter':
+      return <SelectionFilter column={column} />
+    case 'RangeFilter':
+      return <RangeFilter column={column} />
+    case 'QuantitaveFilter':
+      return <QuantitaveFilter column={column} closePopper={handleClose} />
+    case 'QualitativeFilter':
+      return <QualitativeFilter column={column} closePopper={handleClose} />
+    default:
+    { console.log('nothing: ', type) }
     }
   }
 

@@ -35,6 +35,9 @@ const useStyles = makeStyles(() => ({
   onlyButton: {
     textTransform: 'capitalize',
     display: 'none',
+    '&:hover': {
+      backgroundColor: 'unset',
+    }
   },
 
   buttonContainer: {
@@ -48,11 +51,14 @@ const useStyles = makeStyles(() => ({
 const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, id }, closePopper }) => {
   const [value, setValue] = useState('')
   const [optionsValue, setOptionsValue] = useState(filterValue || '')
-  const listItemRef = useRef(null)
 
-  let listContainer = ''
-  let li = ''
-  let onlyButtonContainer = ''
+  const listContainerRef = useRef([])
+  const listItemTextRef = useRef([])
+  const onlyButtonRef = useRef([])
+
+  listContainerRef.current = []
+  listItemTextRef.current = []
+  onlyButtonRef.current = []
 
   const classes = useStyles()
 
@@ -64,13 +70,27 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
     return [...opts.values()]
   }, [id, preFilteredRows])
 
-  useEffect(() => {
-    if (listItemRef.current !== null) {
-      listContainer = listItemRef.current.getElementsByClassName(classes.listItemContainer)
-      li = listItemRef.current.getElementsByClassName('listItemText')
-      onlyButtonContainer = listItemRef.current.getElementsByClassName(classes.onlyButton)
+  const addToRefs = (el, type) => {
+    switch (type) {
+      case classes.listItemContainer:
+        if (el && !listContainerRef.current.includes(el)) {
+          listContainerRef.current.push(el)
+        }
+        break;
+      case 'listItemText':
+        if (el && !listItemTextRef.current.includes(el)) {
+          listItemTextRef.current.push(el)
+        }
+        break;
+      case classes.onlyButton:
+        if (el && !onlyButtonRef.current.includes(el)) {
+          onlyButtonRef.current.push(el)
+        }
+        break;
+      default:
+        break;
     }
-  })
+  }
 
   const handleOnSearch = ({ target: { value } }) => {
     setValue(value)
@@ -78,22 +98,22 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
 
   const handleOnMouseEnter = (opt, index) => {
     if (!optionsValue || optionsValue.includes(opt)) {
-      onlyButtonContainer[index].style.display = 'initial'
+      onlyButtonRef.current[index].style.display = 'initial'
     }
   }
 
   const handleOnMouseLeave = (index) => {
-    onlyButtonContainer[index].style.display = 'none'
+    onlyButtonRef.current[index].style.display = 'none'
   }
 
   const filterList = ({ target: { value } }) => {
-    li.forEach((item, i) => {
+    listItemTextRef.current.forEach((item, i) => {
       const textValue = item.textContent || item.innerText
 
       if (textValue.toUpperCase().indexOf(value.toUpperCase()) > -1) {
-        listContainer[i].style.display = ''
+        listContainerRef.current[i].style.display = ''
       } else {
-        listContainer[i].style.display = 'none'
+        listContainerRef.current[i].style.display = 'none'
       }
     })
   }
@@ -114,12 +134,12 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
     }
 
     if (!optionsValue || optionsValue.includes(opt)) {
-      onlyButtonContainer[options.indexOf(opt)].style.display = 'none'
+      onlyButtonRef.current[options.indexOf(opt)].style.display = 'none'
     } else {
-      onlyButtonContainer[options.indexOf(opt)].style.display = 'initial'
+      onlyButtonRef.current[options.indexOf(opt)].style.display = 'initial'
     }
 
-    setOptionsValue(arr.length && arr.length < options.length ? arr.join(',') : undefined)
+    setOptionsValue(arr.length && arr.length < options.length ? arr.join(',') : '')
   }
 
   const handleOnlyOnClick = (e, opt) => {
@@ -141,7 +161,7 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
 
   return (
     <div>
-      <List ref={listItemRef} className={classes.list}>
+      <List className={classes.list}>
         <TextField fullWidth variant='outlined'
           size='small'
           InputProps={{
@@ -161,7 +181,13 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
         {options.map((opt, index) => {
           const labelID = `${id}-selection-label-${opt}`
           return (
-            <div key={opt} className={classes.listItemContainer} onMouseEnter={() => handleOnMouseEnter(opt, index)} onMouseLeave={() => handleOnMouseLeave(index)}>
+            <div
+              key={opt}
+              ref={(el) => addToRefs(el, classes.listItemContainer)}
+              className={classes.listItemContainer}
+              onMouseEnter={() => handleOnMouseEnter(opt, index)}
+              onMouseLeave={() => handleOnMouseLeave(index)}
+            >
               <ListItem
                 className={classes.MuiListItem}
                 role={undefined}
@@ -181,10 +207,11 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
                     inputProps={{ 'aria-labelledby': labelID }}
                   />
                 </ListItemIcon>
-                <ListItemText className='listItemText' id={labelID} primary={opt} />
+                <ListItemText ref={(el) => addToRefs(el, 'listItemText')} className='listItemText' id={labelID} primary={opt} />
               </ListItem>
 
               <Button
+                ref={(el) => addToRefs(el, classes.onlyButton)}
                 className={classes.onlyButton}
                 color="primary"
                 onClick={(e) => {
