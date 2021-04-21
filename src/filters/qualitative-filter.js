@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useRef, useEffect } from 'react'
+import React, { useMemo, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import List from '@material-ui/core/List'
@@ -37,7 +37,7 @@ const useStyles = makeStyles(() => ({
     display: 'none',
     '&:hover': {
       backgroundColor: 'unset',
-    }
+    },
   },
 
   buttonContainer: {
@@ -72,23 +72,23 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
 
   const addToRefs = (el, type) => {
     switch (type) {
-      case classes.listItemContainer:
-        if (el && !listContainerRef.current.includes(el)) {
-          listContainerRef.current.push(el)
-        }
-        break;
-      case 'listItemText':
-        if (el && !listItemTextRef.current.includes(el)) {
-          listItemTextRef.current.push(el)
-        }
-        break;
-      case classes.onlyButton:
-        if (el && !onlyButtonRef.current.includes(el)) {
-          onlyButtonRef.current.push(el)
-        }
-        break;
-      default:
-        break;
+    case classes.listItemContainer:
+      if (el && !listContainerRef.current.includes(el)) {
+        listContainerRef.current.push(el)
+      }
+      break
+    case 'listItemText':
+      if (el && !listItemTextRef.current.includes(el)) {
+        listItemTextRef.current.push(el)
+      }
+      break
+    case classes.onlyButton:
+      if (el && !onlyButtonRef.current.includes(el)) {
+        onlyButtonRef.current.push(el)
+      }
+      break
+    default:
+      break
     }
   }
 
@@ -139,6 +139,19 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
       onlyButtonRef.current[options.indexOf(opt)].style.display = 'initial'
     }
 
+    setOptionsValue(arr.length && arr.length < options.length ? arr.join(',') : '')
+  }
+
+  const handleExceptOnClick = (e, opt) => {
+    e.stopPropagation()
+    let arr = [...options]
+
+    const i = arr.indexOf(opt)
+    if (i > -1) {
+      arr.splice(i, 1)
+    }
+
+    onlyButtonRef.current[options.indexOf(opt)].style.display = 'none'
     setOptionsValue(arr.length && arr.length < options.length ? arr.join(',') : '')
   }
 
@@ -209,17 +222,29 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
                 </ListItemIcon>
                 <ListItemText ref={(el) => addToRefs(el, 'listItemText')} className='listItemText' id={labelID} primary={opt} />
               </ListItem>
-
-              <Button
-                ref={(el) => addToRefs(el, classes.onlyButton)}
-                className={classes.onlyButton}
-                color="primary"
-                onClick={(e) => {
-                  handleOnlyOnClick(e, opt)
-                }}
-              >
-                Only
-              </Button>
+              {optionsValue && optionsValue.split(',').length === 1 ?
+                <Button
+                  ref={(el) => addToRefs(el, classes.onlyButton)}
+                  className={classes.onlyButton}
+                  color="primary"
+                  onClick={(e) => {
+                    handleExceptOnClick(e, opt)
+                  }}
+                >
+                  Except
+                </Button>
+                :
+                <Button
+                  ref={(el) => addToRefs(el, classes.onlyButton)}
+                  className={classes.onlyButton}
+                  color="primary"
+                  onClick={(e) => {
+                    handleOnlyOnClick(e, opt)
+                  }}
+                >
+                  Only
+                </Button>
+              }
             </div>
           )
         })}
