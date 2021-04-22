@@ -120,26 +120,28 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
 
   const handleListItemOnClick = (e, opt) => {
     e.stopPropagation()
+    if (opt !== optionsValue) {
+      let arr = (optionsValue || '').split(',').filter((v) => v)
 
-    let arr = (optionsValue || '').split(',').filter((v) => v)
-    if (!arr.length) {
-      arr = [...options]
+      if (!arr.length) {
+        arr = [...options]
+      }
+
+      const i = arr.indexOf(opt)
+      if (i > -1) {
+        arr.splice(i, 1)
+      } else {
+        arr.push(opt)
+      }
+
+      if (!optionsValue || optionsValue.includes(opt)) {
+        onlyButtonRef.current[options.indexOf(opt)].style.display = 'none'
+      } else {
+        onlyButtonRef.current[options.indexOf(opt)].style.display = 'initial'
+      }
+
+      setOptionsValue(arr.length && arr.length < options.length ? arr.join(',') : '')
     }
-
-    const i = arr.indexOf(opt)
-    if (i > -1) {
-      arr.splice(i, 1)
-    } else {
-      arr.push(opt)
-    }
-
-    if (!optionsValue || optionsValue.includes(opt)) {
-      onlyButtonRef.current[options.indexOf(opt)].style.display = 'none'
-    } else {
-      onlyButtonRef.current[options.indexOf(opt)].style.display = 'initial'
-    }
-
-    setOptionsValue(arr.length && arr.length < options.length ? arr.join(',') : '')
   }
 
   const handleExceptOnClick = (e, opt) => {
@@ -218,6 +220,7 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
                     tabIndex={-1}
                     disableRipple
                     inputProps={{ 'aria-labelledby': labelID }}
+                    disabled={opt === optionsValue ? true : false}
                   />
                 </ListItemIcon>
                 <ListItemText ref={(el) => addToRefs(el, 'listItemText')} className='listItemText' id={labelID} primary={opt} />
