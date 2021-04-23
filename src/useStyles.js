@@ -2,20 +2,22 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = (borderOptions) => makeStyles((theme) => {
   const containerBorderStyle = borderOptions.isBorder === true && {
-    border: `${borderOptions.borderStyle.size}px ${borderOptions.borderStyle.type} ${borderOptions.borderStyle.color ? borderOptions.borderStyle.color : 'black'}`,
-    'border-radius': `${borderOptions.borderStyle.radius > 0 ? borderOptions.borderStyle.radius : 0}px`,
+    borderWidth: `${borderOptions.borderStyles.borderWidth ? borderOptions.borderStyles.borderWidth : 2}px`,
+    borderStyle: `${borderOptions.borderStyles.borderStyle ? borderOptions.borderStyles.borderStyle : 'solid'}`,
+    borderColor: `${borderOptions.borderStyles.borderColor ? borderOptions.borderStyles.borderColor : 'black'}`,
+    borderRadius: `${borderOptions.borderStyles.borderRadius > 0 ? borderOptions.borderStyles.borderRadius : 0}px`,
     '& tfoot tr:last-child td:first-child': {
       'border-bottom': 0,
     },
   }
 
-  const tableBorderRadius = borderOptions.borderStyle.radius > 0 && borderOptions.toolbar !== true && {
+  const tableBorderRadius = borderOptions.borderStyles.borderRadius > 0 && borderOptions.toolbar !== true && {
     '& thead tr:last-child th:first-child': {
-      'border-top-left-radius': borderOptions.borderStyle.radius,
+      'border-top-left-radius': borderOptions.borderStyles.borderRadius,
     },
 
     '& thead tr:last-child th:last-child': {
-      'border-top-right-radius': borderOptions.borderStyle.radius,
+      'border-top-right-radius': borderOptions.borderStyles.borderRadius,
     },
   }
 

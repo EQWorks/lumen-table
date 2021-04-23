@@ -468,3 +468,7 @@ export const renderJson = () => {
   )
 }
 
+export const defaultBorderStyle = () => <Table data={provinces} isBorder={true}/>
+
+export const customBorderStyle = () => <Table data={provinces} isBorder={true} borderStyles={{ borderRadius: 10, borderColor: 'red', borderStyle: 'dashed', borderWidth: 4 }}/>
+

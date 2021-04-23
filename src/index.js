@@ -93,11 +93,11 @@ export const Table = ({
   remember,
   extendColumns,
   downloadFn,
-  borderStyle,
+  borderStyles,
   isBorder,
 }) => {
   const borderOptions = {
-    borderStyle,
+    borderStyles,
     toolbar,
     isBorder,
   }
@@ -178,7 +178,7 @@ export const Table = ({
   }, [sortBy])
 
   return (
-    <div className={'tableMainContainer ' + `${classes.tableMainContainer}`}>
+    <div className={classes.tableMainContainer}>
       {(_data.length > 0 && toolbar) && (
         <TableToolbar
           rows={rows}
@@ -299,11 +299,11 @@ Table.propTypes = {
   }),
   extendColumns: PropTypes.bool,
   downloadFn: PropTypes.func,
-  borderStyle: PropTypes.shape({
-    size: PropTypes.number,
-    type: PropTypes.oneOf(['dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'none', 'hidden']),
-    color: PropTypes.string,
-    radius: PropTypes.number,
+  borderStyles: PropTypes.shape({
+    borderWidth: PropTypes.number,
+    borderStyle: PropTypes.oneOf(['dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'none', 'hidden']),
+    borderColor: PropTypes.string,
+    borderRadius: PropTypes.number,
   }),
   isBorder: PropTypes.bool,
 }
@@ -320,9 +320,9 @@ Table.defaultProps = {
   remember: {},
   extendColumns: false,
   downloadFn: saveData,
-  borderStyle: {
-    size: 2,
-    type: 'solid',
+  borderStyles: {
+    borderWidth: 2,
+    borderStyle: 'solid',
   },
   isBorder: false,
 }
