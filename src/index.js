@@ -12,7 +12,6 @@ import TableFooter from '@material-ui/core/TableFooter'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
 import TablePagination from '@material-ui/core/TablePagination'
-import { makeStyles } from '@material-ui/core/styles'
 import {
   useTable,
   useSortBy,
@@ -30,31 +29,7 @@ import DefaultFilter from './filters/default-filter'
 import SelectionFilter from './filters/selection-filter'
 import RangeFilter from './filters/range-filter'
 import { saveData } from './table-toolbar/download'
-
-
-const useStyles = makeStyles((theme) => ({
-  head: {
-    fontWeight: theme.typography.fontWeightBold,
-    backgroundColor: theme.palette.grey[50],
-    whiteSpace: 'wrap',
-    height: '100%',
-  },
-  columnContainer: {
-    display: 'flex',
-  },
-  body: {
-    whiteSpace: 'normal',
-    wordBreak: 'break-word',
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  spacer: { flex: 'inherit' },
-  root: { overflow: 'visible' },
-  table: {
-    tableLayout: 'fixed',
-  },
-}))
+import useStyles from './useStyles'
 
 const getHeader = (s) => [
   s.charAt(0).toUpperCase(),
@@ -118,8 +93,16 @@ export const Table = ({
   remember,
   extendColumns,
   downloadFn,
+  borderStyles,
+  isBorder,
 }) => {
-  const classes = useStyles()
+  const borderOptions = {
+    borderStyles,
+    toolbar,
+    isBorder,
+  }
+
+  const classes = useStyles(borderOptions)()
   // custom table config hook
   const {
     _cols,
@@ -159,7 +142,7 @@ export const Table = ({
       },
       sortTypes: {
         caseInsensitive: (row1, row2, columnName) => {
-          if(row1.original[columnName].toLowerCase() > row2.original[columnName].toLowerCase()){
+          if (row1.original[columnName].toLowerCase() > row2.original[columnName].toLowerCase()) {
             return 1
           } else if (row2.original[columnName].toLowerCase() > row1.original[columnName].toLowerCase()) {
             return -1
@@ -193,9 +176,9 @@ export const Table = ({
       toggleSortBy(sortBy[0].id, sortBy[0].desc, false)
     }
   }, [sortBy])
-  
+
   return (
-    <>
+    <div className={classes.tableMainContainer}>
       {(_data.length > 0 && toolbar) && (
         <TableToolbar
           rows={rows}
@@ -222,7 +205,7 @@ export const Table = ({
                       className={classes.head}
                       {...column.getHeaderProps(column.getSortByToggleProps())}
                     >
-                      <div className={classes.columnContainer}>  
+                      <div className={classes.columnContainer}>
                         {column.render('Header')}
                         {column.canSort && (<TableSortLabel {...column} />)}
                         {column.canFilter && (<TableFilterLabel column={column} />)}
@@ -282,12 +265,12 @@ export const Table = ({
         <Card>
           <CardContent>
             <Typography variant='body1'>
-                No visible columns
+              No visible columns
             </Typography>
           </CardContent>
         </Card>
       )}
-    </>
+    </div>
   )
 }
 
@@ -316,6 +299,14 @@ Table.propTypes = {
   }),
   extendColumns: PropTypes.bool,
   downloadFn: PropTypes.func,
+  borderStyles: PropTypes.shape({
+    border: PropTypes.string,
+    borderWidth: PropTypes.number,
+    borderStyle: PropTypes.oneOf(['dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'none', 'hidden']),
+    borderColor: PropTypes.string,
+    borderRadius: PropTypes.number,
+  }),
+  isBorder: PropTypes.bool,
 }
 Table.defaultProps = {
   columns: null,
@@ -330,6 +321,8 @@ Table.defaultProps = {
   remember: {},
   extendColumns: false,
   downloadFn: saveData,
+  borderStyles: {},
+  isBorder: false,
 }
 Table.Column = TableColumn
 Table.filters = { DefaultFilter, SelectionFilter, RangeFilter }

@@ -23,7 +23,7 @@ export const empty = () => <Table />
 
 export const normal = () => <Table data={provinces} />
 
-export const noToolbar = () => <Table data={provinces} toolbar={false}/>
+export const noToolbar = () => <Table data={provinces} toolbar={false} />
 
 export const columns = () => (
   <Table
@@ -357,7 +357,7 @@ export const dynamicSortBy = () => {
 }
 export const caseInsensitiveSort = () => {
   const _provinces = provinces.map((p) => {
-    if (p.province.startsWith('B')) p.province =  p.province.toLowerCase()
+    if (p.province.startsWith('B')) p.province = p.province.toLowerCase()
     return { ...p }
   })
   return (
@@ -446,14 +446,14 @@ export const renderJson = () => {
         Header="Info"
         accessor="info"
         Cell={({ value }) => {
-        // if value type is json, just pass a node that can render it
+          // if value type is json, just pass a node that can render it
           if (typeof value === 'object') {
             return (
               <Accordion>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                 >
-                Details
+                  Details
                 </AccordionSummary>
                 <AccordionDetails>
                   <pre>{JSON.stringify(value, undefined, 2)}</pre>
@@ -467,4 +467,8 @@ export const renderJson = () => {
     </Table>
   )
 }
+
+export const defaultBorderStyle = () => <Table data={provinces} isBorder={true}/>
+
+export const customBorderStyle = () => <Table data={provinces} isBorder={true} borderStyles={{ borderRadius: 10, borderColor: 'red', borderStyle: 'dashed', borderWidth: 4 }}/>
 
