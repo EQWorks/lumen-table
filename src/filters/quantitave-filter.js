@@ -37,12 +37,9 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
   const classes = useStyles()
 
   const [min, max] = useMemo(() => {
-    let min = preFilteredRows.length ? preFilteredRows[0].values[id] : 0
-    let max = preFilteredRows.length ? preFilteredRows[0].values[id] : 0
-    preFilteredRows.forEach(row => {
-      min = Math.min(row.values[id], min)
-      max = Math.max(row.values[id], max)
-    })
+    const values = preFilteredRows.map(({ values }) => values[id])
+    const min = Math.min(...values, 0)
+    const max = Math.max(...values, 0)
 
     if (!filterValue) {
       setMinValue(min)
