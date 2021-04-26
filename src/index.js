@@ -300,6 +300,7 @@ Table.propTypes = {
   extendColumns: PropTypes.bool,
   downloadFn: PropTypes.func,
   borderStyles: PropTypes.shape({
+    border: PropTypes.string,
     borderWidth: PropTypes.number,
     borderStyle: PropTypes.oneOf(['dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'none', 'hidden']),
     borderColor: PropTypes.string,
@@ -320,12 +321,7 @@ Table.defaultProps = {
   remember: {},
   extendColumns: false,
   downloadFn: saveData,
-  borderStyles: {
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#e0e0e0',
-    borderRadius: 4,
-  },
+  borderStyles: {},
   isBorder: false,
 }
 Table.Column = TableColumn
