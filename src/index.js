@@ -321,8 +321,10 @@ Table.defaultProps = {
   extendColumns: false,
   downloadFn: saveData,
   borderStyles: {
-    borderWidth: 2,
+    borderWidth: 1,
     borderStyle: 'solid',
+    borderColor: '#e0e0e0',
+    borderRadius: 4,
   },
   isBorder: false,
 }

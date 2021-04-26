@@ -2,16 +2,16 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = (borderOptions) => makeStyles((theme) => {
   const containerBorderStyle = borderOptions.isBorder === true && {
-    borderWidth: `${borderOptions.borderStyles.borderWidth ? borderOptions.borderStyles.borderWidth : 2}px`,
+    borderWidth: `${borderOptions.borderStyles.borderWidth ? borderOptions.borderStyles.borderWidth : 1}px`,
     borderStyle: `${borderOptions.borderStyles.borderStyle ? borderOptions.borderStyles.borderStyle : 'solid'}`,
-    borderColor: `${borderOptions.borderStyles.borderColor ? borderOptions.borderStyles.borderColor : 'black'}`,
-    borderRadius: `${borderOptions.borderStyles.borderRadius > 0 ? borderOptions.borderStyles.borderRadius : 0}px`,
+    borderColor: `${borderOptions.borderStyles.borderColor ? borderOptions.borderStyles.borderColor : '#e0e0e0'}`,
+    borderRadius: `${borderOptions.borderStyles.borderRadius ? borderOptions.borderStyles.borderRadius : 4}px`,
     '& tfoot tr:last-child td:first-child': {
       'border-bottom': 0,
     },
   }
 
-  const tableBorderRadius = borderOptions.borderStyles.borderRadius > 0 && borderOptions.toolbar !== true && {
+  const tableBorderRadius = borderOptions.borderStyles.borderRadius && borderOptions.toolbar !== true && {
     '& thead tr:last-child th:first-child': {
       'border-top-left-radius': borderOptions.borderStyles.borderRadius,
     },
