@@ -34,6 +34,7 @@ export const columns = () => (
       { Header: 'Province', accessor: 'province' },
       { Header: 'Rate', accessor: 'rate', Cell: ({ value }) => `${value}%` },
     ]}
+    slider={true}
   />
 )
 
@@ -206,6 +207,52 @@ export const RangeFilter = () => (
         percentage: true,
       },
       { Header: 'Province', accessor: 'province' },
+    ]}
+  />
+)
+
+export const QuantitaveFilter = () => (
+  <Table
+    data={provincesRange}
+    columns={[
+      {
+        Header: 'New cases',
+        accessor: 'new_cases',
+        Filter: Table.filters.QuantitaveFilter,
+        filter: Table.filters.QuantitaveFilter.filterFn,
+      },
+      {
+        Header: 'Total cases',
+        accessor: 'total_cases',
+        Filter: Table.filters.QuantitaveFilter,
+        filter: Table.filters.QuantitaveFilter.filterFn,
+      },
+      {
+        Header: 'Rate',
+        accessor: 'rate',
+        Cell: ({ value }) => `${value * 100}%`,
+        Filter: Table.filters.QuantitaveFilter,
+        filter: Table.filters.QuantitaveFilter.filterFn,
+        percentage: true,
+      },
+      { Header: 'Province', accessor: 'province' },
+    ]}
+  />
+)
+
+export const QualitativeFilter = () => (
+  <Table
+    data={provinces}
+    columns={[
+      { Header: 'New cases', accessor: 'new_cases' },
+      { Header: 'Total cases', accessor: 'total_cases' },
+      { Header: 'Rate', accessor: 'rate', Cell: ({ value }) => `${value}%` },
+      {
+        Header: 'Province',
+        accessor: 'province',
+        Filter: Table.filters.QualitativeFilter,
+        filter: Table.filters.QualitativeFilter.filterFn,
+      },
     ]}
   />
 )

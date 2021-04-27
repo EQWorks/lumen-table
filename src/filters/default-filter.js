@@ -20,7 +20,6 @@ const DefaultFilter = ({ filterValue, preFilteredRows, setFilter, id }) => {
   // Global filter only works with pagination from the first page.
   // This may not be a problem for server side pagination when
   // only the current page is downloaded.
-
   return (
     <TextField
       id={`table-search${id ? `-${id}` : ''}`}

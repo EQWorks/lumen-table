@@ -8,7 +8,6 @@ import Download from './download'
 import { Toggle } from './toggle'
 import DefaultFilter from '../filters/default-filter'
 
-
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,

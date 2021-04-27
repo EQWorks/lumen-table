@@ -9,6 +9,10 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import FilterListIcon from '@material-ui/icons/FilterList'
 import { makeStyles } from '@material-ui/core/styles'
 
+import SelectionFilter from './filters/selection-filter'
+import RangeFilter from './filters/range-filter'
+import QuantitaveFilter from './filters/quantitave-filter'
+import QualitativeFilter from './filters/qualitative-filter'
 import DefaultFilter from './filters/default-filter'
 
 
@@ -33,6 +37,21 @@ const TableFilterLabel = ({ column }) => {
       return
     }
     setOpen(false)
+  }
+
+  const filterType = (type) => {
+    switch (type) {
+    case 'SelectionFilter':
+      return <SelectionFilter column={column} />
+    case 'RangeFilter':
+      return <RangeFilter column={column} />
+    case 'QuantitaveFilter':
+      return <QuantitaveFilter column={column} closePopper={handleClose} />
+    case 'QualitativeFilter':
+      return <QualitativeFilter column={column} closePopper={handleClose} />
+    default:
+    { console.log('nothing: ', type) }
+    }
   }
 
   return (
@@ -61,7 +80,7 @@ const TableFilterLabel = ({ column }) => {
               <ClickAwayListener onClickAway={handleClose}>
                 <div className={classes.filter}>
                   {column.Filter ? (
-                    column.render('Filter')
+                    filterType(column.Filter.name)
                   ) : (
                     <DefaultFilter {...column} />
                   )}

@@ -29,6 +29,9 @@ import DefaultFilter from './filters/default-filter'
 import SelectionFilter from './filters/selection-filter'
 import RangeFilter from './filters/range-filter'
 import { saveData } from './table-toolbar/download'
+import QuantitaveFilter from './filters/quantitave-filter'
+import QualitativeFilter from './filters/qualitative-filter'
+
 import useStyles from './useStyles'
 
 const getHeader = (s) => [
@@ -325,6 +328,6 @@ Table.defaultProps = {
   isBorder: false,
 }
 Table.Column = TableColumn
-Table.filters = { DefaultFilter, SelectionFilter, RangeFilter }
+Table.filters = { DefaultFilter, SelectionFilter, RangeFilter, QuantitaveFilter, QualitativeFilter }
 
 export default Table

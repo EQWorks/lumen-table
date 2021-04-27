@@ -56,8 +56,9 @@ const RangeFilter = ({ column: { filterValue, preFilteredRows, setFilter, id, pe
         value={filterValue || [Math.ceil(max), Math.floor(min)]}
         onChange={(_, newValue) => {
           const [_min, _max] = newValue
+
           if (_min === min && _max === max) {
-            setFilter(undefined)
+            setFilter('')
           } else {
             setFilter(newValue)
           }
@@ -66,8 +67,8 @@ const RangeFilter = ({ column: { filterValue, preFilteredRows, setFilter, id, pe
         min={Math.floor(min)}
         valueLabelDisplay="on"
         aria-labelledby={`${id}-range-label`}
-        getAriaValueText={percentage ? (value) => (value*100) : abbreviateNumber}
-        valueLabelFormat={percentage ? (value) => (value*100) : abbreviateNumber}
+        getAriaValueText={percentage ? (value) => (value * 100) : abbreviateNumber}
+        valueLabelFormat={percentage ? (value) => (value * 100) : abbreviateNumber}
         step={max - min <= 1 ? 0.1 : 1}
       />
     </div>
