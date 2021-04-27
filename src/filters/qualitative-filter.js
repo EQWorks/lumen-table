@@ -233,6 +233,7 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
                   onClick={(e) => {
                     handleExceptOnClick(e, opt)
                   }}
+                  disableRipple
                 >
                   Except
                 </Button>
@@ -244,6 +245,7 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
                   onClick={(e) => {
                     handleOnlyOnClick(e, opt)
                   }}
+                  disableRipple
                 >
                   Only
                 </Button>

@@ -29,7 +29,6 @@ import DefaultFilter from './filters/default-filter'
 import SelectionFilter from './filters/selection-filter'
 import RangeFilter from './filters/range-filter'
 import { saveData } from './table-toolbar/download'
-import useStyles from './useStyles'
 import QuantitaveFilter from './filters/quantitave-filter'
 import QualitativeFilter from './filters/qualitative-filter'
 
