@@ -5,8 +5,9 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import Switch from '@material-ui/core/Switch'
+//import Switch from '@material-ui/core/Switch'
 import { makeStyles } from '@material-ui/core/styles'
+import { Switch } from '@eqworks/lumen-ui'
 
 
 const useStyles = makeStyles(() => ({

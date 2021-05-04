@@ -20,6 +20,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@material-ui/lab": "^4.0.0-alpha.58",
     "prop-types": "^15.7.2",
     "react-table": "^7.6.0",
     "use-cached": "^2.0.0"

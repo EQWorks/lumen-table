@@ -4,7 +4,8 @@ import PropTypes from 'prop-types'
 import Slider from '@material-ui/core/Slider'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
-import { Button } from '@material-ui/core'
+import { Button } from '@eqworks/lumen-ui'
+import { TextField as TextF } from '@eqworks/lumen-ui'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -106,10 +107,10 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
         </div>
       </div>
       <div className={classes.buttonContainer}>
-        <Button variant="contained" color="primary" onClick={(e) => { applyOnClick(e) }}>
+        <Button type="primary" color="primary" onClick={(e) => { applyOnClick(e) }}>
           Apply
         </Button>
-        <Button variant="outlined" color="primary" onClick={(e) => { cancelOnClick(e) }}>
+        <Button type="secondary" color="primary" onClick={(e) => { cancelOnClick(e) }}>
           Cancel
         </Button>
       </div>

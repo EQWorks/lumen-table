@@ -9,7 +9,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import SearchIcon from '@material-ui/icons/Search'
-import { Button, Checkbox } from '@material-ui/core'
+import { Checkbox } from '@material-ui/core'
+import { Button } from '@eqworks/lumen-ui'
 
 
 const useStyles = makeStyles(() => ({
@@ -203,6 +204,7 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
               onMouseEnter={() => handleOnMouseEnter(opt, index)}
               onMouseLeave={() => handleOnMouseLeave(index)}
             >
+              {console.log(!optionsValue || (optionsValue || '').includes(opt))}
               <ListItem
                 className={classes.MuiListItem}
                 role={undefined}
@@ -216,7 +218,7 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
                   <Checkbox
                     color='primary'
                     edge='start'
-                    checked={!optionsValue || (optionsValue || '').includes(opt)}
+                    onChange={!optionsValue || (optionsValue || '').includes(opt)}
                     tabIndex={-1}
                     disableRipple
                     inputProps={{ 'aria-labelledby': labelID }}
@@ -255,10 +257,10 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
         })}
       </List>
       <div className={classes.buttonContainer}>
-        <Button variant="contained" color="primary" onClick={(e) => { applyOnClick(e) }}>
+        <Button type="primary" color="primary" onClick={(e) => { applyOnClick(e) }}>
           Apply
         </Button>
-        <Button variant="outlined" color="primary" onClick={(e) => { cancelOnClick(e) }}>
+        <Button type="secondary" color="primary" onClick={(e) => { cancelOnClick(e) }}>
           Cancel
         </Button>
       </div>
