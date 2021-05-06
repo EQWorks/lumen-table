@@ -12,7 +12,7 @@ import provinces from './data/provinces'
 import provincesRange from './data/provinces-range'
 import provincesDates from './data/province-dates'
 import provincesJson from './data/provinces-json'
-import { DateRangeFilter, filterDates } from './data/date-range-filter'
+import { DateRangeFilter, filterDates } from '../src/filters/date-range-filter'
 
 export default {
   title: 'Table',

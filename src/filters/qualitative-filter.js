@@ -6,11 +6,9 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import { makeStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import SearchIcon from '@material-ui/icons/Search'
-import { Checkbox } from '@material-ui/core'
-import { Button } from '@eqworks/lumen-ui'
+import { Checkbox, Button, TextField } from '@eqworks/lumen-ui'
 
 
 const useStyles = makeStyles(() => ({
@@ -33,12 +31,18 @@ const useStyles = makeStyles(() => ({
     minWidth: 0,
   },
 
-  onlyButton: {
-    textTransform: 'capitalize',
+  optionButton: {
     display: 'none',
-    '&:hover': {
+    margin: 'auto',
+    textTransform: 'capitalize',
+
+    '& .MuiButtonBase-root': {
       backgroundColor: 'unset',
-    },
+
+      '&:hover': {
+        backgroundColor: 'unset',
+      },
+    }
   },
 
   buttonContainer: {
@@ -55,11 +59,11 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
 
   const listContainerRef = useRef([])
   const listItemTextRef = useRef([])
-  const onlyButtonRef = useRef([])
+  const optionButtonRef = useRef([])
 
   listContainerRef.current = []
   listItemTextRef.current = []
-  onlyButtonRef.current = []
+  optionButtonRef.current = []
 
   const classes = useStyles()
 
@@ -83,9 +87,9 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
         listItemTextRef.current.push(el)
       }
       break
-    case classes.onlyButton:
-      if (el && !onlyButtonRef.current.includes(el)) {
-        onlyButtonRef.current.push(el)
+    case classes.optionButton:
+      if (el && !optionButtonRef.current.includes(el)) {
+        optionButtonRef.current.push(el)
       }
       break
     default:
@@ -99,12 +103,12 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
 
   const handleOnMouseEnter = (opt, index) => {
     if (!optionsValue || optionsValue.includes(opt)) {
-      onlyButtonRef.current[index].style.display = 'initial'
+      optionButtonRef.current[index].style.display = 'initial'
     }
   }
 
   const handleOnMouseLeave = (index) => {
-    onlyButtonRef.current[index].style.display = 'none'
+    optionButtonRef.current[index].style.display = 'none'
   }
 
   const filterList = ({ target: { value } }) => {
@@ -136,9 +140,9 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
       }
 
       if (!optionsValue || optionsValue.includes(opt)) {
-        onlyButtonRef.current[options.indexOf(opt)].style.display = 'none'
+        optionButtonRef.current[options.indexOf(opt)].style.display = 'none'
       } else {
-        onlyButtonRef.current[options.indexOf(opt)].style.display = 'initial'
+        optionButtonRef.current[options.indexOf(opt)].style.display = 'initial'
       }
 
       setOptionsValue(arr.length && arr.length < options.length ? arr.join(',') : '')
@@ -154,7 +158,7 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
       arr.splice(i, 1)
     }
 
-    onlyButtonRef.current[options.indexOf(opt)].style.display = 'none'
+    optionButtonRef.current[options.indexOf(opt)].style.display = 'none'
     setOptionsValue(arr.length && arr.length < options.length ? arr.join(',') : '')
   }
 
@@ -175,19 +179,21 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
     setOptionsValue(filterValue)
   }
 
+  const checkOnChange = () => {
+
+  }
+
   return (
     <div>
       <List className={classes.list}>
-        <TextField fullWidth variant='outlined'
-          size='small'
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position='end'>
-                <SearchIcon />
-              </InputAdornment>
-            ),
-            'aria-label': 'search',
-          }}
+        <TextField 
+          fullWidth 
+          label=''
+          startAdornment={(          
+            <InputAdornment position='start'>
+              <SearchIcon />
+            </InputAdornment>
+          )}
           onClick={(e) => { e.stopPropagation() }}
           onChange={handleOnSearch}
           onKeyUp={filterList}
@@ -204,7 +210,6 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
               onMouseEnter={() => handleOnMouseEnter(opt, index)}
               onMouseLeave={() => handleOnMouseLeave(index)}
             >
-              {console.log(!optionsValue || (optionsValue || '').includes(opt))}
               <ListItem
                 className={classes.MuiListItem}
                 role={undefined}
@@ -218,7 +223,7 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
                   <Checkbox
                     color='primary'
                     edge='start'
-                    onChange={!optionsValue || (optionsValue || '').includes(opt)}
+                    checked={!optionsValue || (optionsValue || '').includes(opt)}
                     tabIndex={-1}
                     disableRipple
                     inputProps={{ 'aria-labelledby': labelID }}
@@ -227,10 +232,10 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
                 </ListItemIcon>
                 <ListItemText ref={(el) => addToRefs(el, 'listItemText')} className='listItemText' id={labelID} primary={opt} />
               </ListItem>
+              <div ref={(el) => addToRefs(el, classes.optionButton)} className={classes.optionButton}>
               {optionsValue && optionsValue.split(',').length === 1 ?
                 <Button
-                  ref={(el) => addToRefs(el, classes.onlyButton)}
-                  className={classes.onlyButton}
+                  type="tertiary"
                   color="primary"
                   onClick={(e) => {
                     handleExceptOnClick(e, opt)
@@ -241,8 +246,7 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
                 </Button>
                 :
                 <Button
-                  ref={(el) => addToRefs(el, classes.onlyButton)}
-                  className={classes.onlyButton}
+                  type="tertiary"
                   color="primary"
                   onClick={(e) => {
                     handleOnlyOnClick(e, opt)
@@ -251,7 +255,7 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
                 >
                   Only
                 </Button>
-              }
+              }</div>
             </div>
           )
         })}

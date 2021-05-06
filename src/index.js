@@ -31,7 +31,7 @@ import RangeFilter from './filters/range-filter'
 import { saveData } from './table-toolbar/download'
 import QuantitaveFilter from './filters/quantitave-filter'
 import QualitativeFilter from './filters/qualitative-filter'
-import { Button } from '@eqworks/lumen-ui'
+import { ThemeProvider } from '@eqworks/lumen-ui'
 import useStyles from './useStyles'
 
 const getHeader = (s) => [
@@ -181,6 +181,7 @@ export const Table = ({
   }, [sortBy])
 
   return (
+    <ThemeProvider>
     <div className={classes.tableMainContainer}>
       {(_data.length > 0 && toolbar) && (
         <TableToolbar
@@ -274,6 +275,7 @@ export const Table = ({
         </Card>
       )}
     </div>
+    </ThemeProvider>
   )
 }
 

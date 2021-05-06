@@ -3,9 +3,7 @@ import PropTypes from 'prop-types'
 
 import Slider from '@material-ui/core/Slider'
 import { makeStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
-import { Button } from '@eqworks/lumen-ui'
-import { TextField as TextF } from '@eqworks/lumen-ui'
+import { Button, TextField } from '@eqworks/lumen-ui'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,11 +57,11 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
   }
 
   const minOnChange = ({ target: { value } }) => {
-    setMinValue(Number(value))
+    percentage ? setMinValue(Number(value) / 100) : setMinValue(Number(value))
   }
 
   const maxOnChange = ({ target: { value } }) => {
-    setMaxValue(Number(value))
+    percentage ? setMaxValue(Number(value) / 100) : setMaxValue(Number(value))
   }
 
   const applyOnClick = (e) => {
@@ -91,16 +89,18 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
       <div className={classes.rangeContainer}>
         <div className="min">
           Min
-          <TextField variant='outlined'
-            size='small'
+          <TextField 
+            fullWidth
+            label=''
             value={percentage ? minValue * 100 : Math.floor(minValue)}
             onChange={minOnChange}
           />
         </div>
         <div className="max">
           Max
-          <TextField variant='outlined'
-            size='small'
+          <TextField 
+            fullWidth
+            label=''
             value={percentage ? maxValue * 100 : Math.ceil(maxValue)}
             onChange={maxOnChange}
           />
