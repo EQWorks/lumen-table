@@ -13,6 +13,7 @@ import SelectionFilter from './filters/selection-filter'
 import RangeFilter from './filters/range-filter'
 import QuantitaveFilter from './filters/quantitave-filter'
 import QualitativeFilter from './filters/qualitative-filter'
+import { DateRangeFilter } from './filters/date-range-filter'
 import DefaultFilter from './filters/default-filter'
 
 
@@ -49,6 +50,8 @@ const TableFilterLabel = ({ column }) => {
       return <QuantitaveFilter column={column} closePopper={handleClose} />
     case 'QualitativeFilter':
       return <QualitativeFilter column={column} closePopper={handleClose} />
+    case 'DateRangeFilter':
+      return <DateRangeFilter column={column} />
     default:
     { console.log('nothing: ', type) }
     }
