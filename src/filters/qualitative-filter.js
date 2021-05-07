@@ -240,7 +240,7 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
                     }}
                     disableRipple
                   >
-                  Except
+                    Except
                   </Button>
                   :
                   <Button
@@ -251,7 +251,7 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
                     }}
                     disableRipple
                   >
-                  Only
+                    Only
                   </Button>
                 }
               </div>
