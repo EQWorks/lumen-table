@@ -5,7 +5,7 @@ import { Typography } from '@eqworks/lumen-ui'
 import Accordion from '@material-ui/core/Accordion'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import { Table } from '../src'
 
 import provinces from './data/provinces'
@@ -498,7 +498,7 @@ export const renderJson = () => {
             return (
               <Accordion>
                 <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
+                  expandIcon={<ExpandMoreRoundedIcon />}
                 >
                   Details
                 </AccordionSummary>

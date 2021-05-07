@@ -16,8 +16,8 @@ const useStyles = makeStyles(() => ({
     maxHeight: '60vh',
 
     '& .MuiListItem-root': {
-      marginBottom: 4
-    }
+      marginBottom: 4,
+    },
   },
 }))
 

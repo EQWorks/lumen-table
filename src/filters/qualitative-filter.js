@@ -7,7 +7,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import { makeStyles } from '@material-ui/core/styles'
 import InputAdornment from '@material-ui/core/InputAdornment'
-import SearchIcon from '@material-ui/icons/Search'
+import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
 import { Checkbox, Button, TextField } from '@eqworks/lumen-ui'
 
 
@@ -42,7 +42,7 @@ const useStyles = makeStyles(() => ({
       '&:hover': {
         backgroundColor: 'unset',
       },
-    }
+    },
   },
 
   buttonContainer: {
@@ -179,10 +179,6 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
     setOptionsValue(filterValue)
   }
 
-  const checkOnChange = () => {
-
-  }
-
   return (
     <div>
       <List className={classes.list}>
@@ -191,7 +187,7 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
           label=''
           startAdornment={(          
             <InputAdornment position='start'>
-              <SearchIcon />
+              <SearchRoundedIcon />
             </InputAdornment>
           )}
           onClick={(e) => { e.stopPropagation() }}
@@ -233,29 +229,29 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
                 <ListItemText ref={(el) => addToRefs(el, 'listItemText')} className='listItemText' id={labelID} primary={opt} />
               </ListItem>
               <div ref={(el) => addToRefs(el, classes.optionButton)} className={classes.optionButton}>
-              {optionsValue && optionsValue.split(',').length === 1 ?
-                <Button
-                  type="tertiary"
-                  color="primary"
-                  onClick={(e) => {
-                    handleExceptOnClick(e, opt)
-                  }}
-                  disableRipple
-                >
+                {optionsValue && optionsValue.split(',').length === 1 ?
+                  <Button
+                    type="tertiary"
+                    color="primary"
+                    onClick={(e) => {
+                      handleExceptOnClick(e, opt)
+                    }}
+                    disableRipple
+                  >
                   Except
-                </Button>
-                :
-                <Button
-                  type="tertiary"
-                  color="primary"
-                  onClick={(e) => {
-                    handleOnlyOnClick(e, opt)
-                  }}
-                  disableRipple
-                >
+                  </Button>
+                  :
+                  <Button
+                    type="tertiary"
+                    color="primary"
+                    onClick={(e) => {
+                      handleOnlyOnClick(e, opt)
+                    }}
+                    disableRipple
+                  >
                   Only
-                </Button>
-              }</div>
+                  </Button>
+                }</div>
             </div>
           )
         })}

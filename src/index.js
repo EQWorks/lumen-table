@@ -182,99 +182,99 @@ export const Table = ({
 
   return (
     <ThemeProvider>
-    <div className={classes.tableMainContainer}>
-      {(_data.length > 0 && toolbar) && (
-        <TableToolbar
-          rows={rows}
-          allColumns={allColumns}
-          visibleColumns={visibleColumns}
-          toggleHideColumn={toggleHideColumn}
-          downloadable={downloadable}
-          data={data}
-          preGlobalFilteredRows={preGlobalFilteredRows}
-          globalFilter={globalFilter || ''}
-          setGlobalFilter={setGlobalFilter}
-          downloadFn={downloadFn}
-        />
-      )}
-      {visibleColumns.length > 0 ? (
-        <TableContainer>
-          <MUITable className={classes.table} {...getTableProps(tableProps)}>
-            <TableHead>
-              {headerGroups.map((headerGroup, i) => (
-                <TableRow key={i} {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
-                  {headerGroup.headers.map((column, i) => (
-                    <TableCell
-                      key={i}
-                      className={classes.head}
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
-                    >
-                      <div className={classes.columnContainer}>
-                        {column.render('Header')}
-                        {column.canSort && (<TableSortLabel {...column} />)}
-                        {column.canFilter && (<TableFilterLabel column={column} />)}
-                      </div>
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHead>
-            <TableBody {...getTableBodyProps()} className={classes.body}>
-              {page.map((row, i) => {
-                prepareRow(row)
-                return (
-                  <TableRow key={i} {...row.getRowProps()}>
-                    {row.cells.map((cell, i) => (
-                      <TableCell key={i} {...cell.getCellProps()}>
-                        {cell.render('Cell')}
+      <div className={classes.tableMainContainer}>
+        {(_data.length > 0 && toolbar) && (
+          <TableToolbar
+            rows={rows}
+            allColumns={allColumns}
+            visibleColumns={visibleColumns}
+            toggleHideColumn={toggleHideColumn}
+            downloadable={downloadable}
+            data={data}
+            preGlobalFilteredRows={preGlobalFilteredRows}
+            globalFilter={globalFilter || ''}
+            setGlobalFilter={setGlobalFilter}
+            downloadFn={downloadFn}
+          />
+        )}
+        {visibleColumns.length > 0 ? (
+          <TableContainer>
+            <MUITable className={classes.table} {...getTableProps(tableProps)}>
+              <TableHead>
+                {headerGroups.map((headerGroup, i) => (
+                  <TableRow key={i} {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
+                    {headerGroup.headers.map((column, i) => (
+                      <TableCell
+                        key={i}
+                        className={classes.head}
+                        {...column.getHeaderProps(column.getSortByToggleProps())}
+                      >
+                        <div className={classes.columnContainer}>
+                          {column.render('Header')}
+                          {column.canSort && (<TableSortLabel {...column} />)}
+                          {column.canFilter && (<TableFilterLabel column={column} />)}
+                        </div>
                       </TableCell>
                     ))}
                   </TableRow>
-                )
-              })}
-            </TableBody>
+                ))}
+              </TableHead>
+              <TableBody {...getTableBodyProps()} className={classes.body}>
+                {page.map((row, i) => {
+                  prepareRow(row)
+                  return (
+                    <TableRow key={i} {...row.getRowProps()}>
+                      {row.cells.map((cell, i) => (
+                        <TableCell key={i} {...cell.getCellProps()}>
+                          {cell.render('Cell')}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  )
+                })}
+              </TableBody>
 
-            {/* TODO: this seems to be simplifiable */}
-            {(0 < rows.length && rows.length < data.length ? rows.length > pageSize : rows.length > 0) && (
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
+              {/* TODO: this seems to be simplifiable */}
+              {(0 < rows.length && rows.length < data.length ? rows.length > pageSize : rows.length > 0) && (
+                <TableFooter>
+                  <TableRow>
+                    <TablePagination
                     /* TODO: dynamically scale rowsPerPageOptions */
-                    rowsPerPageOptions={[
-                      5,
-                      10,
-                      25,
-                      { label: 'All', value: data.length },
-                    ]}
-                    colSpan={3}
-                    count={rows.length}
-                    rowsPerPage={pageSize}
-                    page={pageIndex}
-                    SelectProps={{
-                      inputProps: { 'aria-label': 'rows per page' },
-                      native: true,
-                    }}
-                    onChangePage={(_, page) => { gotoPage(page) }}
-                    onChangeRowsPerPage={({ target: { value } }) => {
-                      setPageSize(Number(value))
-                    }}
-                    classes={{ spacer: classes.spacer, root: classes.root }}
-                  />
-                </TableRow>
-              </TableFooter>
-            )}
-          </MUITable>
-        </TableContainer>
-      ) : (
-        <Card>
-          <CardContent>
-            <Typography variant='body1'>
+                      rowsPerPageOptions={[
+                        5,
+                        10,
+                        25,
+                        { label: 'All', value: data.length },
+                      ]}
+                      colSpan={3}
+                      count={rows.length}
+                      rowsPerPage={pageSize}
+                      page={pageIndex}
+                      SelectProps={{
+                        inputProps: { 'aria-label': 'rows per page' },
+                        native: true,
+                      }}
+                      onChangePage={(_, page) => { gotoPage(page) }}
+                      onChangeRowsPerPage={({ target: { value } }) => {
+                        setPageSize(Number(value))
+                      }}
+                      classes={{ spacer: classes.spacer, root: classes.root }}
+                    />
+                  </TableRow>
+                </TableFooter>
+              )}
+            </MUITable>
+          </TableContainer>
+        ) : (
+          <Card>
+            <CardContent>
+              <Typography variant='body1'>
               No visible columns
-            </Typography>
-          </CardContent>
-        </Card>
-      )}
-    </div>
+              </Typography>
+            </CardContent>
+          </Card>
+        )}
+      </div>
     </ThemeProvider>
   )
 }

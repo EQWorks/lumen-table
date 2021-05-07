@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { TextField } from '@eqworks/lumen-ui'
 import InputAdornment from '@material-ui/core/InputAdornment'
-import SearchIcon from '@material-ui/icons/Search'
+import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
 import { useAsyncDebounce } from 'react-table'
 
 
@@ -28,7 +28,7 @@ const DefaultFilter = ({ filterValue, preFilteredRows, setFilter, id }) => {
       width='225px'
       startAdornment={(          
         <InputAdornment position='start'>
-          <SearchIcon />
+          <SearchRoundedIcon />
         </InputAdornment>
       )}
       onClick={(e) => { e.stopPropagation() }}

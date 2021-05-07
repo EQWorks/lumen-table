@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import ButtonBase from '@material-ui/core/ButtonBase'
-import ImportExportIcon from '@material-ui/icons/ImportExport'
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
+import ImportExportRoundedIcon from '@material-ui/icons/ImportExportRounded'
+import ArrowDownwardRoundedIcon from '@material-ui/icons/ArrowDownwardRounded'
+import ArrowUpwardRoundedIcon from '@material-ui/icons/ArrowUpwardRounded'
 import { makeStyles } from '@material-ui/core/styles'
 
 
@@ -20,12 +20,12 @@ const TableSortLabel = ({ isSorted, isSortedDesc }) => {
 
   const renderIcon = () => {
     if (!isSorted) {
-      return (<ImportExportIcon fontSize='small' color='disabled' />)
+      return (<ImportExportRoundedIcon fontSize='small' color='disabled' />)
     }
     return isSortedDesc ? (
-      <ArrowDownwardIcon fontSize='small' color='primary' />
+      <ArrowDownwardRoundedIcon fontSize='small' color='primary' />
     ) : (
-      <ArrowUpwardIcon fontSize='small' color='primary' />
+      <ArrowUpwardRoundedIcon fontSize='small' color='primary' />
     )
   }
   return (<ButtonBase disableRipple className={classes.root}>{renderIcon()}</ButtonBase>)

@@ -8,7 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Badge from '@material-ui/core/Badge'
-import SaveAltIcon from '@material-ui/icons/SaveAlt'
+import SaveAltRoundedIcon from '@material-ui/icons/SaveAltRounded'
 import Button from '@eqworks/lumen-ui/dist/button'
 
 
@@ -87,7 +87,7 @@ const Download = ({ data, allColumns, visibleColumns, rows, downloadFn }) => {
           type='tertiary'
           endIcon={
             <Badge color='secondary' variant='dot' invisible={!allowOptions}>
-              <SaveAltIcon fontSize='small' />
+              <SaveAltRoundedIcon fontSize='small' />
             </Badge>
           }
           onClick={allowOptions ? handleToggle : handleDownload({ visCols: false, filteredRows: false })}

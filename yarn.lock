@@ -1199,10 +1199,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-"@eqworks/lumen-ui@1.0.1":
-  version "1.0.1"
-  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-ui/1.0.1/473ea1781abf718a1a379299002e5bc2ca27a49b1e0b3dc6b2ca48b79e4ad7d5#d49556add8635b73cbe30c7400cc018ba7a332e7"
-  integrity sha512-mgyGbOUhlpASzZc3eFGTjd4WXgx5d17O34P2EoJ9LlyFMzrag3sS/KlKy0fvWajTD1XnkqaKqaAz4gCtZBlYmw==
+"@eqworks/lumen-ui@^1.1.1":
+  version "1.1.1"
+  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-ui/1.1.1/4b76221bf7097e5666791c1226671703b3da9c2c9a3ba173809a037228d886f9#ebab4fcb88bb165497fe6bcfe83306bcbd9fa36b"
+  integrity sha512-H9KA0hzaGyUMn27vhyiEreG0SJb5JehQ5YnE1rEMzQKsYz9CnCGU5ZMebw4zhVVKM/fixLYhnQ8mBm4Yo6A23A==
   dependencies:
     clsx "^1.1.1"
     prop-types "^15.7.2"
