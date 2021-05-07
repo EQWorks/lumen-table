@@ -8,7 +8,9 @@ import ListItemText from '@material-ui/core/ListItemText'
 import { makeStyles } from '@material-ui/core/styles'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
-import { Checkbox, Button, TextField } from '@eqworks/lumen-ui'
+import Checkbox from '@eqworks/lumen-ui/dist/checkbox'
+import Button from '@eqworks/lumen-ui/dist/button'
+import TextField from '@eqworks/lumen-ui/dist/text-field'
 
 
 const useStyles = makeStyles(() => ({
@@ -251,7 +253,8 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
                   >
                   Only
                   </Button>
-                }</div>
+                }
+              </div>
             </div>
           )
         })}

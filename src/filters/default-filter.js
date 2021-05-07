@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { TextField } from '@eqworks/lumen-ui'
+import TextField from '@eqworks/lumen-ui/dist/text-field'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
 import { useAsyncDebounce } from 'react-table'

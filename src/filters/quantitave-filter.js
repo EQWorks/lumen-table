@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 
 import Slider from '@material-ui/core/Slider'
 import { makeStyles } from '@material-ui/core/styles'
-import { Button, TextField } from '@eqworks/lumen-ui'
+import Button from '@eqworks/lumen-ui/dist/button'
+import TextField from '@eqworks/lumen-ui/dist/text-field'
 
 const useStyles = makeStyles((theme) => ({
   root: {
