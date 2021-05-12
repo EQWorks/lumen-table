@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 
 import Slider from '@material-ui/core/Slider'
 import { makeStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
-import { Button } from '@material-ui/core'
+import Button from '@eqworks/lumen-ui/dist/button'
+import TextField from '@eqworks/lumen-ui/dist/text-field'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,11 +58,11 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
   }
 
   const minOnChange = ({ target: { value } }) => {
-    setMinValue(Number(value))
+    percentage ? setMinValue(Number(value) / 100) : setMinValue(Number(value))
   }
 
   const maxOnChange = ({ target: { value } }) => {
-    setMaxValue(Number(value))
+    percentage ? setMaxValue(Number(value) / 100) : setMaxValue(Number(value))
   }
 
   const applyOnClick = (e) => {
@@ -90,26 +90,28 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
       <div className={classes.rangeContainer}>
         <div className="min">
           Min
-          <TextField variant='outlined'
-            size='small'
+          <TextField 
+            fullWidth
+            label=''
             value={percentage ? minValue * 100 : Math.floor(minValue)}
             onChange={minOnChange}
           />
         </div>
         <div className="max">
           Max
-          <TextField variant='outlined'
-            size='small'
+          <TextField 
+            fullWidth
+            label=''
             value={percentage ? maxValue * 100 : Math.ceil(maxValue)}
             onChange={maxOnChange}
           />
         </div>
       </div>
       <div className={classes.buttonContainer}>
-        <Button variant="contained" color="primary" onClick={(e) => { applyOnClick(e) }}>
+        <Button type="primary" color="primary" onClick={(e) => { applyOnClick(e) }}>
           Apply
         </Button>
-        <Button variant="outlined" color="primary" onClick={(e) => { cancelOnClick(e) }}>
+        <Button type="secondary" color="primary" onClick={(e) => { cancelOnClick(e) }}>
           Cancel
         </Button>
       </div>

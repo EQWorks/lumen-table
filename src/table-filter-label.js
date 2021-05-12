@@ -6,13 +6,14 @@ import Popper from '@material-ui/core/Popper'
 import Grow from '@material-ui/core/Grow'
 import Paper from '@material-ui/core/Paper'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
-import FilterListIcon from '@material-ui/icons/FilterList'
+import FilterListRoundedIcon from '@material-ui/icons/FilterListRounded'
 import { makeStyles } from '@material-ui/core/styles'
 
 import SelectionFilter from './filters/selection-filter'
 import RangeFilter from './filters/range-filter'
 import QuantitaveFilter from './filters/quantitave-filter'
 import QualitativeFilter from './filters/qualitative-filter'
+import { DateRangeFilter } from './filters/date-range-filter'
 import DefaultFilter from './filters/default-filter'
 
 
@@ -49,6 +50,8 @@ const TableFilterLabel = ({ column }) => {
       return <QuantitaveFilter column={column} closePopper={handleClose} />
     case 'QualitativeFilter':
       return <QualitativeFilter column={column} closePopper={handleClose} />
+    case 'DateRangeFilter':
+      return <DateRangeFilter column={column} />
     default:
     { console.log('nothing: ', type) }
     }
@@ -66,7 +69,7 @@ const TableFilterLabel = ({ column }) => {
           setOpen((prev) => !prev)
         }}
       >
-        <FilterListIcon color={column.filterValue ? 'primary' : 'disabled'} />
+        <FilterListRoundedIcon color={column.filterValue ? 'primary' : 'disabled'} />
       </ButtonBase>
       <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition>
         {({ TransitionProps, placement }) => (

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import TextField from '@material-ui/core/TextField'
+import TextField from '@eqworks/lumen-ui/dist/text-field'
 import InputAdornment from '@material-ui/core/InputAdornment'
-import SearchIcon from '@material-ui/icons/Search'
+import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
 import { useAsyncDebounce } from 'react-table'
 
 
@@ -24,15 +24,13 @@ const DefaultFilter = ({ filterValue, preFilteredRows, setFilter, id }) => {
     <TextField
       id={`table-search${id ? `-${id}` : ''}`}
       variant='outlined'
-      size='small'
-      InputProps={{
-        startAdornment: (
-          <InputAdornment position='start'>
-            <SearchIcon />
-          </InputAdornment>
-        ),
-        'aria-label': 'search',
-      }}
+      label=''
+      width='225px'
+      startAdornment={(          
+        <InputAdornment position='start'>
+          <SearchRoundedIcon />
+        </InputAdornment>
+      )}
       onClick={(e) => { e.stopPropagation() }}
       onChange={search}
       value={value || ''}

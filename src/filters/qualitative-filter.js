@@ -6,10 +6,11 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import { makeStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
 import InputAdornment from '@material-ui/core/InputAdornment'
-import SearchIcon from '@material-ui/icons/Search'
-import { Button, Checkbox } from '@material-ui/core'
+import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
+import Checkbox from '@eqworks/lumen-ui/dist/checkbox'
+import Button from '@eqworks/lumen-ui/dist/button'
+import TextField from '@eqworks/lumen-ui/dist/text-field'
 
 
 const useStyles = makeStyles(() => ({
@@ -32,11 +33,17 @@ const useStyles = makeStyles(() => ({
     minWidth: 0,
   },
 
-  onlyButton: {
-    textTransform: 'capitalize',
+  optionButton: {
     display: 'none',
-    '&:hover': {
+    margin: 'auto',
+    textTransform: 'capitalize',
+
+    '& .MuiButtonBase-root': {
       backgroundColor: 'unset',
+
+      '&:hover': {
+        backgroundColor: 'unset',
+      },
     },
   },
 
@@ -54,11 +61,11 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
 
   const listContainerRef = useRef([])
   const listItemTextRef = useRef([])
-  const onlyButtonRef = useRef([])
+  const optionButtonRef = useRef([])
 
   listContainerRef.current = []
   listItemTextRef.current = []
-  onlyButtonRef.current = []
+  optionButtonRef.current = []
 
   const classes = useStyles()
 
@@ -82,9 +89,9 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
         listItemTextRef.current.push(el)
       }
       break
-    case classes.onlyButton:
-      if (el && !onlyButtonRef.current.includes(el)) {
-        onlyButtonRef.current.push(el)
+    case classes.optionButton:
+      if (el && !optionButtonRef.current.includes(el)) {
+        optionButtonRef.current.push(el)
       }
       break
     default:
@@ -98,12 +105,12 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
 
   const handleOnMouseEnter = (opt, index) => {
     if (!optionsValue || optionsValue.includes(opt)) {
-      onlyButtonRef.current[index].style.display = 'initial'
+      optionButtonRef.current[index].style.display = 'initial'
     }
   }
 
   const handleOnMouseLeave = (index) => {
-    onlyButtonRef.current[index].style.display = 'none'
+    optionButtonRef.current[index].style.display = 'none'
   }
 
   const filterList = ({ target: { value } }) => {
@@ -135,9 +142,9 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
       }
 
       if (!optionsValue || optionsValue.includes(opt)) {
-        onlyButtonRef.current[options.indexOf(opt)].style.display = 'none'
+        optionButtonRef.current[options.indexOf(opt)].style.display = 'none'
       } else {
-        onlyButtonRef.current[options.indexOf(opt)].style.display = 'initial'
+        optionButtonRef.current[options.indexOf(opt)].style.display = 'initial'
       }
 
       setOptionsValue(arr.length && arr.length < options.length ? arr.join(',') : '')
@@ -153,7 +160,7 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
       arr.splice(i, 1)
     }
 
-    onlyButtonRef.current[options.indexOf(opt)].style.display = 'none'
+    optionButtonRef.current[options.indexOf(opt)].style.display = 'none'
     setOptionsValue(arr.length && arr.length < options.length ? arr.join(',') : '')
   }
 
@@ -177,16 +184,14 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
   return (
     <div>
       <List className={classes.list}>
-        <TextField fullWidth variant='outlined'
-          size='small'
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position='end'>
-                <SearchIcon />
-              </InputAdornment>
-            ),
-            'aria-label': 'search',
-          }}
+        <TextField 
+          fullWidth 
+          label=''
+          startAdornment={(          
+            <InputAdornment position='start'>
+              <SearchRoundedIcon />
+            </InputAdornment>
+          )}
           onClick={(e) => { e.stopPropagation() }}
           onChange={handleOnSearch}
           onKeyUp={filterList}
@@ -225,40 +230,40 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
                 </ListItemIcon>
                 <ListItemText ref={(el) => addToRefs(el, 'listItemText')} className='listItemText' id={labelID} primary={opt} />
               </ListItem>
-              {optionsValue && optionsValue.split(',').length === 1 ?
-                <Button
-                  ref={(el) => addToRefs(el, classes.onlyButton)}
-                  className={classes.onlyButton}
-                  color="primary"
-                  onClick={(e) => {
-                    handleExceptOnClick(e, opt)
-                  }}
-                  disableRipple
-                >
-                  Except
-                </Button>
-                :
-                <Button
-                  ref={(el) => addToRefs(el, classes.onlyButton)}
-                  className={classes.onlyButton}
-                  color="primary"
-                  onClick={(e) => {
-                    handleOnlyOnClick(e, opt)
-                  }}
-                  disableRipple
-                >
-                  Only
-                </Button>
-              }
+              <div ref={(el) => addToRefs(el, classes.optionButton)} className={classes.optionButton}>
+                {optionsValue && optionsValue.split(',').length === 1 ?
+                  <Button
+                    type="tertiary"
+                    color="primary"
+                    onClick={(e) => {
+                      handleExceptOnClick(e, opt)
+                    }}
+                    disableRipple
+                  >
+                    Except
+                  </Button>
+                  :
+                  <Button
+                    type="tertiary"
+                    color="primary"
+                    onClick={(e) => {
+                      handleOnlyOnClick(e, opt)
+                    }}
+                    disableRipple
+                  >
+                    Only
+                  </Button>
+                }
+              </div>
             </div>
           )
         })}
       </List>
       <div className={classes.buttonContainer}>
-        <Button variant="contained" color="primary" onClick={(e) => { applyOnClick(e) }}>
+        <Button type="primary" color="primary" onClick={(e) => { applyOnClick(e) }}>
           Apply
         </Button>
-        <Button variant="outlined" color="primary" onClick={(e) => { cancelOnClick(e) }}>
+        <Button type="secondary" color="primary" onClick={(e) => { cancelOnClick(e) }}>
           Cancel
         </Button>
       </div>

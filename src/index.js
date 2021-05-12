@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import Typography from '@material-ui/core/Typography'
+import Typography from '@eqworks/lumen-ui/dist/typography'
 import TableContainer from '@material-ui/core/TableContainer'
 import MUITable from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
@@ -31,7 +31,6 @@ import RangeFilter from './filters/range-filter'
 import { saveData } from './table-toolbar/download'
 import QuantitaveFilter from './filters/quantitave-filter'
 import QualitativeFilter from './filters/qualitative-filter'
-
 import useStyles from './useStyles'
 
 const getHeader = (s) => [
@@ -238,7 +237,7 @@ export const Table = ({
               <TableFooter>
                 <TableRow>
                   <TablePagination
-                    /* TODO: dynamically scale rowsPerPageOptions */
+                  /* TODO: dynamically scale rowsPerPageOptions */
                     rowsPerPageOptions={[
                       5,
                       10,
@@ -268,7 +267,7 @@ export const Table = ({
         <Card>
           <CardContent>
             <Typography variant='body1'>
-              No visible columns
+            No visible columns
             </Typography>
           </CardContent>
         </Card>

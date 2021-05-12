@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
 
 import { Parser, transforms } from 'json2csv'
-import Typography from '@material-ui/core/Typography'
+import Typography from '@eqworks/lumen-ui/dist/typography'
 import Accordion from '@material-ui/core/Accordion'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import { Table } from '../src'
 
 import provinces from './data/provinces'
 import provincesRange from './data/provinces-range'
 import provincesDates from './data/province-dates'
 import provincesJson from './data/provinces-json'
-import { DateRangeFilter, filterDates } from './data/date-range-filter'
+import { DateRangeFilter, filterDates } from '../src/filters/date-range-filter'
 
 export default {
   title: 'Table',
@@ -498,7 +498,7 @@ export const renderJson = () => {
             return (
               <Accordion>
                 <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
+                  expandIcon={<ExpandMoreRoundedIcon />}
                 >
                   Details
                 </AccordionSummary>
