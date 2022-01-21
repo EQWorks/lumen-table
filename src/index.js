@@ -21,6 +21,8 @@ import {
 } from 'react-table'
 import { cached } from 'use-cached'
 
+import { Chip } from '@eqworks/lumen-labs'
+
 import TableColumn from './table-column'
 import TableToolbar from './table-toolbar'
 import TableSortLabel from './table-sort-label'
@@ -205,73 +207,115 @@ export const Table = ({
         />
       )}
       {visibleColumns.length > 0 ? (
-        <TableContainer>
-          <MUITable className={classes.table} {...getTableProps(tableProps)}>
-            <TableHead>
-              {headerGroups.map((headerGroup, i) => (
-                <TableRow key={i} {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
-                  {headerGroup.headers.map((column, i) => (
-                    <TableCell
-                      key={i}
-                      className={classes.head}
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
-                    >
-                      <div className={classes.columnContainer}>
-                        {column.render('Header')}
-                        {column.canSort && (<TableSortLabel {...column} />)}
-                        {column.canFilter && (<TableFilterLabel column={column} />)}
-                      </div>
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHead>
-            <TableBody {...getTableBodyProps()} className={classes.body}>
-              {page.map((row, i) => {
-                prepareRow(row)
-                return (
-                  <TableRow key={i} {...row.getRowProps()}>
-                    {row.cells.map((cell, i) => (
-                      <TableCell key={i} {...cell.getCellProps()}>
-                        {cell.render('Cell')}
+        <>
+          <TableContainer>
+            <MUITable className={classes.table} {...getTableProps(tableProps)}>
+              <TableHead>
+                {headerGroups.map((headerGroup, i) => (
+                  <TableRow key={i} {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
+                    {headerGroup.headers.map((column, i) => (
+                      <TableCell
+                        key={i}
+                        className={classes.head}
+                        {...column.getHeaderProps(column.getSortByToggleProps())}
+                      >
+                        <div className={classes.columnContainer}>
+                          {column.render('Header')}
+                          {column.canSort && (<TableSortLabel {...column} />)}
+                          {column.canFilter && (<TableFilterLabel column={column} />)}
+                        </div>
                       </TableCell>
                     ))}
                   </TableRow>
-                )
-              })}
-            </TableBody>
+                ))}
+              </TableHead>
+              <TableBody {...getTableBodyProps()} className={classes.body}>
+                {page.map((row, i) => {
+                  prepareRow(row)
+                  return (
+                    <TableRow key={i} {...row.getRowProps()}>
+                      {row.cells.map((cell, i) => (
+                        <TableCell key={i} {...cell.getCellProps()}>
+                          {cell.render('Cell')}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  )
+                })}
+              </TableBody>
 
-            {/* TODO: this seems to be simplifiable */}
-            {(0 < rows.length && rows.length < data.length ? rows.length > pageSize : rows.length > 0) && (
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                  /* TODO: dynamically scale rowsPerPageOptions */
-                    rowsPerPageOptions={[
-                      5,
-                      10,
-                      25,
-                      { label: 'All', value: data.length },
-                    ]}
-                    colSpan={3}
-                    count={rows.length}
-                    rowsPerPage={pageSize}
-                    page={pageIndex}
-                    SelectProps={{
-                      inputProps: { 'aria-label': 'rows per page' },
-                      native: true,
-                    }}
-                    onChangePage={(_, page) => { gotoPage(page) }}
-                    onChangeRowsPerPage={({ target: { value } }) => {
-                      setPageSize(Number(value))
-                    }}
-                    classes={{ spacer: classes.spacer, root: classes.root }}
-                  />
-                </TableRow>
-              </TableFooter>
-            )}
-          </MUITable>
-        </TableContainer>
+              {/* TODO: this seems to be simplifiable */}
+              {(0 < rows.length && rows.length < data.length ? rows.length > pageSize : rows.length > 0) && (
+                <TableFooter>
+                  <TableRow>
+                    <TablePagination
+                    /* TODO: dynamically scale rowsPerPageOptions */
+                      rowsPerPageOptions={[
+                        5,
+                        10,
+                        25,
+                        { label: 'All', value: data.length },
+                      ]}
+                      colSpan={3}
+                      count={rows.length}
+                      rowsPerPage={pageSize}
+                      page={pageIndex}
+                      SelectProps={{
+                        inputProps: { 'aria-label': 'rows per page' },
+                        native: true,
+                      }}
+                      onChangePage={(_, page) => { gotoPage(page) }}
+                      onChangeRowsPerPage={({ target: { value } }) => {
+                        setPageSize(Number(value))
+                      }}
+                      classes={{ spacer: classes.spacer, root: classes.root }}
+                    />
+                  </TableRow>
+                </TableFooter>
+              )}
+            </MUITable>
+          </TableContainer>
+          <div className="table-main-container">
+            <div className="table-container">
+              <table className="table-root">
+                <thead className="table-header">
+                  {headerGroups.map((headerGroup) => ( 
+                    <tr className="table-header-row" {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
+                      {headerGroup.headers.map((column) => (
+                        <td className="table-header-cell" {...column.getHeaderProps(column.getSortByToggleProps())}>
+                          <div className="table-header-item">
+                            {column.render('Header')}
+                            {column.canSort && (<TableSortLabel {...column} />)}
+                            {column.canFilter && (<TableFilterLabel column={column} />)}
+                          </div>
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </thead>
+                <tbody className="table-body" {...getTableBodyProps()}>
+                  {page.map((row, i) => {
+                    prepareRow(row)
+                    return (
+                      <tr className="table-body-row" key={i} {...row.getRowProps()}>
+                        {row.cells.map((cell, i) => (
+                          <td className="table-body-cell" key={i} {...cell.getCellProps()}>
+                            {cell.render('Cell')}
+                          </td>
+                        ))}
+                      </tr>
+                    )
+                  })}
+                </tbody>
+                <tfoot className="table-footer">
+                  <tr className="table-footer-row">
+                    
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </>
       ) : (
         <Card>
           <CardContent>

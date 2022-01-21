@@ -20,6 +20,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@eqworks/lumen-labs": "^0.1.0-alpha.24",
     "prop-types": "^15.7.2",
     "react-table": "^7.6.0",
     "use-cached": "^2.0.0"
@@ -32,8 +33,8 @@
     "@babel/preset-react": "^7.9.4",
     "@eqworks/lumen-ui": "^1.1.1",
     "@material-ui/core": "^4.11.3",
-    "@material-ui/lab": "^4.0.0-alpha.58",
     "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.58",
     "@size-limit/preset-small-lib": "^4.6.0",
     "@storybook/addon-actions": "^6.0.26",
     "@storybook/addon-essentials": "^6.0.26",
@@ -50,8 +51,8 @@
   "peerDependencies": {
     "@eqworks/lumen-ui": "^1.1.1",
     "@material-ui/core": "^4.11.3",
-    "@material-ui/lab": "^4.0.0-alpha.58",
     "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.58",
     "react": "^16.14.0"
   },
   "size-limit": [
