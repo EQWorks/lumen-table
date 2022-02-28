@@ -1,17 +1,15 @@
 import React, { useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import Slider from '@material-ui/core/Slider'
 import { makeStyles } from '@material-ui/core/styles'
-import Button from '@eqworks/lumen-ui/dist/button'
-import TextField from '@eqworks/lumen-ui/dist/text-field'
+import { Button, TextField, RangeSliderLabel } from '@eqworks/lumen-labs'
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '40ch',
     padding: theme.spacing(4, 2, 0, 2),
     fontSize: theme.typography.fontSize,
-    textAlign: 'center',
   },
 
   rangeContainer: {
@@ -35,6 +33,9 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
   const [maxValue, setMaxValue] = useState('')
 
   const classes = useStyles()
+  const textFieldClasses = Object.freeze({ 
+    container: 'w-full',
+  })
 
   const [min, max] = useMemo(() => {
     const values = preFilteredRows.map(({ values }) => values[id])
@@ -57,12 +58,12 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
     setMaxValue(newValue[1])
   }
 
-  const minOnChange = ({ target: { value } }) => {
-    percentage ? setMinValue(Number(value) / 100) : setMinValue(Number(value))
+  const minOnChange = (val) => {
+    percentage ? setMinValue(Number(val) / 100) : setMinValue(Number(val))
   }
 
-  const maxOnChange = ({ target: { value } }) => {
-    percentage ? setMaxValue(Number(value) / 100) : setMaxValue(Number(value))
+  const maxOnChange = (val) => {
+    percentage ? setMaxValue(Number(val) / 100) : setMaxValue(Number(val))
   }
 
   const applyOnClick = (e) => {
@@ -79,39 +80,42 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
   }
 
   return (
-    <div className={classes.root} onClick={(e) => { e.stopPropagation() }} >
-      <Slider
-        value={[minValue, maxValue]}
+    <div className={classes.root} onClick={(e) => { e.stopPropagation() }}>
+      <RangeSliderLabel
+        values={[minValue, maxValue]}
         onChange={(_, newValue) => sliderOnChange(_, newValue)}
         min={Math.floor(min)}
         max={Math.ceil(max)}
-        step={max - min <= 1 ? 0.1 : 1}
+        width='w-full'
+        showLabel={false}
       />
       <div className={classes.rangeContainer}>
         <div className="min">
           Min
-          <TextField 
-            fullWidth
-            label=''
-            value={percentage ? minValue * 100 : Math.floor(minValue)}
+          <TextField
+            classes={textFieldClasses}
+            size='lg'
+            onClick={(e) => { e.stopPropagation() }}
             onChange={minOnChange}
+            value={percentage ? (minValue * 100).toString() : Math.floor(minValue).toString()}
           />
         </div>
         <div className="max">
           Max
           <TextField 
-            fullWidth
-            label=''
-            value={percentage ? maxValue * 100 : Math.ceil(maxValue)}
+            classes={textFieldClasses}
+            size='lg'
+            onClick={(e) => { e.stopPropagation() }}
             onChange={maxOnChange}
+            value={percentage ? (maxValue * 100).toString() : Math.ceil(maxValue).toString()}
           />
         </div>
       </div>
       <div className={classes.buttonContainer}>
-        <Button type="primary" color="primary" onClick={(e) => { applyOnClick(e) }}>
+        <Button variant="filled" size='lg' onClick={(e) => { applyOnClick(e) }}>
           Apply
         </Button>
-        <Button type="secondary" color="primary" onClick={(e) => { cancelOnClick(e) }}>
+        <Button variant="outlined" size='lg' onClick={(e) => { cancelOnClick(e) }}>
           Cancel
         </Button>
       </div>
