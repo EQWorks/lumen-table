@@ -43,7 +43,7 @@ export const saveData = ({ data, rows, allColumns, visibleColumns, visCols = fal
 
 const Download = ({ data, allColumns, visibleColumns, rows, downloadFn }) => {
   const classes = makeStyles({
-    toggleContainer: {
+    downloadContainer: {
       '& .button-container': {
         border: 0
       },
@@ -55,7 +55,7 @@ const Download = ({ data, allColumns, visibleColumns, rows, downloadFn }) => {
   })
 
   const dialogClasses = Object.freeze({
-    root: classes.toggleContainer,
+    root: classes.downloadContainer,
     dialog: 'dialog-container shadow-light-20 bg-secondary-50'
   })
 

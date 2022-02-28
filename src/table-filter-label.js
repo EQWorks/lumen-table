@@ -1,13 +1,9 @@
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import ButtonBase from '@material-ui/core/ButtonBase'
-import Popper from '@material-ui/core/Popper'
-import Grow from '@material-ui/core/Grow'
-import Paper from '@material-ui/core/Paper'
-import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import FilterListRoundedIcon from '@material-ui/icons/FilterListRounded'
-import { makeStyles } from '@material-ui/core/styles'
+
+import { BaseComponents, makeStyles } from '@eqworks/lumen-labs'
 
 import SelectionFilter from './filters/selection-filter'
 import RangeFilter from './filters/range-filter'
@@ -17,19 +13,37 @@ import { DateRangeFilter } from './filters/date-range-filter'
 import DefaultFilter from './filters/default-filter'
 
 
-const useStyles = makeStyles(() => ({
-  root: {
-    paddingLeft: '2px',
-    paddingRight: '2px',
-  },
-  filter: {
-    padding: '1rem',
-    display: 'flex',
-  },
-}))
-
 const TableFilterLabel = ({ column }) => {
-  const classes = useStyles()
+  const classes = makeStyles({
+    filterLabelContainer: {
+      '& .button-container:focus': {
+        outline: 0
+      },
+
+      '& .dialog-container': {
+        display: 'grid',
+
+        '& .dialog-content': {
+          justifySelf: 'center',
+        }
+      },
+    },
+
+    filter: {
+      padding: '1rem',
+      display: 'flex',
+    },
+  })
+
+  const dialogClasses = Object.freeze({
+    root: classes.filterLabelContainer,
+    dialogContainer: 'dialog-container',
+    dialog: 'dialog-content shadow-light-20 bg-secondary-50'
+  })
+
+  const buttonClasses = Object.freeze({
+    button: 'button-container'
+  })
   const anchorRef = useRef(null)
   const [open, setOpen] = useState(false)
 
@@ -57,42 +71,27 @@ const TableFilterLabel = ({ column }) => {
     }
   }
 
+  const _button = (
+    <BaseComponents.ButtonBase
+      aria-label='Edit button'
+      ref={anchorRef}
+      classes={buttonClasses}
+    >
+      <FilterListRoundedIcon color={column.filterValue ? 'primary' : 'disabled'} />
+    </BaseComponents.ButtonBase>
+  )
+
   return (
     <>
-      <ButtonBase
-        aria-label='Edit button'
-        ref={anchorRef}
-        disableRipple
-        className={classes.root}
-        onClick={(e) => {
-          e.stopPropagation()
-          setOpen((prev) => !prev)
-        }}
-      >
-        <FilterListRoundedIcon color={column.filterValue ? 'primary' : 'disabled'} />
-      </ButtonBase>
-      <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition>
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
-            }}
-          >
-            <Paper>
-              <ClickAwayListener onClickAway={handleClose}>
-                <div className={classes.filter}>
-                  {column.Filter ? (
-                    filterType(column.Filter.name)
-                  ) : (
-                    <DefaultFilter {...column} />
-                  )}
-                </div>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper>
+      <BaseComponents.DialogBase classes={dialogClasses} button={_button}>
+        <div className={classes.filter}>
+          {column.Filter ? (
+            filterType(column.Filter.name)
+          ) : (
+            <DefaultFilter {...column} />
+          )}
+        </div>
+      </BaseComponents.DialogBase>
     </>
   )
 }

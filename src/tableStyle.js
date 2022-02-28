@@ -47,6 +47,10 @@ const tableStyle = makeStyles(({
           fontWeight: 700,
           '& .table-header-row': {
             '& .table-header-cell': {
+              '& .table-header-item': {
+                display: 'flex',
+                alignItems: 'center',
+              }
             },
           },
         },
