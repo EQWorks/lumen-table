@@ -217,19 +217,23 @@ export const Table = ({
           <div className={`table-container ${tableClasses.container}`}>
             <table className={`table-root border-secondary-200 shadow-light-10 ${tableClasses.root}`} {...getTableProps(tableProps)}>
               <thead className={`table-header ${tableClasses.header}`}>
-                {headerGroups.map((headerGroup) => ( 
-                  <tr className="table-header-row" {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
-                    {headerGroup.headers.map((column) => (
-                      <td className={`table-header-cell border-${defaultStyles.borderType} border-secondary-200`} {...column.getHeaderProps(column.getSortByToggleProps())}>
-                        <div className="table-header-item">
-                          {column.render('Header')}
-                          {column.canSort && (<TableSortLabel {...column} />)}
-                          {column.canFilter && (<TableFilterLabel column={column} />)}
-                        </div>
-                      </td>
-                    ))}
-                  </tr>
-                ))}
+                {headerGroups.map((headerGroup) => {
+                  const totalHeaders = headerGroup.headers.length
+
+                  return ( 
+                    <tr className="table-header-row" {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
+                      {headerGroup.headers.map((column, index) => (
+                        <td className={`table-header-cell border-${defaultStyles.borderType} border-secondary-200`} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                          <div className="table-header-item">
+                            {column.render('Header')}
+                            {column.canSort && (<TableSortLabel {...column} />)}
+                            {column.canFilter && (<TableFilterLabel column={column} index={index} length={totalHeaders}/>)}
+                          </div>
+                        </td>
+                      ))}
+                    </tr>
+                  )
+                })}
               </thead>
               <tbody className={`table-body ${tableClasses.body}`} {...getTableBodyProps()}>
                 {page.map((row, i) => {

@@ -13,7 +13,7 @@ import { DateRangeFilter } from './filters/date-range-filter'
 import DefaultFilter from './filters/default-filter'
 
 
-const TableFilterLabel = ({ column }) => {
+const TableFilterLabel = ({ column, index, length }) => {
   const classes = makeStyles({
     filterLabelContainer: {
       '& .button-container:focus': {
@@ -24,7 +24,7 @@ const TableFilterLabel = ({ column }) => {
         display: 'grid',
 
         '& .dialog-content': {
-          justifySelf: 'center',
+          justifySelf: `${(index === length - 1 && 'right') || (index === 0 ? 'left' : 'center')}`,
         }
       },
     },
@@ -98,6 +98,8 @@ const TableFilterLabel = ({ column }) => {
 
 TableFilterLabel.propTypes = {
   column: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
+  length: PropTypes.number.isRequired,
 }
 
 export default TableFilterLabel

@@ -5,24 +5,23 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import { makeStyles } from '@material-ui/core/styles'
-import Switch from '@eqworks/lumen-ui/dist/switch'
 
+import { SwitchRect, makeStyles } from '@eqworks/lumen-labs'
 
-const useStyles = makeStyles(() => ({
-  list: {
-    width: '40ch',
-    overflow: 'auto',
-    maxHeight: '60vh',
-
-    '& .MuiListItem-root': {
-      marginBottom: 4,
-    },
-  },
-}))
 
 const SelectionFilter = ({ column: { filterValue, preFilteredRows, setFilter, id } }) => {
-  const classes = useStyles()
+  const classes = makeStyles({
+    list: {
+      width: '40ch',
+      overflow: 'auto',
+      maxHeight: '60vh',
+  
+      '& .MuiListItem-root': {
+        marginBottom: 4,
+      },
+    },
+  })
+
   const options = useMemo(() => {
     const opts = new Set()
     preFilteredRows.forEach((row) => {
@@ -57,13 +56,11 @@ const SelectionFilter = ({ column: { filterValue, preFilteredRows, setFilter, id
             }}
           >
             <ListItemIcon>
-              <Switch
-                color='primary'
-                edge='start'
+              <SwitchRect
+                id={labelID}
                 checked={!filterValue || (filterValue || '').includes(opt)}
-                tabIndex={-1}
+                onClick={(e) => e.stopPropagation()}
                 disableRipple
-                inputProps={{ 'aria-labelledby': labelID }}
               />
             </ListItemIcon>
             <ListItemText id={labelID} primary={opt} />

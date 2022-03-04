@@ -54,8 +54,8 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
   }, [id, preFilteredRows])
 
   const sliderOnChange = (_, newValue) => {
-    setMinValue(newValue[0])
-    setMaxValue(newValue[1])
+    setMinValue(percentage ? newValue[0] / 100 : newValue[0])
+    setMaxValue(percentage ? newValue[1] / 100 : newValue[1])
   }
 
   const minOnChange = (val) => {
@@ -82,10 +82,10 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
   return (
     <div className={classes.root} onClick={(e) => { e.stopPropagation() }}>
       <RangeSliderLabel
-        values={[minValue, maxValue]}
+        values={percentage ? [Number(minValue * 100), Number(maxValue * 100)] : [Number(minValue), Number(maxValue)]}
         onChange={(_, newValue) => sliderOnChange(_, newValue)}
-        min={Math.floor(min)}
-        max={Math.ceil(max)}
+        min={percentage ? Math.floor(min * 100) : Math.floor(min)}
+        max={percentage ? Math.ceil(max * 100) : Math.ceil(max)}
         width='w-full'
         showLabel={false}
       />
