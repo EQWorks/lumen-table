@@ -9,19 +9,19 @@ import ListItemText from '@material-ui/core/ListItemText'
 import { SwitchRect, makeStyles } from '@eqworks/lumen-labs'
 
 
-const SelectionFilter = ({ column: { filterValue, preFilteredRows, setFilter, id } }) => {
-  const classes = makeStyles({
-    list: {
-      width: '40ch',
-      overflow: 'auto',
-      maxHeight: '60vh',
-  
-      '& .MuiListItem-root': {
-        marginBottom: 4,
-      },
-    },
-  })
+const classes = makeStyles({
+  list: {
+    width: '40ch',
+    overflow: 'auto',
+    maxHeight: '60vh',
 
+    '& .MuiListItem-root': {
+      marginBottom: '0.25rem',
+    },
+  },
+})
+
+const SelectionFilter = ({ column: { filterValue, preFilteredRows, setFilter, id } }) => {
   const options = useMemo(() => {
     const opts = new Set()
     preFilteredRows.forEach((row) => {
@@ -60,7 +60,6 @@ const SelectionFilter = ({ column: { filterValue, preFilteredRows, setFilter, id
                 id={labelID}
                 checked={!filterValue || (filterValue || '').includes(opt)}
                 onClick={(e) => e.stopPropagation()}
-                disableRipple
               />
             </ListItemIcon>
             <ListItemText id={labelID} primary={opt} />

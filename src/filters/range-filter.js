@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 
-import { makeStyles } from '@material-ui/core/styles'
-import { RangeSliderLabel } from '@eqworks/lumen-labs'
+import { RangeSliderLabel, makeStyles } from '@eqworks/lumen-labs'
 
 
 // based on https://stackoverflow.com/a/10601315/158111
@@ -30,15 +29,14 @@ function abbreviateNumber(value) {
   return newValue
 }
 
-const useStyles = makeStyles((theme) => ({
+const classes = makeStyles({
   root: {
     width: '40ch',
-    padding: theme.spacing(4, 2, 0, 2),
+    padding: '2rem 1rem 0 2rem',
   },
-}))
+})
 
 const RangeFilter = ({ column: { filterValue, preFilteredRows, setFilter, id, percentage } }) => {
-  const classes = useStyles()
   const [min, max] = useMemo(() => {
     let min = preFilteredRows.length ? preFilteredRows[0].values[id] : 0
     let max = preFilteredRows.length ? preFilteredRows[0].values[id] : 0

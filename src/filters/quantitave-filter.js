@@ -1,38 +1,37 @@
 import React, { useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { makeStyles } from '@material-ui/core/styles'
-import { Button, TextField, RangeSliderLabel } from '@eqworks/lumen-labs'
+
+import { Button, TextField, RangeSliderLabel, makeStyles } from '@eqworks/lumen-labs'
 
 
-const useStyles = makeStyles((theme) => ({
+const classes = makeStyles({
   root: {
     width: '40ch',
-    padding: theme.spacing(4, 2, 0, 2),
-    fontSize: theme.typography.fontSize,
+    padding: '2rem 1rem 0 1rem',
+    fontSize: '0.875rem',
   },
 
   rangeContainer: {
     display: 'grid',
     'grid-template-columns': '1fr 1fr',
-    columnGap: 10,
+    columnGap: '0.625rem',
     textAlign: 'left',
-    textIndent: 5,
+    textIndent: '0.313rem',
   },
 
   buttonContainer: {
-    marginTop: 20,
+    marginTop: '1.25rem',
     display: 'grid',
     'grid-template-columns': '1fr 1fr',
-    columnGap: 10,
+    columnGap: '0.625rem',
   },
-}))
+})
 
 const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, id, percentage }, closePopper }) => {
   const [minValue, setMinValue] = useState('')
   const [maxValue, setMaxValue] = useState('')
 
-  const classes = useStyles()
   const textFieldClasses = Object.freeze({ 
     container: 'w-full',
   })
