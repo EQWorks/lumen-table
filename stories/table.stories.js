@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { Parser, transforms } from 'json2csv'
 import Typography from '@eqworks/lumen-ui/dist/typography'
@@ -519,3 +519,22 @@ export const defaultBorderStyle = () => <Table data={provinces} isBorder={true}/
 
 export const customBorderStyle = () => <Table data={provinces} isBorder={true} borderStyles={{ borderRadius: 10, borderColor: 'red', borderStyle: 'dashed', borderWidth: 4 }}/>
 
+export const arbitraryAPIData = () => {
+  const API_URL = 'https://api.covid19api.com/summary'
+  const [data, setData] = useState([])
+  useEffect(() => {
+    fetch(API_URL)
+      .then((res) => res.json())
+      .then(({ Countries }) => {
+        setData(Countries)
+      })
+  }, [])
+  return (
+    <>
+      <Typography variant="body1">
+        Data from <a href={API_URL}>{API_URL}</a>
+      </Typography>
+      <Table data={data} />
+    </>
+  )
+}
