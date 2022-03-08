@@ -43,10 +43,19 @@ const inferColumns = (data) => Object.keys(data[0] || {}).map((accessor) => ({
   Header: getHeader(accessor),
 }))
 const colFilter = (c) => c.type === TableColumn || c.type.name === 'TableColumn'
+const deObjectify = (data) => data.map((d) => {
+  const r = { ...d }
+  Object.keys(d).forEach((k) => {
+    if (typeof d[k] === 'object' && d[k] != null) {
+      r[k] = JSON.stringify(d[k])
+    }
+  })
+  return r
+})
 
 const useTableConfig = ({ data, hiddenColumns, children, columns, remember, extendColumns = false }) => {
   // memoized columns and data for useTable hook
-  const _data = useMemo(() => data, [data])
+  const _data = useMemo(() => deObjectify(data), [data])
   const _cols = useMemo(() => {
     const inferred = inferColumns(data)
     if (!children && !columns) {
