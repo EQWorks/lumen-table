@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useMemo, Children } from 'react'
 import PropTypes from 'prop-types'
 
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import Typography from '@eqworks/lumen-ui/dist/typography'
-
 import {
   useTable,
   useSortBy,
@@ -89,6 +85,7 @@ const useTableConfig = ({ data, hiddenColumns, children, columns, remember, exte
 }
 
 export const Table = ({
+  classes,
   columns,
   data,
   toolbar,
@@ -102,7 +99,9 @@ export const Table = ({
   extendColumns,
   downloadFn,
   defaultStyles,
-  classes,
+  stickyHeader,
+  rowsPerPage,
+  initialPageSize,
 }) => {
   const tableClasses = Object.freeze({
     rootContainer: `${classes.rootContainer}`,
@@ -151,6 +150,7 @@ export const Table = ({
       initialState: {
         hiddenColumns: hidden,
         sortBy: useMemo(() => Array.isArray(cachedSortBy) ? cachedSortBy : [cachedSortBy], [cachedSortBy]),
+        pageSize: initialPageSize,
       },
       sortTypes: {
         caseInsensitive: (row1, row2, columnName) => {
@@ -216,20 +216,20 @@ export const Table = ({
         <>
           <div className={`table-container ${tableClasses.container}`}>
             <table className={`table-root border-secondary-200 shadow-light-10 ${tableClasses.root}`} {...getTableProps(tableProps)}>
-              <thead className={`table-header ${tableClasses.header}`}>
+              <thead className={`table-header ${tableClasses.header} ${stickyHeader && 'sticky-header'}`}>
                 {headerGroups.map((headerGroup) => {
                   const totalHeaders = headerGroup.headers.length
 
                   return ( 
                     <tr className="table-header-row" {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
                       {headerGroup.headers.map((column, index) => (
-                        <td className={`table-header-cell border-${defaultStyles.borderType} border-secondary-200`} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                        <th className={`table-header-cell border-${defaultStyles.borderType} border-secondary-200`} {...column.getHeaderProps(column.getSortByToggleProps())}>
                           <div className="table-header-item">
                             {column.render('Header')}
                             {column.canSort && (<TableSortLabel {...column} />)}
                             {column.canFilter && (<TableFilterLabel column={column} index={index} length={totalHeaders}/>)}
                           </div>
-                        </td>
+                        </th>
                       ))}
                     </tr>
                   )
@@ -258,7 +258,7 @@ export const Table = ({
                         pageSize={pageSize}
                         onChangePage={(_, page) =>  gotoPage(page.currentPage - 1)}
                         onChangeRowsPerPage={(e, val) => onChageRowsPerPage(e, val)}
-                        rowsPerPage={[5, 10, 20]}
+                        rowsPerPage={rowsPerPage}
                       />
                     </td>
                   )}
@@ -268,13 +268,11 @@ export const Table = ({
           </div>
         </>
       ) : (
-        <Card>
-          <CardContent>
-            <Typography variant='body1'>
+        <div className="empty-container shadow-10">
+          <div className="content-container">
             No visible columns
-            </Typography>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
     </div>
   )
@@ -310,6 +308,9 @@ Table.propTypes = {
     headerColor: PropTypes.oneOf(['grey', 'white']),
     borderType: PropTypes.oneOf(['none', 'horizontal', 'vertical', 'around']),
   }),
+  stickyHeader: PropTypes.bool,
+  rowsPerPage: PropTypes.arrayOf(PropTypes.number),
+  initialPageSize: PropTypes.number,
 }
 
 Table.defaultProps = {
@@ -330,6 +331,8 @@ Table.defaultProps = {
     headerColor: 'white',
     borderType: 'none',
   },
+  stickyHeader: true,
+  initialPageSize: 10,
 }
 Table.Column = TableColumn
 Table.filters = { DefaultFilter, SelectionFilter, RangeFilter, QuantitaveFilter, QualitativeFilter }

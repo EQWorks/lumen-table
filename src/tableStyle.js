@@ -4,6 +4,7 @@ const tableStyle = makeStyles(({
   tableRootContainer: {
     '& .table-container': {
       '& .table-root': {
+        position: 'relative',
         width: '100%',
         fontSize: '0.857rem',
         lineHeight: '1.143rem',
@@ -15,7 +16,7 @@ const tableStyle = makeStyles(({
         borderSpacing: 0,
 
         '& tr': {
-          '& td': {
+          '& td, th': {
             borderStyle: 'solid',
             borderCollapse: 'separate',
             borderSpacing: 0,
@@ -55,6 +56,11 @@ const tableStyle = makeStyles(({
           },
         },
 
+        '& .sticky-header': {
+          position: 'sticky',
+          top: 0,
+        },
+
         '& .table-body': {
           '& .table-body-row': {
             '& .table-body-cell': {
@@ -78,6 +84,16 @@ const tableStyle = makeStyles(({
             },
           }
         }
+      }
+    },
+
+    '& .empty-container': {
+      fontSize: '0.875rem',
+      fontWeight: '400',
+      lineHeight: '1.5',
+  
+      '& .content-container': {
+        padding: '1.25rem'
       }
     }
   },
