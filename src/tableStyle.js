@@ -41,7 +41,7 @@ const tableStyle = makeStyles(({
 
           '& .border-around': {
             borderWidth: '0 1px 1px 0',
-          }
+          },
         },
 
         '& .table-header': {
@@ -51,7 +51,7 @@ const tableStyle = makeStyles(({
               '& .table-header-item': {
                 display: 'flex',
                 alignItems: 'center',
-              }
+              },
             },
           },
         },
@@ -67,7 +67,7 @@ const tableStyle = makeStyles(({
               '& .table-body-item': {
               },
             },
-          }
+          },
         },
 
         '& .table-footer': {
@@ -82,9 +82,9 @@ const tableStyle = makeStyles(({
             '& .border-vertical': {
               borderWidth: '1px 0 0 0',
             },
-          }
-        }
-      }
+          },
+        },
+      },
     },
 
     '& .empty-container': {
@@ -93,9 +93,9 @@ const tableStyle = makeStyles(({
       lineHeight: '1.5',
   
       '& .content-container': {
-        padding: '1.25rem'
-      }
-    }
+        padding: '1.25rem',
+      },
+    },
   },
 }))
 

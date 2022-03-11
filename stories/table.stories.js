@@ -20,7 +20,7 @@ export default {
 }
 
 const tableClasses = {
-  header: ''
+  header: '',
 }
 
 export const empty = () => <Table />

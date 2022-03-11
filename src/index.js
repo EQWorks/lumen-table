@@ -112,7 +112,7 @@ export const Table = ({
       ${defaultStyles.headerColor === 'white' && 'bg-secondary-50 shadow-light-20'}
     `,
     body: `${classes.body}`,
-    footer: `${classes.footer}`
+    footer: `${classes.footer}`,
   })
   // custom table config hook
   const {
@@ -217,13 +217,13 @@ export const Table = ({
           <div className={`table-container ${tableClasses.container}`}>
             <table className={`table-root border-secondary-200 shadow-light-10 ${tableClasses.root}`} {...getTableProps(tableProps)}>
               <thead className={`table-header ${tableClasses.header} ${stickyHeader && 'sticky-header'}`}>
-                {headerGroups.map((headerGroup) => {
+                {headerGroups.map((headerGroup, index) => {
                   const totalHeaders = headerGroup.headers.length
 
                   return ( 
-                    <tr className="table-header-row" {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
+                    <tr key={`header-row-${index}`} className="table-header-row" {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
                       {headerGroup.headers.map((column, index) => (
-                        <th className={`table-header-cell border-${defaultStyles.borderType} border-secondary-200`} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                        <th key={`header-cell-${index}`} className={`table-header-cell border-${defaultStyles.borderType} border-secondary-200`} {...column.getHeaderProps(column.getSortByToggleProps())}>
                           <div className="table-header-item">
                             {column.render('Header')}
                             {column.canSort && (<TableSortLabel {...column} />)}

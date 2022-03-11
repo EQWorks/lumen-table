@@ -9,13 +9,13 @@ const DefaultFilter = ({ filterValue, preFilteredRows, setFilter, id }) => {
   const classes = makeStyles({
     defaultFilterContainer: {
       '& .textfield-container': {
-        width: '12.5rem'
-      }
-    }
+        width: '12.5rem',
+      },
+    },
   })
 
   const textFieldClasses = Object.freeze({
-    container: 'textfield-container'
+    container: 'textfield-container',
   })
 
   const [value, setValue] = useState(filterValue)
@@ -38,7 +38,7 @@ const DefaultFilter = ({ filterValue, preFilteredRows, setFilter, id }) => {
         size='lg'
         inputProps={{ 
           placeholder: `Search in ${preFilteredRows.length} records...`, 
-          startIcon: <Icons.Search size='lg'/> 
+          startIcon: <Icons.Search size='lg'/>, 
         }}
         onClick={(e) => { e.stopPropagation() }}
         onChange={search}

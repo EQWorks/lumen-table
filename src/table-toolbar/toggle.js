@@ -17,12 +17,12 @@ export const Toggle = ({ allColumns, toggleHideColumn }) => {
   const classes = makeStyles({
     toggleContainer: {
       '& .button-container': {
-        border: 0
+        border: 0,
       },
 
       '& .dialog-container': {
-        zIndex: 1
-      }
+        zIndex: 1,
+      },
     },
 
     list: {
@@ -33,11 +33,11 @@ export const Toggle = ({ allColumns, toggleHideColumn }) => {
 
   const dialogClasses = Object.freeze({
     root: classes.toggleContainer,
-    dialog: 'dialog-container shadow-light-20 bg-secondary-50'
+    dialog: 'dialog-container shadow-light-20 bg-secondary-50',
   })
 
   const buttonClasses = Object.freeze({
-    button: 'button-container'
+    button: 'button-container',
   })
 
   if (!(allColumns || []).length) {
@@ -97,48 +97,6 @@ export const Toggle = ({ allColumns, toggleHideColumn }) => {
           })}
         </List>
       </BaseComponents.DialogBase>
-      {/* <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition>
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
-            }}
-          >
-            <Paper>
-              <ClickAwayListener onClickAway={handleClose}>
-                <List className={classes.list}>
-                  {allColumns.map((c) => {
-                    const labelID = `toggle-label-${c.id}`
-                    return (
-                      <ListItem
-                        key={c.id}
-                        role={undefined}
-                        dense
-                        button
-                        disabled={c.noToggle}
-                        onClick={() => { toggleHideColumn(c.id) }}
-                      >
-                        <ListItemIcon>
-                          <Switch
-                            color='primary'
-                            edge='start'
-                            checked={c.isVisible}
-                            tabIndex={-1}
-                            disableRipple
-                            inputProps={{ 'aria-labelledby': labelID }}
-                          />
-                        </ListItemIcon>
-                        <ListItemText id={labelID} primary={c.render('Header')} />
-                      </ListItem>
-                    )
-                  })}
-                </List>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper> */}
     </>
   )
 }

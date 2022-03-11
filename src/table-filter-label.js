@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import FilterListRoundedIcon from '@material-ui/icons/FilterListRounded'
@@ -17,7 +17,7 @@ const TableFilterLabel = ({ column, index, length }) => {
   const classes = makeStyles({
     filterLabelContainer: {
       '& .button-container:focus': {
-        outline: 0
+        outline: 0,
       },
 
       '& .dialog-container': {
@@ -25,7 +25,7 @@ const TableFilterLabel = ({ column, index, length }) => {
 
         '& .dialog-content': {
           justifySelf: `${(index === length - 1 && 'right') || (index === 0 ? 'left' : 'center')}`,
-        }
+        },
       },
     },
 
@@ -38,20 +38,18 @@ const TableFilterLabel = ({ column, index, length }) => {
   const dialogClasses = Object.freeze({
     root: classes.filterLabelContainer,
     dialogContainer: 'dialog-container',
-    dialog: 'dialog-content shadow-light-20 bg-secondary-50'
+    dialog: 'dialog-content shadow-light-20 bg-secondary-50',
   })
 
   const buttonClasses = Object.freeze({
-    button: 'button-container'
+    button: 'button-container',
   })
   const anchorRef = useRef(null)
-  const [open, setOpen] = useState(false)
 
   const handleClose = (e) => {
     if (anchorRef.current && anchorRef.current.contains(e.target)) {
       return
     }
-    setOpen(false)
   }
 
   const filterType = (type) => {

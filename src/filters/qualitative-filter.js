@@ -1,9 +1,8 @@
-import React, { useMemo, useState, useRef , useEffect} from 'react'
+import React, { useMemo, useState, useRef , useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import { makeStyles, Button, BaseComponents, TextField, Icons, Checkbox } from '@eqworks/lumen-labs'
 
@@ -50,7 +49,7 @@ const classes = makeStyles({
 
     '& .submit-button': {
       justifyContent: 'center',
-    }
+    },
   },
 })
 
@@ -77,7 +76,7 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
 
     optionButton: {
       button: 'text-interactive-500 focus:outline-none',
-    }
+    },
   })
 
   const options = useMemo(() => {
@@ -238,11 +237,8 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
               >
                 {optionsValue && 
                   <Checkbox
-                    label={opt}
                     checked={checked}
                     inputProps={{ disabled: opt === optionsValue ? true : false }}
-                    onChange={(val) => {}}
-                    showLabel={false}
                   />
                 }
                 <ListItemText ref={(el) => addToRefs(el, 'listItemText')} className='listItemText' id={labelID} primary={opt} />

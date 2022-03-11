@@ -45,22 +45,22 @@ const Download = ({ data, allColumns, visibleColumns, rows, downloadFn }) => {
   const classes = makeStyles({
     downloadContainer: {
       '& .button-container': {
-        border: 0
+        border: 0,
       },
 
       '& .dialog-container': {
-        zIndex: 1
-      }
+        zIndex: 1,
+      },
     },
   })
 
   const dialogClasses = Object.freeze({
     root: classes.downloadContainer,
-    dialog: 'dialog-container shadow-light-20 bg-secondary-50'
+    dialog: 'dialog-container shadow-light-20 bg-secondary-50',
   })
 
   const buttonClasses = Object.freeze({
-    button: 'button-container'
+    button: 'button-container',
   })
 
   const allowVisCols = 0 < visibleColumns.length && visibleColumns.length < allColumns.length

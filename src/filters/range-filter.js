@@ -62,12 +62,12 @@ const RangeFilter = ({ column: { filterValue, preFilteredRows, setFilter, id, pe
 
     if (!filterValue) {
       values = percentage ? 
-      [Number(Math.floor(min * 100)), Number(Math.ceil(max * 100))] : 
-      [Number(Math.floor(min)), Number(Math.ceil(max))]
+        [Number(Math.floor(min * 100)), Number(Math.ceil(max * 100))] : 
+        [Number(Math.floor(min)), Number(Math.ceil(max))]
     } else {
       values = percentage ? 
-      [Number(Math.floor(filterValue[0] * 100)), Number(Math.ceil(filterValue[1] * 100))] : 
-      [Number(Math.floor(filterValue[0])), Number(Math.ceil(filterValue[1]))]
+        [Number(Math.floor(filterValue[0] * 100)), Number(Math.ceil(filterValue[1] * 100))] : 
+        [Number(Math.floor(filterValue[0])), Number(Math.ceil(filterValue[1]))]
     }
 
     return values
