@@ -226,7 +226,6 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
               onMouseLeave={() => handleOnMouseLeave(index)}
             >
               <ListItem
-                key={labelID}
                 className={classes.MuiListItem}
                 role={undefined}
                 dense
