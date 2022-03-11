@@ -27,7 +27,9 @@ export const empty = () => <Table />
 
 export const normal = () => <Table data={provinces} rowsPerPage={[5,10,20,50]}/>
 
-export const noToolbar = () => <Table classes={tableClasses} data={provinces} toolbar={false}/>
+export const noToolbar = () => <Table classes={tableClasses} data={provinces} toolbar={false} rowsPerPage={[5,10,20,50]}/>
+
+export const stickyHeader = () => <Table classes={tableClasses} data={provinces} initialPageSize={50} rowsPerPage={[5,10,20,50]} stickyHeader/>
 
 export const columns = () => (
   <Table

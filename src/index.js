@@ -331,7 +331,7 @@ Table.defaultProps = {
     headerColor: 'white',
     borderType: 'none',
   },
-  stickyHeader: true,
+  stickyHeader: false,
   initialPageSize: 10,
 }
 Table.Column = TableColumn

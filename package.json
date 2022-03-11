@@ -23,7 +23,6 @@
     "@eqworks/lumen-labs": "^0.1.0-alpha.39",
     "prop-types": "^15.7.2",
     "react-table": "^7.6.0",
-    "tailwindcss": "^2.2.7",
     "use-cached": "^2.0.0"
   },
   "devDependencies": {
@@ -59,7 +58,7 @@
   "size-limit": [
     {
       "path": "dist/",
-      "limit": "30 kB"
+      "limit": "250 kB"
     }
   ]
 }
