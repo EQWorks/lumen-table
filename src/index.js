@@ -102,6 +102,7 @@ export const Table = ({
   stickyHeader,
   rowsPerPage,
   initialPageSize,
+  highlightColumn,
 }) => {
   const tableClasses = Object.freeze({
     rootContainer: `${classes.rootContainer}`,
@@ -241,7 +242,7 @@ export const Table = ({
                   return (
                     <tr className="table-body-row" key={i} {...row.getRowProps()}>
                       {row.cells.map((cell, i) => (
-                        <td className={`table-body-cell border-${defaultStyles.borderType} border-secondary-200 text-secondary-800 ${i === 0 && 'font-bold'}`} key={i} {...cell.getCellProps()}>
+                        <td className={`table-body-cell border-${defaultStyles.borderType} border-secondary-200 text-secondary-800 ${i === (highlightColumn - 1) && 'font-bold'}`} key={i} {...cell.getCellProps()}>
                           <div className="table-body-item">{cell.render('Cell')}</div>
                         </td>
                       ))}
@@ -311,6 +312,7 @@ Table.propTypes = {
   stickyHeader: PropTypes.bool,
   rowsPerPage: PropTypes.arrayOf(PropTypes.number),
   initialPageSize: PropTypes.number,
+  highlightColumn: PropTypes.number,
 }
 
 Table.defaultProps = {

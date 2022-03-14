@@ -31,6 +31,8 @@ export const noToolbar = () => <Table classes={tableClasses} data={provinces} to
 
 export const stickyHeader = () => <Table classes={tableClasses} data={provinces} initialPageSize={50} rowsPerPage={[5,10,20,50]} stickyHeader/>
 
+export const highlightColumn = () => <Table classes={tableClasses} data={provinces} rowsPerPage={[5,10,20,50]} highlightColumn={1}/>
+
 export const columns = () => (
   <Table
     data={provinces}
