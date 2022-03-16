@@ -5,19 +5,19 @@ import { TextField, Icons, makeStyles } from '@eqworks/lumen-labs'
 import { useAsyncDebounce } from 'react-table'
 
 
-const DefaultFilter = ({ filterValue, preFilteredRows, setFilter, id }) => {
-  const classes = makeStyles({
-    defaultFilterContainer: {
-      '& .textfield-container': {
-        width: '12.5rem',
-      },
+const classes = makeStyles({
+  defaultFilterContainer: {
+    '& .textfield-container': {
+      width: '12.5rem',
     },
-  })
+  },
+})
 
-  const textFieldClasses = Object.freeze({
-    container: 'textfield-container',
-  })
+const textFieldClasses = Object.freeze({
+  container: 'textfield-container',
+})
 
+const DefaultFilter = ({ filterValue, preFilteredRows, setFilter, id }) => {
   const [value, setValue] = useState(filterValue)
   const _setFilter = useAsyncDebounce(value => {
     setFilter(value || undefined)

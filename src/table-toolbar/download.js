@@ -41,28 +41,28 @@ export const saveData = ({ data, rows, allColumns, visibleColumns, visCols = fal
   link.remove()
 }
 
-const Download = ({ data, allColumns, visibleColumns, rows, downloadFn }) => {
-  const classes = makeStyles({
-    downloadContainer: {
-      '& .button-container': {
-        border: 0,
-      },
-
-      '& .dialog-container': {
-        zIndex: 1,
-      },
+const classes = makeStyles({
+  downloadContainer: {
+    '& .button-container': {
+      border: 0,
     },
-  })
 
-  const dialogClasses = Object.freeze({
-    root: classes.downloadContainer,
-    dialog: 'dialog-container shadow-light-20 bg-secondary-50',
-  })
+    '& .dialog-container': {
+      zIndex: 1,
+    },
+  },
+})
 
-  const buttonClasses = Object.freeze({
-    button: 'button-container',
-  })
+const dialogClasses = Object.freeze({
+  root: classes.downloadContainer,
+  dialog: 'dialog-container shadow-light-40 bg-secondary-50',
+})
 
+const buttonClasses = Object.freeze({
+  button: 'button-container',
+})
+
+const Download = ({ data, allColumns, visibleColumns, rows, downloadFn }) => {
   const allowVisCols = 0 < visibleColumns.length && visibleColumns.length < allColumns.length
   const allowFilteredRows = 0 < rows.length && rows.length < data.length
   const allowOptions = allowVisCols || allowFilteredRows

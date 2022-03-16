@@ -53,6 +53,20 @@ const classes = makeStyles({
   },
 })
 
+const tailwindClasses = Object.freeze({ 
+  texfield: {
+    container: 'w-full',
+  },
+
+  submitButton: {
+    button: 'submit-button',
+  },
+
+  optionButton: {
+    button: 'text-interactive-500 focus:outline-none',
+  },
+})
+
 const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, id }, closePopper }) => {
   const [value, setValue] = useState('')
   const [optionsValue, setOptionsValue] = useState(filterValue || '')
@@ -64,20 +78,6 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
   listContainerRef.current = []
   listItemTextRef.current = []
   optionButtonRef.current = []
-
-  const tailwindClasses = Object.freeze({ 
-    texfield: {
-      container: 'w-full',
-    },
-
-    submitButton: {
-      button: 'submit-button',
-    },
-
-    optionButton: {
-      button: 'text-interactive-500 focus:outline-none',
-    },
-  })
 
   const options = useMemo(() => {
     const opts = new Set()

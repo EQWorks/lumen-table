@@ -27,13 +27,13 @@ const classes = makeStyles({
   },
 })
 
+const textFieldClasses = Object.freeze({ 
+  container: 'w-full',
+})
+
 const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, id, percentage }, closePopper }) => {
   const [minValue, setMinValue] = useState('')
   const [maxValue, setMaxValue] = useState('')
-
-  const textFieldClasses = Object.freeze({ 
-    container: 'w-full',
-  })
 
   const [min, max] = useMemo(() => {
     const values = preFilteredRows.map(({ values }) => values[id])

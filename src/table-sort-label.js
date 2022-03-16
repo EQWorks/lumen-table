@@ -8,14 +8,14 @@ import ArrowUpwardRoundedIcon from '@material-ui/icons/ArrowUpwardRounded'
 import { BaseComponents, makeStyles } from '@eqworks/lumen-labs'
 
 
-const TableSortLabel = ({ isSorted, isSortedDesc }) => {
-  const classes = makeStyles({
-    root: {
-      paddingLeft: '2px',
-      paddingRight: '2px',
-    },
-  })
+const classes = makeStyles({
+  root: {
+    paddingLeft: '2px',
+    paddingRight: '2px',
+  },
+})
 
+const TableSortLabel = ({ isSorted, isSortedDesc }) => {
   const renderIcon = () => {
     if (!isSorted) {
       return (<ImportExportRoundedIcon fontSize='small' color='disabled' />)

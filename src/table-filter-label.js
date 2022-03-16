@@ -13,37 +13,38 @@ import { DateRangeFilter } from './filters/date-range-filter'
 import DefaultFilter from './filters/default-filter'
 
 
+const useStyles = (index, length) => makeStyles({
+  filterLabelContainer: {
+    '& .button-container:focus': {
+      outline: 0,
+    },
+
+    '& .dialog-container': {
+      display: 'grid',
+
+      '& .dialog-content': {
+        justifySelf: `${(index === length - 1 && 'right') || (index === 0 ? 'left' : 'center')}`,
+      },
+    },
+  },
+
+  filter: {
+    padding: '1rem',
+    display: 'flex',
+  },
+})
+
+const dialogClasses = Object.freeze({
+  dialogContainer: 'dialog-container',
+  dialog: 'dialog-content shadow-light-40 bg-secondary-50',
+})
+
+const buttonClasses = Object.freeze({
+  button: 'button-container',
+})
+
 const TableFilterLabel = ({ column, index, length }) => {
-  const classes = makeStyles({
-    filterLabelContainer: {
-      '& .button-container:focus': {
-        outline: 0,
-      },
-
-      '& .dialog-container': {
-        display: 'grid',
-
-        '& .dialog-content': {
-          justifySelf: `${(index === length - 1 && 'right') || (index === 0 ? 'left' : 'center')}`,
-        },
-      },
-    },
-
-    filter: {
-      padding: '1rem',
-      display: 'flex',
-    },
-  })
-
-  const dialogClasses = Object.freeze({
-    root: classes.filterLabelContainer,
-    dialogContainer: 'dialog-container',
-    dialog: 'dialog-content shadow-light-20 bg-secondary-50',
-  })
-
-  const buttonClasses = Object.freeze({
-    button: 'button-container',
-  })
+  const classes = useStyles(index, length)
   const anchorRef = useRef(null)
 
   const handleClose = (e) => {
@@ -81,7 +82,12 @@ const TableFilterLabel = ({ column, index, length }) => {
 
   return (
     <>
-      <BaseComponents.DialogBase classes={dialogClasses} button={_button}>
+      <BaseComponents.DialogBase 
+        classes={{
+          ...dialogClasses,
+          root: classes.filterLabelContainer,
+        }} 
+        button={_button}>
         <div className={classes.filter}>
           {column.Filter ? (
             filterType(column.Filter.name)

@@ -13,33 +13,33 @@ import Badge from '@material-ui/core/Badge'
 import SettingsIcon from '@material-ui/icons/Settings'
 
 
+const classes = makeStyles({
+  toggleContainer: {
+    '& .button-container': {
+      border: 0,
+    },
+
+    '& .dialog-container': {
+      zIndex: 1,
+    },
+  },
+
+  list: {
+    overflow: 'auto',
+    maxHeight: '60vh',
+  },
+})
+
+const dialogClasses = Object.freeze({
+  root: classes.toggleContainer,
+  dialog: 'dialog-container shadow-light-40 bg-secondary-50',
+})
+
+const buttonClasses = Object.freeze({
+  button: 'button-container',
+})
+
 export const Toggle = ({ allColumns, toggleHideColumn }) => {
-  const classes = makeStyles({
-    toggleContainer: {
-      '& .button-container': {
-        border: 0,
-      },
-
-      '& .dialog-container': {
-        zIndex: 1,
-      },
-    },
-
-    list: {
-      overflow: 'auto',
-      maxHeight: '60vh',
-    },
-  })
-
-  const dialogClasses = Object.freeze({
-    root: classes.toggleContainer,
-    dialog: 'dialog-container shadow-light-20 bg-secondary-50',
-  })
-
-  const buttonClasses = Object.freeze({
-    button: 'button-container',
-  })
-
   if (!(allColumns || []).length) {
     return null
   }

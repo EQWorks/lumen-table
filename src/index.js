@@ -110,7 +110,7 @@ export const Table = ({
     root: `${classes.root}`,
     header: `text-secondary-500 ${classes.header} 
       ${defaultStyles.headerColor === 'grey' && 'bg-secondary-100'}
-      ${defaultStyles.headerColor === 'white' && 'bg-secondary-50 shadow-light-20'}
+      ${defaultStyles.headerColor === 'white' && 'bg-secondary-50 shadow-light-40'}
     `,
     body: `${classes.body}`,
     footer: `${classes.footer}`,
@@ -331,7 +331,7 @@ Table.defaultProps = {
   downloadFn: saveData,
   defaultStyles: {
     headerColor: 'white',
-    borderType: 'none',
+    borderType: 'horizontal',
   },
   stickyHeader: false,
   initialPageSize: 10,
