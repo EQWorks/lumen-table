@@ -104,17 +104,6 @@ export const Table = ({
   initialPageSize,
   highlightColumn,
 }) => {
-  const tableClasses = Object.freeze({
-    rootContainer: `${classes.rootContainer}`,
-    container: `${classes.container}`,
-    root: `${classes.root}`,
-    header: `text-secondary-500 ${classes.header} 
-      ${defaultStyles.headerColor === 'grey' && 'bg-secondary-100'}
-      ${defaultStyles.headerColor === 'white' && 'bg-secondary-50 shadow-light-40'}
-    `,
-    body: `${classes.body}`,
-    footer: `${classes.footer}`,
-  })
   // custom table config hook
   const {
     _cols,
@@ -198,7 +187,7 @@ export const Table = ({
   }
 
   return (
-    <div className={`table-root-container ${tableStyle.tableRootContainer} ${tableClasses.rootContainer}`}>
+    <div className={`table-root-container ${tableStyle.tableRootContainer} ${classes.rootContainer}`}>
       {(_data.length > 0 && toolbar) && (
         <TableToolbar
           rows={rows}
@@ -215,9 +204,13 @@ export const Table = ({
       )}
       {visibleColumns.length > 0 ? (
         <>
-          <div className={`table-container ${tableClasses.container}`}>
-            <table className={`table-root border-secondary-200 shadow-light-10 ${tableClasses.root}`} {...getTableProps(tableProps)}>
-              <thead className={`table-header ${tableClasses.header} ${stickyHeader && 'sticky-header'}`}>
+          <div className={`table-container ${classes.container}`}>
+            <table className={`table-root border-secondary-200 shadow-light-10 ${classes.root}`} {...getTableProps(tableProps)}>
+              <thead className={`table-header text-secondary-500 
+                ${classes.header} ${stickyHeader && 'sticky-header'}
+                ${defaultStyles.headerColor === 'grey' && 'bg-secondary-100'}
+                ${defaultStyles.headerColor === 'white' && 'bg-secondary-50 shadow-light-40'}
+              `}>
                 {headerGroups.map((headerGroup, index) => {
                   const totalHeaders = headerGroup.headers.length
 
@@ -236,7 +229,7 @@ export const Table = ({
                   )
                 })}
               </thead>
-              <tbody className={`table-body ${tableClasses.body}`} {...getTableBodyProps()}>
+              <tbody className={`table-body ${classes.body}`} {...getTableBodyProps()}>
                 {page.map((row, i) => {
                   prepareRow(row)
                   return (
@@ -250,7 +243,7 @@ export const Table = ({
                   )
                 })}
               </tbody>
-              <tfoot className={`table-footer ${tableClasses.footer}`}>
+              <tfoot className={`table-footer ${classes.footer}`}>
                 <tr className="table-footer-row">
                   {(0 < rows.length && rows.length < data.length ? rows.length > pageSize : rows.length > 0) && (
                     <td className={`table-footer-cell border-${defaultStyles.borderType} border-secondary-200`} colSpan={100}>
