@@ -15,7 +15,7 @@
     "build": "babel src --out-dir dist --copy-files",
     "lint": "eslint src stories",
     "prepack": "yarn build",
-    "prepublishOnly": "yarn eslint src/ && yarn build",
+    "prepublishOnly": "yarn lint src/ && yarn build",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
