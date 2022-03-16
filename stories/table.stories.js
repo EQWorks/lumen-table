@@ -401,8 +401,7 @@ export const dynamicSortBy = () => {
         {['new_cases', 'total_cases', 'province'].map((col) => (
           <div key={col} style={{ paddingRight: '.5rem' }}>
             <Button onClick={() => setSort(col)} size='sm'>
-              {' '}
-              {col}{' '}
+              {col}
             </Button>
           </div>
         ))}
