@@ -14,6 +14,14 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 12.x
+          always-auth: true
+      - run: yarn install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.CD_NPM_TOKEN }}
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 12.x
           registry-url: https://registry.npmjs.org/
           scope: '@eqworks'
           always-auth: true
@@ -27,9 +35,6 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: '@eqworks'
           always-auth: true
-      - run: yarn install
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.CD_GITHUB_TOKEN }}
       - run: echo "@eqworks:registry=https://npm.pkg.github.com:_authToken=${{ secrets.CD_GITHUB_TOKEN }}" > ~/.npmrc
       - run: yarn publish --tag alpha --access public
         env:
