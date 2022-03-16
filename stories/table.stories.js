@@ -13,25 +13,22 @@ import provincesRange from './data/provinces-range'
 import provincesDates from './data/province-dates'
 import provincesJson from './data/provinces-json'
 import { DateRangeFilter, filterDates } from '../src/filters/date-range-filter'
+import { Button } from '@eqworks/lumen-labs'
 
 export default {
   title: 'Table',
   component: Table,
 }
 
-const tableClasses = {
-  header: '',
-}
-
 export const empty = () => <Table />
 
 export const normal = () => <Table data={provinces} rowsPerPage={[5,10,20,50]}/>
 
-export const noToolbar = () => <Table classes={tableClasses} data={provinces} toolbar={false} rowsPerPage={[5,10,20,50]}/>
+export const noToolbar = () => <Table data={provinces} toolbar={false} rowsPerPage={[5,10,20,50]}/>
 
-export const stickyHeader = () => <Table classes={tableClasses} data={provinces} initialPageSize={50} rowsPerPage={[5,10,20,50]} stickyHeader/>
+export const stickyHeader = () => <Table data={provinces} initialPageSize={50} rowsPerPage={[5,10,20,50]} stickyHeader/>
 
-export const highlightColumn = () => <Table classes={tableClasses} data={provinces} rowsPerPage={[5,10,20,50]} highlightColumn={1}/>
+export const highlightColumn = () => <Table data={provinces} rowsPerPage={[5,10,20,50]} highlightColumn={1}/>
 
 export const columns = () => (
   <Table
@@ -89,7 +86,7 @@ export const initialHidden = () => (
         Header: 'Action',
         id: 'action',
         // eslint-disable-next-line react/display-name
-        Cell: () => <button onClick={null}>Edit</button>,
+        Cell: () => <Button size='sm' variant='filled' onClick={null}>Edit</Button>,
         hidden: true,
       },
     ]}
@@ -112,7 +109,7 @@ export const initialHiddenColumns = () => (
     <Table.Column
       Header="Action"
       id="action"
-      Cell={() => <button onClick={null}>Edit</button>}
+      Cell={() => <Button size='sm' variant='filled' onClick={null}>Edit</Button>}
     />
   </Table>
 )
@@ -398,14 +395,18 @@ export const dynamicSortBy = () => {
   return (
     <>
       <Typography variant="body1">
-        SortBy changing according to the chosen button.
+        SortBy changing according to the chosen Button.
       </Typography>
-      {['new_cases', 'total_cases', 'province'].map((col) => (
-        <button key={col} onClick={() => setSort(col)}>
-          {' '}
-          {col}{' '}
-        </button>
-      ))}
+      <div style={{ display: 'flex', marginTop: '.5rem' }}>
+        {['new_cases', 'total_cases', 'province'].map((col) => (
+          <div key={col} style={{ paddingRight: '.5rem' }}>
+            <Button onClick={() => setSort(col)} size='sm'>
+              {' '}
+              {col}{' '}
+            </Button>
+          </div>
+        ))}
+      </div>
       <Table data={provinces} sortBy={[{ id: sort, desc: true }]} />
     </>
   )

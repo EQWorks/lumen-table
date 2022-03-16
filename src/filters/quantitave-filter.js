@@ -9,13 +9,16 @@ const classes = makeStyles({
     width: '40ch',
     padding: '2rem 1rem 0 1rem',
     fontSize: '0.875rem',
+
+    '& .slider-container': {
+      textAlign: 'left',
+    },
   },
 
   rangeContainer: {
     display: 'grid',
     'grid-template-columns': '1fr 1fr',
     columnGap: '0.625rem',
-    textAlign: 'left',
     textIndent: '0.313rem',
   },
 

@@ -33,6 +33,10 @@ const classes = makeStyles({
   root: {
     width: '40ch',
     padding: '2rem 1rem 0 2rem',
+
+    '& .slider-container': {
+      textAlign: 'left',
+    },
   },
 })
 
