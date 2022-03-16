@@ -5,7 +5,8 @@ import ImportExportRoundedIcon from '@material-ui/icons/ImportExportRounded'
 import ArrowDownwardRoundedIcon from '@material-ui/icons/ArrowDownwardRounded'
 import ArrowUpwardRoundedIcon from '@material-ui/icons/ArrowUpwardRounded'
 
-import { BaseComponents, makeStyles } from '@eqworks/lumen-labs'
+import { makeStyles } from '@eqworks/lumen-labs'
+import ButtonBase from '@eqworks/lumen-labs/dist/base-components/button-base'
 
 
 const classes = makeStyles({
@@ -26,7 +27,7 @@ const TableSortLabel = ({ isSorted, isSortedDesc }) => {
       <ArrowUpwardRoundedIcon fontSize='small' color='primary' />
     )
   }
-  return (<BaseComponents.ButtonBase className={classes.root}>{renderIcon()}</BaseComponents.ButtonBase>)
+  return (<ButtonBase className={classes.root}>{renderIcon()}</ButtonBase>)
 }
 
 TableSortLabel.propTypes = {

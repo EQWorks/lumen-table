@@ -28,10 +28,11 @@ const reducer = (id) => (acc, row) => {
 
 export function DateRangeFilter({ column: { filterValue, preFilteredRows, setFilter, id } }) {
   const { min, max } = useMemo(() => preFilteredRows.reduce(reducer(id), {}))
-
+  const [filterMin, filterMax] = filterValue || []
+  
   return (
     <DateRange 
-      defaultValue={[(filterValue || [])[0] || min, (filterValue || [])[1] || max]} 
+      defaultValue={[filterMin || min, filterMax || max]} 
       setFromValue={(value) => { setFilter((old = []) => [value ? value : undefined, old[1]]) }} 
       setToValue={(value) => { setFilter((old = []) => [old[0], value ? value : undefined]) }}
     />

@@ -4,7 +4,8 @@ import PropTypes from 'prop-types'
 import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
 
-import { BaseComponents, Button, makeStyles } from '@eqworks/lumen-labs'
+import { Button, makeStyles } from '@eqworks/lumen-labs'
+import DialogBase from '@eqworks/lumen-labs/dist/base-components/dialog-base'
 
 import Badge from '@material-ui/core/Badge'
 import SaveAltRoundedIcon from '@material-ui/icons/SaveAltRounded'
@@ -107,7 +108,7 @@ const Download = ({ data, allColumns, visibleColumns, rows, downloadFn }) => {
 
   return (
     <>
-      <BaseComponents.DialogBase classes={dialogClasses} button={_button}>
+      <DialogBase classes={dialogClasses} button={_button}>
         <MenuList>
           <MenuItem onClick={handleDownload({ visCols: false, filteredRows: false })}>
             {allText()}
@@ -128,7 +129,7 @@ const Download = ({ data, allColumns, visibleColumns, rows, downloadFn }) => {
             </MenuItem>
           )}
         </MenuList>
-      </BaseComponents.DialogBase>
+      </DialogBase>
     </>
   )
 }

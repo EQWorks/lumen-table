@@ -3,7 +3,9 @@ import PropTypes from 'prop-types'
 
 import FilterListRoundedIcon from '@material-ui/icons/FilterListRounded'
 
-import { BaseComponents, makeStyles } from '@eqworks/lumen-labs'
+import { makeStyles } from '@eqworks/lumen-labs'
+import DialogBase from '@eqworks/lumen-labs/dist/base-components/dialog-base'
+import ButtonBase from '@eqworks/lumen-labs/dist/base-components/button-base'
 
 import SelectionFilter from './filters/selection-filter'
 import RangeFilter from './filters/range-filter'
@@ -71,18 +73,18 @@ const TableFilterLabel = ({ column, index, length }) => {
   }
 
   const _button = (
-    <BaseComponents.ButtonBase
+    <ButtonBase
       aria-label='Edit button'
       ref={anchorRef}
       classes={buttonClasses}
     >
       <FilterListRoundedIcon color={column.filterValue ? 'primary' : 'disabled'} />
-    </BaseComponents.ButtonBase>
+    </ButtonBase>
   )
 
   return (
     <>
-      <BaseComponents.DialogBase 
+      <DialogBase 
         classes={{
           ...dialogClasses,
           root: classes.filterLabelContainer,
@@ -95,7 +97,7 @@ const TableFilterLabel = ({ column, index, length }) => {
             <DefaultFilter {...column} />
           )}
         </div>
-      </BaseComponents.DialogBase>
+      </DialogBase>
     </>
   )
 }
