@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 12.x
-          registry-url: https://npm.pkg.github.com/
+          registry-url: https://registry.npmjs.org/
           scope: '@eqworks'
           always-auth: true
       - run: yarn install
@@ -26,17 +26,17 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.CD_GITHUB_TOKEN }}
       - run: yarn publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.CD_GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.CD_NPM_TOKEN_PUBLISH }}
 
       - uses: actions/setup-node@v2
         with:
           node-version: 12.x
-          registry-url: https://registry.npmjs.org/
+          registry-url: https://npm.pkg.github.com/
           scope: '@eqworks'
           always-auth: true
       - run: yarn publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.CD_NPM_TOKEN_PUBLISH }}
+          NODE_AUTH_TOKEN: ${{ secrets.CD_GITHUB_TOKEN }}
 
       - name: Generate tag associated release notes
         if: ${{ success() }}
