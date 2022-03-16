@@ -37,4 +37,4 @@ jobs:
       - name: Deploy
         run: yarn storybook-to-ghpages --ci
         env:
-          GH_TOKEN: EQWorks:${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: EQWorks:${{ secrets.CD_GITHUB_TOKEN }}
