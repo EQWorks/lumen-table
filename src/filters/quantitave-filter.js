@@ -51,16 +51,17 @@ const QuantitaveFilter = ({ column: { filterValue, preFilteredRows, setFilter, i
     return [min, max]
   }, [id, preFilteredRows])
 
-  const sliderOnChange = (_, newValue) => {
-    setMinValue(percentage ? newValue[0] / 100 : newValue[0])
-    setMaxValue(percentage ? newValue[1] / 100 : newValue[1])
+  const sliderOnChange = (_, [min, max]) => {
+    setMinValue(percentage ? min / 100 : min)
+    setMaxValue(percentage ? max / 100 : max)
   }
 
   const minOnChange = (val) => {
-    percentage ? setMinValue(Number(val) / 100) : setMinValue(Number(val))
+    setMinValue(percentage ? Number(val) / 100 : Number(val))
   }
 
   const maxOnChange = (val) => {
+    setMaxValue(percentage ? Number(val) / 100 : Number(val))
     percentage ? setMaxValue(Number(val) / 100) : setMaxValue(Number(val))
   }
 

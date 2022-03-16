@@ -53,7 +53,7 @@ const RangeFilter = ({ column: { filterValue, preFilteredRows, setFilter, id, pe
     if (_min === min && _max === max) {
       setFilter('')
     } else {
-      setFilter([percentage ? newValue[0] / 100 : newValue[0], percentage ? newValue[1] / 100 : newValue[1]])
+      setFilter([percentage ? _min / 100 : _min, percentage ? _max / 100 : _max])
     }
   }
 
@@ -77,7 +77,7 @@ const RangeFilter = ({ column: { filterValue, preFilteredRows, setFilter, id, pe
     <div className={classes.root} onClick={(e) => { e.stopPropagation() }} >
       <RangeSliderLabel
         values={getValues()}
-        onChange={(_, newValue) => sliderOnChange(_, newValue)}
+        onChange={sliderOnChange}
         min={percentage ? Math.floor(min * 100) : Math.floor(min)}
         max={percentage ? Math.ceil(max * 100) : Math.ceil(max)}
         tooltipFormat={percentage ? undefined : [abbreviateNumber(getValues()[0]), abbreviateNumber(getValues()[1])]}
