@@ -13,10 +13,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 12.x
-          always-auth: true
       - run: yarn install
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.CD_NPM_TOKEN }}
 
       - uses: actions/setup-node@v2
         with:
