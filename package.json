@@ -1,6 +1,6 @@
 {
   "name": "@eqworks/lumen-table",
-  "version": "2.0.0-alpha.4",
+  "version": "2.0.0-alpha.5",
   "main": "dist/index.js",
   "source": "src/index.js",
   "files": [
