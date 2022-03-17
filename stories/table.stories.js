@@ -13,12 +13,18 @@ import provincesRange from './data/provinces-range'
 import provincesDates from './data/province-dates'
 import provincesJson from './data/provinces-json'
 import { DateRangeFilter, filterDates } from '../src/filters/date-range-filter'
-import { Button } from '@eqworks/lumen-labs'
+import { Button, makeStyles } from '@eqworks/lumen-labs'
 
 export default {
   title: 'Table',
   component: Table,
 }
+
+const classes = makeStyles({
+  stylingContainer: {
+    width: '45vw',
+  },
+})
 
 export const empty = () => <Table />
 
@@ -29,6 +35,159 @@ export const noToolbar = () => <Table data={provinces} toolbar={false} rowsPerPa
 export const stickyHeader = () => <Table data={provinces} initialPageSize={50} rowsPerPage={[5,10,20,50]} stickyHeader/>
 
 export const highlightColumn = () => <Table data={provinces} rowsPerPage={[5,10,20,50]} highlightColumn={1}/>
+
+export const stylingTypes = () => (
+  <div>
+    <h4 className='text-interactive-500'>Table styles</h4>
+    <div className='flex'>
+      <div className='mr-2'>
+        <h4 className='m-2'>- White header - horizontal border</h4>
+        <Table
+          classes={{
+            root: classes.stylingContainer,
+          }} 
+          data={provinces} 
+          initialPageSize={5} 
+          rowsPerPage={[5,10,20,50]}
+          toolbar={false}
+        />
+      </div>
+      <div>
+        <h4 className='m-2'>- Grey header - horizontal border</h4>
+        <Table
+          classes={{
+            root: classes.stylingContainer,
+          }} 
+          data={provinces} 
+          initialPageSize={5} 
+          rowsPerPage={[5,10,20,50]}
+          toolbar={false}
+          defaultStyles={
+            {
+              headerColor: 'grey',
+              borderType: 'horizontal',
+            }
+          }
+        />
+      </div>
+    </div>
+    <div className='flex'>
+      <div className='mr-2'>
+        <h4 className='m-2'>- White header - vertical border</h4>
+        <Table
+          classes={{
+            root: classes.stylingContainer,
+          }} 
+          data={provinces} 
+          initialPageSize={5} 
+          rowsPerPage={[5,10,20,50]}
+          toolbar={false}
+          defaultStyles={
+            {
+              headerColor: 'white',
+              borderType: 'vertical',
+            }
+          }
+        />
+      </div>
+      <div>
+        <h4 className='m-2'>- Grey header - vertical border</h4>
+        <Table
+          classes={{
+            root: classes.stylingContainer,
+          }} 
+          data={provinces} 
+          initialPageSize={5} 
+          rowsPerPage={[5,10,20,50]}
+          toolbar={false}
+          defaultStyles={
+            {
+              headerColor: 'grey',
+              borderType: 'vertical',
+            }
+          }
+        />
+      </div>
+    </div>
+    <div className='flex'>
+      <div className='mr-2'>
+        <h4 className='m-2'>- White header - all around border</h4>
+        <Table
+          classes={{
+            root: classes.stylingContainer,
+          }} 
+          data={provinces} 
+          initialPageSize={5} 
+          rowsPerPage={[5,10,20,50]}
+          toolbar={false}
+          defaultStyles={
+            {
+              headerColor: 'white',
+              borderType: 'around',
+            }
+          }
+        />
+      </div>
+      <div>
+        <h4 className='m-2'>- Grey header - all around border</h4>
+        <Table
+          classes={{
+            root: classes.stylingContainer,
+          }} 
+          data={provinces} 
+          initialPageSize={5} 
+          rowsPerPage={[5,10,20,50]}
+          toolbar={false}
+          defaultStyles={
+            {
+              headerColor: 'grey',
+              borderType: 'around',
+            }
+          }
+        />
+      </div>
+    </div>
+    <div className='flex'>
+      <div className='mr-2'>
+        <h4 className='m-2'>- White header - none border</h4>
+        <Table
+          classes={{
+            root: classes.stylingContainer,
+          }} 
+          data={provinces} 
+          initialPageSize={5} 
+          rowsPerPage={[5,10,20,50]}
+          toolbar={false}
+          defaultStyles={
+            {
+              headerColor: 'white',
+              borderType: 'none',
+            }
+          }
+        />
+      </div>
+      <div>
+        <h4 className='m-2'>- Grey header - none border</h4>
+        <Table
+          classes={{
+            root: classes.stylingContainer,
+          }} 
+          data={provinces} 
+          initialPageSize={5} 
+          rowsPerPage={[5,10,20,50]}
+          toolbar={false}
+          defaultStyles={
+            {
+              headerColor: 'grey',
+              borderType: 'none',
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+
+)
 
 export const columns = () => (
   <Table

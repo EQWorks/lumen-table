@@ -187,7 +187,7 @@ export const Table = ({
   }
 
   return (
-    <div className={`table-root-container ${tableStyle.tableRootContainer} ${classes.rootContainer}`}>
+    <div className={`table-root-container ${tableStyle.tableRootContainer} ${classes.root}`}>
       {(_data.length > 0 && toolbar) && (
         <TableToolbar
           rows={rows}
