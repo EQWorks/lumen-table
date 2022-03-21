@@ -1,4 +1,3 @@
-import { ThemeProvider } from '@eqworks/lumen-ui/dist/theme';
 import React from 'react';
 
 
@@ -8,8 +7,6 @@ export const parameters = {
 
 export const decorators = [
   (Story) => (
-    <ThemeProvider>
-      <Story />
-    </ThemeProvider>
+    <Story />
   ),
 ];
