@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
 import { Parser, transforms } from 'json2csv'
-import Typography from '@eqworks/lumen-ui/dist/typography'
 import Accordion from '@material-ui/core/Accordion'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
@@ -23,6 +22,14 @@ export default {
 const classes = makeStyles({
   stylingContainer: {
     width: '45vw',
+  },
+
+  typography: {
+    fontSize: '1rem',
+    fontFamily: 'PT Sans, sans-serif',
+    fontWeight: 400,
+    lineHeight: 1.5,
+    letterSpacing: '0.00938em',
   },
 })
 
@@ -484,10 +491,10 @@ export const rememberHidden = () => {
   }
   return (
     <>
-      <Typography variant="body1">
+      <div className={classes.typography}>
         Hidden columns remembered for {remember.ttl} minutes. Refresh page, or
         swich out and back to this story, to see its effect.
-      </Typography>
+      </div>
       <Table
         data={provinces}
         columns={[
@@ -514,10 +521,10 @@ export const rememberHiddenWithInitHiddenColumns = () => {
   }
   return (
     <>
-      <Typography variant="body1">
+      <div className={classes.typography}>
         Hidden columns remembered for {remember.ttl} minutes. Refresh page, or
         swich out and back to this story, to see its effect.
-      </Typography>
+      </div>
       <Table
         data={provinces}
         hiddenColumns={['new_cases', 'total_cases']}
@@ -535,10 +542,10 @@ export const rememberSortBy = () => {
   }
   return (
     <>
-      <Typography variant="body1">
+      <div className={classes.typography}>
         Columns sorting order remembered for {remember.ttl} minutes. Refresh
         page, or swich out and back to this story, to see its effect.
-      </Typography>
+      </div>
       <Table
         data={provinces}
         sortBy={{ id: 'new_cases', desc: true }}
@@ -553,9 +560,9 @@ export const dynamicSortBy = () => {
 
   return (
     <>
-      <Typography variant="body1">
+      <div className={classes.typography}>
         SortBy changing according to the chosen Button.
-      </Typography>
+      </div>
       <div style={{ display: 'flex', marginTop: '.5rem' }}>
         {['new_cases', 'total_cases', 'province'].map((col) => (
           <div key={col} style={{ paddingRight: '.5rem' }}>
@@ -576,9 +583,9 @@ export const caseInsensitiveSort = () => {
   })
   return (
     <>
-      <Typography variant="body1">
+      <div className={classes.typography}>
         SortBy to be case insensitive.
-      </Typography>
+      </div>
       <Table
         data={_provinces}
         columns={[
@@ -694,9 +701,9 @@ export const arbitraryAPIData = () => {
   }, [])
   return (
     <>
-      <Typography variant="body1">
+      <div className={classes.typography}>
         Data from <a href={API_URL}>{API_URL}</a>
-      </Typography>
+      </div>
       <Table data={data} />
     </>
   )
