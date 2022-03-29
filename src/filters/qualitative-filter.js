@@ -1,19 +1,13 @@
-import React, { useMemo, useState, useRef } from 'react'
+import React, { useMemo, useState, useRef , useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import { makeStyles } from '@material-ui/core/styles'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
-import Checkbox from '@eqworks/lumen-ui/dist/checkbox'
-import Button from '@eqworks/lumen-ui/dist/button'
-import TextField from '@eqworks/lumen-ui/dist/text-field'
+import { makeStyles, Button, BaseComponents, TextField, Icons, Checkbox } from '@eqworks/lumen-labs'
 
 
-const useStyles = makeStyles(() => ({
+const classes = makeStyles({
   list: {
     width: '20em',
     overflow: 'auto',
@@ -30,12 +24,12 @@ const useStyles = makeStyles(() => ({
   },
 
   MuiListItemIcon: {
-    minWidth: 0,
+    width: '100%',
   },
 
-  optionButton: {
+  optionButtonContainer: {
+    padding: '6px 15px',
     display: 'none',
-    margin: 'auto',
     textTransform: 'capitalize',
 
     '& .MuiButtonBase-root': {
@@ -48,12 +42,30 @@ const useStyles = makeStyles(() => ({
   },
 
   buttonContainer: {
-    marginTop: 20,
+    marginTop: '1.25rem',
     display: 'grid',
     'grid-template-columns': '1fr 1fr',
-    columnGap: 10,
+    columnGap: '0.625rem',
+
+    '& .submit-button': {
+      justifyContent: 'center',
+    },
   },
-}))
+})
+
+const tailwindClasses = Object.freeze({ 
+  texfield: {
+    container: 'w-full',
+  },
+
+  submitButton: {
+    button: 'submit-button',
+  },
+
+  optionButton: {
+    button: 'text-interactive-500 focus:outline-none',
+  },
+})
 
 const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, id }, closePopper }) => {
   const [value, setValue] = useState('')
@@ -67,8 +79,6 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
   listItemTextRef.current = []
   optionButtonRef.current = []
 
-  const classes = useStyles()
-
   const options = useMemo(() => {
     const opts = new Set()
     preFilteredRows.forEach((row) => {
@@ -76,6 +86,17 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
     })
     return [...opts.values()]
   }, [id, preFilteredRows])
+
+  useEffect(() => {
+    if (!optionsValue.length) {
+      setOptionsValue(options.join(','))
+    }
+  }, [options])
+
+  const inputProps = { 
+    placeholder:  `Search in ${options.length} records...`,
+    startIcon: <Icons.Search size='lg'/>,
+  }
 
   const addToRefs = (el, type) => {
     switch (type) {
@@ -99,13 +120,13 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
     }
   }
 
-  const handleOnSearch = ({ target: { value } }) => {
-    setValue(value)
+  const handleOnSearch = (val) => {
+    setValue(val)
   }
 
   const handleOnMouseEnter = (opt, index) => {
     if (!optionsValue || optionsValue.includes(opt)) {
-      optionButtonRef.current[index].style.display = 'initial'
+      optionButtonRef.current[index].style.display = 'flex'
     }
   }
 
@@ -144,10 +165,9 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
       if (!optionsValue || optionsValue.includes(opt)) {
         optionButtonRef.current[options.indexOf(opt)].style.display = 'none'
       } else {
-        optionButtonRef.current[options.indexOf(opt)].style.display = 'initial'
+        optionButtonRef.current[options.indexOf(opt)].style.display = 'flex'
       }
-
-      setOptionsValue(arr.length && arr.length < options.length ? arr.join(',') : '')
+      setOptionsValue(arr.length ? arr.join(',') : '')
     }
   }
 
@@ -184,25 +204,22 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
   return (
     <div>
       <List className={classes.list}>
-        <TextField 
-          fullWidth 
-          label=''
-          startAdornment={(          
-            <InputAdornment position='start'>
-              <SearchRoundedIcon />
-            </InputAdornment>
-          )}
+        <TextField
+          classes={tailwindClasses.texfield}
+          size='lg'
+          inputProps={inputProps}
           onClick={(e) => { e.stopPropagation() }}
           onChange={handleOnSearch}
           onKeyUp={filterList}
           value={value || ''}
-          placeholder={`Search in ${options.length} records...`}
         />
         {options.map((opt, index) => {
           const labelID = `${id}-selection-label-${opt}`
+          const checked = optionsValue && optionsValue.split(',').filter((v) => v).includes(opt)
+
           return (
             <div
-              key={opt}
+              key={labelID}
               ref={(el) => addToRefs(el, classes.listItemContainer)}
               className={classes.listItemContainer}
               onMouseEnter={() => handleOnMouseEnter(opt, index)}
@@ -217,42 +234,33 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
                   handleListItemOnClick(e, opt)
                 }}
               >
-                <ListItemIcon className={classes.MuiListItemIcon}>
+                {optionsValue && 
                   <Checkbox
-                    color='primary'
-                    edge='start'
-                    checked={!optionsValue || (optionsValue || '').includes(opt)}
-                    tabIndex={-1}
-                    disableRipple
-                    inputProps={{ 'aria-labelledby': labelID }}
-                    disabled={opt === optionsValue ? true : false}
+                    checked={checked}
+                    inputProps={{ disabled: opt === optionsValue ? true : false }}
                   />
-                </ListItemIcon>
+                }
                 <ListItemText ref={(el) => addToRefs(el, 'listItemText')} className='listItemText' id={labelID} primary={opt} />
               </ListItem>
-              <div ref={(el) => addToRefs(el, classes.optionButton)} className={classes.optionButton}>
+              <div ref={(el) => addToRefs(el, classes.optionButton)} className={classes.optionButtonContainer}>
                 {optionsValue && optionsValue.split(',').length === 1 ?
-                  <Button
-                    type="tertiary"
-                    color="primary"
+                  <BaseComponents.ButtonBase
+                    classes={tailwindClasses.optionButton}
                     onClick={(e) => {
                       handleExceptOnClick(e, opt)
                     }}
-                    disableRipple
                   >
                     Except
-                  </Button>
+                  </BaseComponents.ButtonBase>
                   :
-                  <Button
-                    type="tertiary"
-                    color="primary"
+                  <BaseComponents.ButtonBase
+                    classes={tailwindClasses.optionButton}
                     onClick={(e) => {
                       handleOnlyOnClick(e, opt)
                     }}
-                    disableRipple
                   >
                     Only
-                  </Button>
+                  </BaseComponents.ButtonBase>
                 }
               </div>
             </div>
@@ -260,10 +268,10 @@ const QualitativeFilter = ({ column: { filterValue, preFilteredRows, setFilter, 
         })}
       </List>
       <div className={classes.buttonContainer}>
-        <Button type="primary" color="primary" onClick={(e) => { applyOnClick(e) }}>
+        <Button classes={tailwindClasses.submitButton} variant="filled" size='lg' onClick={(e) => { applyOnClick(e) }}>
           Apply
         </Button>
-        <Button type="secondary" color="primary" onClick={(e) => { cancelOnClick(e) }}>
+        <Button classes={tailwindClasses.submitButton} variant="outlined" size='lg' onClick={(e) => { cancelOnClick(e) }}>
           Cancel
         </Button>
       </div>

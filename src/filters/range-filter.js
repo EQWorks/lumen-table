@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 
-import Slider from '@material-ui/core/Slider'
-import { makeStyles } from '@material-ui/core/styles'
+import { RangeSliderLabel, makeStyles } from '@eqworks/lumen-labs'
 
 
 // based on https://stackoverflow.com/a/10601315/158111
@@ -30,16 +29,18 @@ function abbreviateNumber(value) {
   return newValue
 }
 
-const useStyles = makeStyles((theme) => ({
+const classes = makeStyles({
   root: {
     width: '40ch',
-    padding: theme.spacing(4, 2, 0, 2),
-    textAlign: 'center',
+    padding: '2rem 1rem 0 2rem',
+
+    '& .slider-container': {
+      textAlign: 'left',
+    },
   },
-}))
+})
 
 const RangeFilter = ({ column: { filterValue, preFilteredRows, setFilter, id, percentage } }) => {
-  const classes = useStyles()
   const [min, max] = useMemo(() => {
     let min = preFilteredRows.length ? preFilteredRows[0].values[id] : 0
     let max = preFilteredRows.length ? preFilteredRows[0].values[id] : 0
@@ -50,26 +51,42 @@ const RangeFilter = ({ column: { filterValue, preFilteredRows, setFilter, id, pe
     return [min, max]
   }, [id, preFilteredRows])
 
+  const sliderOnChange = (_, newValue) => {
+    const [_min, _max] = newValue
+
+    if (_min === min && _max === max) {
+      setFilter('')
+    } else {
+      setFilter([percentage ? _min / 100 : _min, percentage ? _max / 100 : _max])
+    }
+  }
+
+  const getValues = () => {
+    let values = []
+
+    if (!filterValue) {
+      values = percentage ? 
+        [Number(Math.floor(min * 100)), Number(Math.ceil(max * 100))] : 
+        [Number(Math.floor(min)), Number(Math.ceil(max))]
+    } else {
+      values = percentage ? 
+        [Number(Math.floor(filterValue[0] * 100)), Number(Math.ceil(filterValue[1] * 100))] : 
+        [Number(Math.floor(filterValue[0])), Number(Math.ceil(filterValue[1]))]
+    }
+
+    return values
+  }
+
   return (
     <div className={classes.root} onClick={(e) => { e.stopPropagation() }} >
-      <Slider
-        value={filterValue || [Math.ceil(max), Math.floor(min)]}
-        onChange={(_, newValue) => {
-          const [_min, _max] = newValue
-
-          if (_min === min && _max === max) {
-            setFilter('')
-          } else {
-            setFilter(newValue)
-          }
-        }}
-        max={Math.ceil(max)}
-        min={Math.floor(min)}
-        valueLabelDisplay="on"
-        aria-labelledby={`${id}-range-label`}
-        getAriaValueText={percentage ? (value) => (value * 100) : abbreviateNumber}
-        valueLabelFormat={percentage ? (value) => (value * 100) : abbreviateNumber}
-        step={max - min <= 1 ? 0.1 : 1}
+      <RangeSliderLabel
+        values={getValues()}
+        onChange={sliderOnChange}
+        min={percentage ? Math.floor(min * 100) : Math.floor(min)}
+        max={percentage ? Math.ceil(max * 100) : Math.ceil(max)}
+        tooltipFormat={percentage ? undefined : [abbreviateNumber(getValues()[0]), abbreviateNumber(getValues()[1])]}
+        width='w-full'
+        showLabel={false}
       />
     </div>
   )

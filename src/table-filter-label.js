@@ -1,13 +1,11 @@
-import React, { useState, useRef } from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import ButtonBase from '@material-ui/core/ButtonBase'
-import Popper from '@material-ui/core/Popper'
-import Grow from '@material-ui/core/Grow'
-import Paper from '@material-ui/core/Paper'
-import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import FilterListRoundedIcon from '@material-ui/icons/FilterListRounded'
-import { makeStyles } from '@material-ui/core/styles'
+
+import { makeStyles } from '@eqworks/lumen-labs'
+import DialogBase from '@eqworks/lumen-labs/dist/base-components/dialog-base'
+import ButtonBase from '@eqworks/lumen-labs/dist/base-components/button-base'
 
 import SelectionFilter from './filters/selection-filter'
 import RangeFilter from './filters/range-filter'
@@ -17,27 +15,44 @@ import { DateRangeFilter } from './filters/date-range-filter'
 import DefaultFilter from './filters/default-filter'
 
 
-const useStyles = makeStyles(() => ({
-  root: {
-    paddingLeft: '2px',
-    paddingRight: '2px',
+const useStyles = (index, length) => makeStyles({
+  filterLabelContainer: {
+    '& .button-container:focus': {
+      outline: 0,
+    },
+
+    '& .dialog-container': {
+      display: 'grid',
+
+      '& .dialog-content': {
+        justifySelf: `${(index === length - 1 && 'right') || (index === 0 ? 'left' : 'center')}`,
+      },
+    },
   },
+
   filter: {
     padding: '1rem',
     display: 'flex',
   },
-}))
+})
 
-const TableFilterLabel = ({ column }) => {
-  const classes = useStyles()
+const dialogClasses = Object.freeze({
+  dialogContainer: 'dialog-container',
+  dialog: 'dialog-content shadow-light-40 bg-secondary-50',
+})
+
+const buttonClasses = Object.freeze({
+  button: 'button-container',
+})
+
+const TableFilterLabel = ({ column, index, length }) => {
+  const classes = useStyles(index, length)
   const anchorRef = useRef(null)
-  const [open, setOpen] = useState(false)
 
   const handleClose = (e) => {
     if (anchorRef.current && anchorRef.current.contains(e.target)) {
       return
     }
-    setOpen(false)
   }
 
   const filterType = (type) => {
@@ -57,48 +72,40 @@ const TableFilterLabel = ({ column }) => {
     }
   }
 
+  const _button = (
+    <ButtonBase
+      aria-label='Edit button'
+      ref={anchorRef}
+      classes={buttonClasses}
+    >
+      <FilterListRoundedIcon color={column.filterValue ? 'primary' : 'disabled'} />
+    </ButtonBase>
+  )
+
   return (
     <>
-      <ButtonBase
-        aria-label='Edit button'
-        ref={anchorRef}
-        disableRipple
-        className={classes.root}
-        onClick={(e) => {
-          e.stopPropagation()
-          setOpen((prev) => !prev)
-        }}
-      >
-        <FilterListRoundedIcon color={column.filterValue ? 'primary' : 'disabled'} />
-      </ButtonBase>
-      <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition>
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
-            }}
-          >
-            <Paper>
-              <ClickAwayListener onClickAway={handleClose}>
-                <div className={classes.filter}>
-                  {column.Filter ? (
-                    filterType(column.Filter.name)
-                  ) : (
-                    <DefaultFilter {...column} />
-                  )}
-                </div>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper>
+      <DialogBase 
+        classes={{
+          ...dialogClasses,
+          root: classes.filterLabelContainer,
+        }} 
+        button={_button}>
+        <div className={classes.filter}>
+          {column.Filter ? (
+            filterType(column.Filter.name)
+          ) : (
+            <DefaultFilter {...column} />
+          )}
+        </div>
+      </DialogBase>
     </>
   )
 }
 
 TableFilterLabel.propTypes = {
   column: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
+  length: PropTypes.number.isRequired,
 }
 
 export default TableFilterLabel

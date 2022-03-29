@@ -1,18 +1,28 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import TextField from '@eqworks/lumen-ui/dist/text-field'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
+import { TextField, Icons, makeStyles } from '@eqworks/lumen-labs'
 import { useAsyncDebounce } from 'react-table'
 
+
+const classes = makeStyles({
+  defaultFilterContainer: {
+    '& .textfield-container': {
+      width: '12.5rem',
+    },
+  },
+})
+
+const textFieldClasses = Object.freeze({
+  container: 'textfield-container',
+})
 
 const DefaultFilter = ({ filterValue, preFilteredRows, setFilter, id }) => {
   const [value, setValue] = useState(filterValue)
   const _setFilter = useAsyncDebounce(value => {
     setFilter(value || undefined)
   }, 200)
-  const search = ({ target: { value } }) => {
+  const search = (value) => {
     setValue(value)
     _setFilter(value)
   }
@@ -21,21 +31,20 @@ const DefaultFilter = ({ filterValue, preFilteredRows, setFilter, id }) => {
   // This may not be a problem for server side pagination when
   // only the current page is downloaded.
   return (
-    <TextField
-      id={`table-search${id ? `-${id}` : ''}`}
-      variant='outlined'
-      label=''
-      width='225px'
-      startAdornment={(          
-        <InputAdornment position='start'>
-          <SearchRoundedIcon />
-        </InputAdornment>
-      )}
-      onClick={(e) => { e.stopPropagation() }}
-      onChange={search}
-      value={value || ''}
-      placeholder={`Search in ${preFilteredRows.length} records...`}
-    />
+    <div className={classes.defaultFilterContainer}>
+      <TextField
+        classes={textFieldClasses}
+        id={`table-search${id ? `-${id}` : ''}`}
+        size='lg'
+        inputProps={{ 
+          placeholder: `Search in ${preFilteredRows.length} records...`, 
+          startIcon: <Icons.Search size='lg'/>, 
+        }}
+        onClick={(e) => { e.stopPropagation() }}
+        onChange={search}
+        value={value || ''}
+      />
+    </div>
   )
 }
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
 import { Parser, transforms } from 'json2csv'
-import Typography from '@eqworks/lumen-ui/dist/typography'
 import Accordion from '@material-ui/core/Accordion'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
@@ -13,17 +12,189 @@ import provincesRange from './data/provinces-range'
 import provincesDates from './data/province-dates'
 import provincesJson from './data/provinces-json'
 import { DateRangeFilter, filterDates } from '../src/filters/date-range-filter'
+import { Button, makeStyles } from '@eqworks/lumen-labs'
 
 export default {
   title: 'Table',
   component: Table,
 }
 
+const classes = makeStyles({
+  stylingContainer: {
+    width: '45vw',
+  },
+
+  typography: {
+    fontSize: '1rem',
+    fontFamily: 'PT Sans, sans-serif',
+    fontWeight: 400,
+    lineHeight: 1.5,
+    letterSpacing: '0.00938em',
+  },
+})
+
 export const empty = () => <Table />
 
-export const normal = () => <Table data={provinces} />
+export const normal = () => <Table data={provinces} rowsPerPage={[5,10,20,50]}/>
 
-export const noToolbar = () => <Table data={provinces} toolbar={false} />
+export const noToolbar = () => <Table data={provinces} toolbar={false} rowsPerPage={[5,10,20,50]}/>
+
+export const stickyHeader = () => <Table data={provinces} initialPageSize={50} rowsPerPage={[5,10,20,50]} stickyHeader/>
+
+export const highlightColumn = () => <Table data={provinces} rowsPerPage={[5,10,20,50]} highlightColumn={1}/>
+
+export const stylingTypes = () => (
+  <div>
+    <h4 className='text-interactive-500'>Table styles</h4>
+    <div className='flex'>
+      <div className='mr-2'>
+        <h4 className='m-2'>- White header - horizontal border</h4>
+        <Table
+          classes={{
+            root: classes.stylingContainer,
+          }} 
+          data={provinces} 
+          initialPageSize={5} 
+          rowsPerPage={[5,10,20,50]}
+          toolbar={false}
+        />
+      </div>
+      <div>
+        <h4 className='m-2'>- Grey header - horizontal border</h4>
+        <Table
+          classes={{
+            root: classes.stylingContainer,
+          }} 
+          data={provinces} 
+          initialPageSize={5} 
+          rowsPerPage={[5,10,20,50]}
+          toolbar={false}
+          defaultStyles={
+            {
+              headerColor: 'grey',
+              borderType: 'horizontal',
+            }
+          }
+        />
+      </div>
+    </div>
+    <div className='flex'>
+      <div className='mr-2'>
+        <h4 className='m-2'>- White header - vertical border</h4>
+        <Table
+          classes={{
+            root: classes.stylingContainer,
+          }} 
+          data={provinces} 
+          initialPageSize={5} 
+          rowsPerPage={[5,10,20,50]}
+          toolbar={false}
+          defaultStyles={
+            {
+              headerColor: 'white',
+              borderType: 'vertical',
+            }
+          }
+        />
+      </div>
+      <div>
+        <h4 className='m-2'>- Grey header - vertical border</h4>
+        <Table
+          classes={{
+            root: classes.stylingContainer,
+          }} 
+          data={provinces} 
+          initialPageSize={5} 
+          rowsPerPage={[5,10,20,50]}
+          toolbar={false}
+          defaultStyles={
+            {
+              headerColor: 'grey',
+              borderType: 'vertical',
+            }
+          }
+        />
+      </div>
+    </div>
+    <div className='flex'>
+      <div className='mr-2'>
+        <h4 className='m-2'>- White header - all around border</h4>
+        <Table
+          classes={{
+            root: classes.stylingContainer,
+          }} 
+          data={provinces} 
+          initialPageSize={5} 
+          rowsPerPage={[5,10,20,50]}
+          toolbar={false}
+          defaultStyles={
+            {
+              headerColor: 'white',
+              borderType: 'around',
+            }
+          }
+        />
+      </div>
+      <div>
+        <h4 className='m-2'>- Grey header - all around border</h4>
+        <Table
+          classes={{
+            root: classes.stylingContainer,
+          }} 
+          data={provinces} 
+          initialPageSize={5} 
+          rowsPerPage={[5,10,20,50]}
+          toolbar={false}
+          defaultStyles={
+            {
+              headerColor: 'grey',
+              borderType: 'around',
+            }
+          }
+        />
+      </div>
+    </div>
+    <div className='flex'>
+      <div className='mr-2'>
+        <h4 className='m-2'>- White header - none border</h4>
+        <Table
+          classes={{
+            root: classes.stylingContainer,
+          }} 
+          data={provinces} 
+          initialPageSize={5} 
+          rowsPerPage={[5,10,20,50]}
+          toolbar={false}
+          defaultStyles={
+            {
+              headerColor: 'white',
+              borderType: 'none',
+            }
+          }
+        />
+      </div>
+      <div>
+        <h4 className='m-2'>- Grey header - none border</h4>
+        <Table
+          classes={{
+            root: classes.stylingContainer,
+          }} 
+          data={provinces} 
+          initialPageSize={5} 
+          rowsPerPage={[5,10,20,50]}
+          toolbar={false}
+          defaultStyles={
+            {
+              headerColor: 'grey',
+              borderType: 'none',
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+
+)
 
 export const columns = () => (
   <Table
@@ -81,7 +252,7 @@ export const initialHidden = () => (
         Header: 'Action',
         id: 'action',
         // eslint-disable-next-line react/display-name
-        Cell: () => <button onClick={null}>Edit</button>,
+        Cell: () => <Button size='sm' variant='filled' onClick={null}>Edit</Button>,
         hidden: true,
       },
     ]}
@@ -104,7 +275,7 @@ export const initialHiddenColumns = () => (
     <Table.Column
       Header="Action"
       id="action"
-      Cell={() => <button onClick={null}>Edit</button>}
+      Cell={() => <Button size='sm' variant='filled' onClick={null}>Edit</Button>}
     />
   </Table>
 )
@@ -320,10 +491,10 @@ export const rememberHidden = () => {
   }
   return (
     <>
-      <Typography variant="body1">
+      <div className={classes.typography}>
         Hidden columns remembered for {remember.ttl} minutes. Refresh page, or
         swich out and back to this story, to see its effect.
-      </Typography>
+      </div>
       <Table
         data={provinces}
         columns={[
@@ -350,10 +521,10 @@ export const rememberHiddenWithInitHiddenColumns = () => {
   }
   return (
     <>
-      <Typography variant="body1">
+      <div className={classes.typography}>
         Hidden columns remembered for {remember.ttl} minutes. Refresh page, or
         swich out and back to this story, to see its effect.
-      </Typography>
+      </div>
       <Table
         data={provinces}
         hiddenColumns={['new_cases', 'total_cases']}
@@ -371,10 +542,10 @@ export const rememberSortBy = () => {
   }
   return (
     <>
-      <Typography variant="body1">
+      <div className={classes.typography}>
         Columns sorting order remembered for {remember.ttl} minutes. Refresh
         page, or swich out and back to this story, to see its effect.
-      </Typography>
+      </div>
       <Table
         data={provinces}
         sortBy={{ id: 'new_cases', desc: true }}
@@ -389,15 +560,18 @@ export const dynamicSortBy = () => {
 
   return (
     <>
-      <Typography variant="body1">
-        SortBy changing according to the chosen button.
-      </Typography>
-      {['new_cases', 'total_cases', 'province'].map((col) => (
-        <button key={col} onClick={() => setSort(col)}>
-          {' '}
-          {col}{' '}
-        </button>
-      ))}
+      <div className={classes.typography}>
+        SortBy changing according to the chosen Button.
+      </div>
+      <div style={{ display: 'flex', marginTop: '.5rem' }}>
+        {['new_cases', 'total_cases', 'province'].map((col) => (
+          <div key={col} style={{ paddingRight: '.5rem' }}>
+            <Button onClick={() => setSort(col)} size='sm'>
+              {col}
+            </Button>
+          </div>
+        ))}
+      </div>
       <Table data={provinces} sortBy={[{ id: sort, desc: true }]} />
     </>
   )
@@ -409,9 +583,9 @@ export const caseInsensitiveSort = () => {
   })
   return (
     <>
-      <Typography variant="body1">
+      <div className={classes.typography}>
         SortBy to be case insensitive.
-      </Typography>
+      </div>
       <Table
         data={_provinces}
         columns={[
@@ -515,10 +689,6 @@ export const renderJson = () => {
   )
 }
 
-export const defaultBorderStyle = () => <Table data={provinces} isBorder={true}/>
-
-export const customBorderStyle = () => <Table data={provinces} isBorder={true} borderStyles={{ borderRadius: 10, borderColor: 'red', borderStyle: 'dashed', borderWidth: 4 }}/>
-
 export const arbitraryAPIData = () => {
   const API_URL = 'https://api.covid19api.com/summary'
   const [data, setData] = useState([])
@@ -531,9 +701,9 @@ export const arbitraryAPIData = () => {
   }, [])
   return (
     <>
-      <Typography variant="body1">
+      <div className={classes.typography}>
         Data from <a href={API_URL}>{API_URL}</a>
-      </Typography>
+      </div>
       <Table data={data} />
     </>
   )

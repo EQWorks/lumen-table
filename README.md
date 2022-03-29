@@ -13,17 +13,8 @@ npm i @eqworks/lumen-table
 Next, install the required peer dependencies:
 
 ```
-npm i @eqworks/lumen-ui @material-ui/core @material-ui/icons @material-ui/lab react react-dom
+npm i @eqworks/lumen-labs @material-ui/core @material-ui/icons react react-dom
 ```
-
-Once you have installed all the required dependencies, wrap your application in a `<ThemeProvider>`:
-
-```jsx
-import { ThemeProvider } from "@eqworks/lumen-ui";
-
-const MyApp = () => <ThemeProvider>Hello world!</ThemeProvider>;
-```
-
 Now, you can start using `lumen-table` component:
 
 ```jsx
@@ -36,4 +27,23 @@ const MyComponent = () => (
 );
 ```
 
-> **Note:** You can override the `lumen-ui` default theme by passing a `theme` prop to `<ThemeProvider>`.<br />[Click here to find out how to create your own theme using Material UI's `createMuiTheme` method](https://material-ui.com/customization/theming/#api).
+You can override the `lumen-labs` default theme by passing a `classes` prop to `<Table />` for your own custom styling.
+
+```jsx
+import { Table } from "@eqworks/lumen-table";
+
+const tableClasses = Object.freeze({
+  rootContainer: 'custom-root-container-class',
+  container: 'custom-container',
+  root: 'custom-root',
+  header: 'custom-header',
+  body: 'custom-body',
+  foot: 'custom-foot'
+})
+
+const MyComponent = () => (
+  <div>
+    <Table classes={tableClasses}/>
+  </div>
+);
+```

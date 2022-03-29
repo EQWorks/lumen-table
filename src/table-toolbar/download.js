@@ -1,15 +1,14 @@
-import React, { useState, useRef } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
-import Grow from '@material-ui/core/Grow'
-import Paper from '@material-ui/core/Paper'
-import Popper from '@material-ui/core/Popper'
 import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
-import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+
+import { Button, makeStyles } from '@eqworks/lumen-labs'
+import DialogBase from '@eqworks/lumen-labs/dist/base-components/dialog-base'
+
 import Badge from '@material-ui/core/Badge'
 import SaveAltRoundedIcon from '@material-ui/icons/SaveAltRounded'
-import Button from '@eqworks/lumen-ui/dist/button'
 
 
 export const saveData = ({ data, rows, allColumns, visibleColumns, visCols = false, filteredRows = false }) => {
@@ -43,9 +42,28 @@ export const saveData = ({ data, rows, allColumns, visibleColumns, visCols = fal
   link.remove()
 }
 
+const classes = makeStyles({
+  downloadContainer: {
+    '& .button-container': {
+      border: 0,
+    },
+
+    '& .dialog-container': {
+      zIndex: 1,
+    },
+  },
+})
+
+const dialogClasses = Object.freeze({
+  root: classes.downloadContainer,
+  dialog: 'dialog-container shadow-light-40 bg-secondary-50',
+})
+
+const buttonClasses = Object.freeze({
+  button: 'button-container',
+})
+
 const Download = ({ data, allColumns, visibleColumns, rows, downloadFn }) => {
-  const anchorRef = useRef(null)
-  const [open, setOpen] = useState(false)
   const allowVisCols = 0 < visibleColumns.length && visibleColumns.length < allColumns.length
   const allowFilteredRows = 0 < rows.length && rows.length < data.length
   const allowOptions = allowVisCols || allowFilteredRows
@@ -53,17 +71,6 @@ const Download = ({ data, allColumns, visibleColumns, rows, downloadFn }) => {
   const handleDownload = ({ visCols = false, filteredRows = false }) => (e) => {
     e.stopPropagation()
     downloadFn({ data, rows, allColumns, visibleColumns, visCols, filteredRows })
-  }
-
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen)
-  }
-
-  const handleClose = (e) => {
-    if (anchorRef.current && anchorRef.current.contains(e.target)) {
-      return
-    }
-    setOpen(false)
   }
 
   const allText = () => {
@@ -80,57 +87,49 @@ const Download = ({ data, allColumns, visibleColumns, rows, downloadFn }) => {
     return null
   }
 
+  const _button = (
+    <div aria-label='Save Button'>
+      <Button
+        classes={buttonClasses}
+        variant='outlined'
+        size='lg'
+        endIcon={
+          <Badge color='secondary' variant='dot' invisible={!allowOptions}>
+            <SaveAltRoundedIcon fontSize='small' />
+          </Badge>
+        }
+        onClick={allowOptions ? undefined : handleDownload({ visCols: false, filteredRows: false })}
+        aria-haspopup='menu'
+      >
+        Download
+      </Button>
+    </div>
+  )
+
   return (
     <>
-      <div ref={anchorRef} aria-label='Save Button'>
-        <Button
-          type='tertiary'
-          endIcon={
-            <Badge color='secondary' variant='dot' invisible={!allowOptions}>
-              <SaveAltRoundedIcon fontSize='small' />
-            </Badge>
-          }
-          onClick={allowOptions ? handleToggle : handleDownload({ visCols: false, filteredRows: false })}
-          aria-haspopup='menu'
-        >
-          Download
-        </Button>
-      </div>
-      <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition>
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
-            }}
-          >
-            <Paper>
-              <ClickAwayListener onClickAway={handleClose}>
-                <MenuList>
-                  <MenuItem onClick={handleDownload({ visCols: false, filteredRows: false })}>
-                    {allText()}
-                  </MenuItem>
-                  {allowVisCols && allowFilteredRows && (
-                    <MenuItem onClick={handleDownload({ visCols: true, filteredRows: true })}>
-                      Visible columns and filtered rows
-                    </MenuItem>
-                  )}
-                  {allowVisCols && (
-                    <MenuItem onClick={handleDownload({ visCols: true, filteredRows: false })}>
-                      Visible columns
-                    </MenuItem>
-                  )}
-                  {allowFilteredRows && (
-                    <MenuItem onClick={handleDownload({ visCols: false, filteredRows: true })}>
-                      Filtered rows
-                    </MenuItem>
-                  )}
-                </MenuList>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper>
+      <DialogBase classes={dialogClasses} button={_button}>
+        <MenuList>
+          <MenuItem onClick={handleDownload({ visCols: false, filteredRows: false })}>
+            {allText()}
+          </MenuItem>
+          {allowVisCols && allowFilteredRows && (
+            <MenuItem onClick={handleDownload({ visCols: true, filteredRows: true })}>
+              Visible columns and filtered rows
+            </MenuItem>
+          )}
+          {allowVisCols && (
+            <MenuItem onClick={handleDownload({ visCols: true, filteredRows: false })}>
+              Visible columns
+            </MenuItem>
+          )}
+          {allowFilteredRows && (
+            <MenuItem onClick={handleDownload({ visCols: false, filteredRows: true })}>
+              Filtered rows
+            </MenuItem>
+          )}
+        </MenuList>
+      </DialogBase>
     </>
   )
 }

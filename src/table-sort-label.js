@@ -1,23 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import ButtonBase from '@material-ui/core/ButtonBase'
 import ImportExportRoundedIcon from '@material-ui/icons/ImportExportRounded'
 import ArrowDownwardRoundedIcon from '@material-ui/icons/ArrowDownwardRounded'
 import ArrowUpwardRoundedIcon from '@material-ui/icons/ArrowUpwardRounded'
-import { makeStyles } from '@material-ui/core/styles'
+
+import { makeStyles } from '@eqworks/lumen-labs'
+import ButtonBase from '@eqworks/lumen-labs/dist/base-components/button-base'
 
 
-const useStyles = makeStyles(() => ({
+const classes = makeStyles({
   root: {
     paddingLeft: '2px',
     paddingRight: '2px',
   },
-}))
+})
 
 const TableSortLabel = ({ isSorted, isSortedDesc }) => {
-  const classes = useStyles()
-
   const renderIcon = () => {
     if (!isSorted) {
       return (<ImportExportRoundedIcon fontSize='small' color='disabled' />)
@@ -28,7 +27,7 @@ const TableSortLabel = ({ isSorted, isSortedDesc }) => {
       <ArrowUpwardRoundedIcon fontSize='small' color='primary' />
     )
   }
-  return (<ButtonBase disableRipple className={classes.root}>{renderIcon()}</ButtonBase>)
+  return (<ButtonBase className={classes.root}>{renderIcon()}</ButtonBase>)
 }
 
 TableSortLabel.propTypes = {

@@ -1,17 +1,6 @@
 import React, { useState, useEffect, useMemo, Children } from 'react'
 import PropTypes from 'prop-types'
 
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import Typography from '@eqworks/lumen-ui/dist/typography'
-import TableContainer from '@material-ui/core/TableContainer'
-import MUITable from '@material-ui/core/Table'
-import TableHead from '@material-ui/core/TableHead'
-import TableBody from '@material-ui/core/TableBody'
-import TableFooter from '@material-ui/core/TableFooter'
-import TableRow from '@material-ui/core/TableRow'
-import TableCell from '@material-ui/core/TableCell'
-import TablePagination from '@material-ui/core/TablePagination'
 import {
   useTable,
   useSortBy,
@@ -20,6 +9,8 @@ import {
   useFilters,
 } from 'react-table'
 import { cached } from 'use-cached'
+
+import { Pagination } from '@eqworks/lumen-labs'
 
 import TableColumn from './table-column'
 import TableToolbar from './table-toolbar'
@@ -31,7 +22,9 @@ import RangeFilter from './filters/range-filter'
 import { saveData } from './table-toolbar/download'
 import QuantitaveFilter from './filters/quantitave-filter'
 import QualitativeFilter from './filters/qualitative-filter'
-import useStyles from './useStyles'
+
+import tableStyle from './tableStyle'
+
 
 const getHeader = (s) => [
   s.charAt(0).toUpperCase(),
@@ -92,6 +85,7 @@ const useTableConfig = ({ data, hiddenColumns, children, columns, remember, exte
 }
 
 export const Table = ({
+  classes,
   columns,
   data,
   toolbar,
@@ -104,16 +98,12 @@ export const Table = ({
   remember,
   extendColumns,
   downloadFn,
-  borderStyles,
-  isBorder,
+  defaultStyles,
+  stickyHeader,
+  rowsPerPage,
+  initialPageSize,
+  highlightColumn,
 }) => {
-  const borderOptions = {
-    borderStyles,
-    toolbar,
-    isBorder,
-  }
-
-  const classes = useStyles(borderOptions)()
   // custom table config hook
   const {
     _cols,
@@ -141,7 +131,7 @@ export const Table = ({
     setPageSize,
     gotoPage,
     visibleColumns,
-    state: { pageSize, pageIndex, globalFilter, hiddenColumns: _hidden, sortBy: _sortBy },
+    state: { pageSize, globalFilter, hiddenColumns: _hidden, sortBy: _sortBy },
     rows,
   } = useTable(
     {
@@ -150,6 +140,7 @@ export const Table = ({
       initialState: {
         hiddenColumns: hidden,
         sortBy: useMemo(() => Array.isArray(cachedSortBy) ? cachedSortBy : [cachedSortBy], [cachedSortBy]),
+        pageSize: initialPageSize,
       },
       sortTypes: {
         caseInsensitive: (row1, row2, columnName) => {
@@ -188,8 +179,15 @@ export const Table = ({
     }
   }, [sortBy])
 
+  const onChageRowsPerPage = (e, val) => {
+    e.stopPropagation()
+    if (pageSize !== val.pager.pageSize) {
+      setPageSize(val.pager.pageSize)
+    }
+  }
+
   return (
-    <div className={classes.tableMainContainer}>
+    <div className={`table-root-container ${tableStyle.tableRootContainer} ${classes.root}`}>
       {(_data.length > 0 && toolbar) && (
         <TableToolbar
           rows={rows}
@@ -205,81 +203,70 @@ export const Table = ({
         />
       )}
       {visibleColumns.length > 0 ? (
-        <TableContainer>
-          <MUITable className={classes.table} {...getTableProps(tableProps)}>
-            <TableHead>
-              {headerGroups.map((headerGroup, i) => (
-                <TableRow key={i} {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
-                  {headerGroup.headers.map((column, i) => (
-                    <TableCell
-                      key={i}
-                      className={classes.head}
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
-                    >
-                      <div className={classes.columnContainer}>
-                        {column.render('Header')}
-                        {column.canSort && (<TableSortLabel {...column} />)}
-                        {column.canFilter && (<TableFilterLabel column={column} />)}
-                      </div>
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHead>
-            <TableBody {...getTableBodyProps()} className={classes.body}>
-              {page.map((row, i) => {
-                prepareRow(row)
-                return (
-                  <TableRow key={i} {...row.getRowProps()}>
-                    {row.cells.map((cell, i) => (
-                      <TableCell key={i} {...cell.getCellProps()}>
-                        {cell.render('Cell')}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                )
-              })}
-            </TableBody>
+        <>
+          <div className={`table-container ${classes.container}`}>
+            <table className={`table-root border-secondary-200 shadow-light-10 ${classes.root}`} {...getTableProps(tableProps)}>
+              <thead className={`table-header text-secondary-500 
+                ${classes.header} ${stickyHeader && 'sticky-header'}
+                ${defaultStyles.headerColor === 'grey' && 'bg-secondary-100'}
+                ${defaultStyles.headerColor === 'white' && 'bg-secondary-50 shadow-light-40'}
+              `}>
+                {headerGroups.map((headerGroup, index) => {
+                  const totalHeaders = headerGroup.headers.length
 
-            {/* TODO: this seems to be simplifiable */}
-            {(0 < rows.length && rows.length < data.length ? rows.length > pageSize : rows.length > 0) && (
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                  /* TODO: dynamically scale rowsPerPageOptions */
-                    rowsPerPageOptions={[
-                      5,
-                      10,
-                      25,
-                      { label: 'All', value: data.length },
-                    ]}
-                    colSpan={3}
-                    count={rows.length}
-                    rowsPerPage={pageSize}
-                    page={pageIndex}
-                    SelectProps={{
-                      inputProps: { 'aria-label': 'rows per page' },
-                      native: true,
-                    }}
-                    onChangePage={(_, page) => { gotoPage(page) }}
-                    onChangeRowsPerPage={({ target: { value } }) => {
-                      setPageSize(Number(value))
-                    }}
-                    classes={{ spacer: classes.spacer, root: classes.root }}
-                  />
-                </TableRow>
-              </TableFooter>
-            )}
-          </MUITable>
-        </TableContainer>
+                  return ( 
+                    <tr key={`header-row-${index}`} className="table-header-row" {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
+                      {headerGroup.headers.map((column, index) => (
+                        <th key={`header-cell-${index}`} className={`table-header-cell border-${defaultStyles.borderType} border-secondary-200`} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                          <div className="table-header-item">
+                            {column.render('Header')}
+                            {column.canSort && (<TableSortLabel {...column} />)}
+                            {column.canFilter && (<TableFilterLabel column={column} index={index} length={totalHeaders}/>)}
+                          </div>
+                        </th>
+                      ))}
+                    </tr>
+                  )
+                })}
+              </thead>
+              <tbody className={`table-body ${classes.body}`} {...getTableBodyProps()}>
+                {page.map((row, i) => {
+                  prepareRow(row)
+                  return (
+                    <tr className="table-body-row" key={i} {...row.getRowProps()}>
+                      {row.cells.map((cell, i) => (
+                        <td className={`table-body-cell border-${defaultStyles.borderType} border-secondary-200 text-secondary-800 ${i === (highlightColumn - 1) && 'font-bold'}`} key={i} {...cell.getCellProps()}>
+                          <div className="table-body-item">{cell.render('Cell')}</div>
+                        </td>
+                      ))}
+                    </tr>
+                  )
+                })}
+              </tbody>
+              <tfoot className={`table-footer ${classes.footer}`}>
+                <tr className="table-footer-row">
+                  {(0 < rows.length && rows.length < data.length ? rows.length > pageSize : rows.length > 0) && (
+                    <td className={`table-footer-cell border-${defaultStyles.borderType} border-secondary-200`} colSpan={100}>
+                      <Pagination
+                        items={rows}
+                        pageSize={pageSize}
+                        onChangePage={(_, page) =>  gotoPage(page.currentPage - 1)}
+                        onChangeRowsPerPage={(e, val) => onChageRowsPerPage(e, val)}
+                        rowsPerPage={rowsPerPage}
+                      />
+                    </td>
+                  )}
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </>
       ) : (
-        <Card>
-          <CardContent>
-            <Typography variant='body1'>
+        <div className="empty-container shadow-10">
+          <div className="content-container">
             No visible columns
-            </Typography>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
     </div>
   )
@@ -292,6 +279,7 @@ const childrenColumnCheck = (props, _, componentName) => {
 }
 
 Table.propTypes = {
+  classes: PropTypes.object,
   columns: childrenColumnCheck,
   children: childrenColumnCheck,
   data: PropTypes.array,
@@ -310,16 +298,18 @@ Table.propTypes = {
   }),
   extendColumns: PropTypes.bool,
   downloadFn: PropTypes.func,
-  borderStyles: PropTypes.shape({
-    border: PropTypes.string,
-    borderWidth: PropTypes.number,
-    borderStyle: PropTypes.oneOf(['dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'none', 'hidden']),
-    borderColor: PropTypes.string,
-    borderRadius: PropTypes.number,
+  defaultStyles: PropTypes.shape({
+    headerColor: PropTypes.oneOf(['grey', 'white']),
+    borderType: PropTypes.oneOf(['none', 'horizontal', 'vertical', 'around']),
   }),
-  isBorder: PropTypes.bool,
+  stickyHeader: PropTypes.bool,
+  rowsPerPage: PropTypes.arrayOf(PropTypes.number),
+  initialPageSize: PropTypes.number,
+  highlightColumn: PropTypes.number,
 }
+
 Table.defaultProps = {
+  classes: {},
   columns: null,
   children: null,
   data: [],
@@ -332,8 +322,12 @@ Table.defaultProps = {
   remember: {},
   extendColumns: false,
   downloadFn: saveData,
-  borderStyles: {},
-  isBorder: false,
+  defaultStyles: {
+    headerColor: 'white',
+    borderType: 'horizontal',
+  },
+  stickyHeader: false,
+  initialPageSize: 10,
 }
 Table.Column = TableColumn
 Table.filters = { DefaultFilter, SelectionFilter, RangeFilter, QuantitaveFilter, QualitativeFilter }
