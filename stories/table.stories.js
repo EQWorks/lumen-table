@@ -717,7 +717,7 @@ export const customPagination = () => {
   useEffect(() => {
     setGetTable(tableRef.current)
   }, [tableRef])
-  console.log(getTable)
+
   const onChageRowsPerPage = (e, val) => {
     e.stopPropagation()
     if (tableRef.pageSize !== val.pager.pageSize) {
