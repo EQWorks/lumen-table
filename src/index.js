@@ -198,7 +198,7 @@ export const Table = forwardRef(({
     visibleColumns,
     state: { pageSize, globalFilter, hiddenColumns: _hidden, sortBy: _sortBy },
     rows,
-  }), [rows, gotoPage])
+  }))
 
   const onChageRowsPerPage = (e, val) => {
     e.stopPropagation()
@@ -208,7 +208,7 @@ export const Table = forwardRef(({
   }
 
   return (
-    <div ref={tableRef} className={`table-root-container ${tableStyle.tableRootContainer} ${classes.root}`}>
+    <div ref={tableRef} className={`table-root-container bg-secondary-50 ${tableStyle.tableRootContainer} ${classes.root}`}>
       {(_data.length > 0 && toolbar) && (
         <TableToolbar
           rows={rows}
