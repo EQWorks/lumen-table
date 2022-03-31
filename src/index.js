@@ -208,7 +208,7 @@ export const Table = forwardRef(({
   }
 
   return (
-    <div ref={tableRef} className={`table-root-container bg-secondary-50 ${tableStyle.tableRootContainer} ${classes.root}`}>
+    <div ref={tableRef} className={`table-root-container bg-secondary-50 inline-flex flex-col ${tableStyle.tableRootContainer} ${classes.root}`}>
       {(_data.length > 0 && toolbar) && (
         <TableToolbar
           rows={rows}
