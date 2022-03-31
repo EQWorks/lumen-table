@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import { Parser, transforms } from 'json2csv'
 import Accordion from '@material-ui/core/Accordion'
@@ -12,7 +12,7 @@ import provincesRange from './data/provinces-range'
 import provincesDates from './data/province-dates'
 import provincesJson from './data/provinces-json'
 import { DateRangeFilter, filterDates } from '../src/filters/date-range-filter'
-import { Button, makeStyles } from '@eqworks/lumen-labs'
+import { Button, Pagination, makeStyles } from '@eqworks/lumen-labs'
 
 export default {
   title: 'Table',
@@ -706,5 +706,39 @@ export const arbitraryAPIData = () => {
       </div>
       <Table data={data} />
     </>
+  )
+}
+
+export const customPagination = () => {
+  const [getTable, setGetTable] = useState('')
+  const tableRef = useRef({})
+  const { rows, pageSize, gotoPage, setPageSize } = getTable
+
+  useEffect(() => {
+    setGetTable(tableRef.current)
+  }, [tableRef])
+
+  const onChageRowsPerPage = (e, val) => {
+    e.stopPropagation()
+    if (tableRef.pageSize !== val.pager.pageSize) {
+      setPageSize(val.pager.pageSize)
+    }
+  }
+
+  return (
+    <div>
+      <Table ref={tableRef} data={provinces} initialPageSize={10} stickyHeader hidePagination/>
+      {rows && (
+        <Pagination
+          itemsLength={rows.length}
+          pageSize={pageSize}
+          onChangePage={(_, page) => {
+            gotoPage(page.pager.currentPage - 1) 
+          }}
+          onChangeRowsPerPage={(e, val) => onChageRowsPerPage(e, val)}
+          rowsPerPage={[5,10,20,50]}
+        />
+      )}
+    </div>
   )
 }

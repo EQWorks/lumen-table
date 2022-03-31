@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, Children } from 'react'
+import React, { useState, useEffect, useMemo, Children, forwardRef, useImperativeHandle, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -84,7 +84,7 @@ const useTableConfig = ({ data, hiddenColumns, children, columns, remember, exte
   }
 }
 
-export const Table = ({
+export const Table = forwardRef(({
   classes,
   columns,
   data,
@@ -103,7 +103,8 @@ export const Table = ({
   rowsPerPage,
   initialPageSize,
   highlightColumn,
-}) => {
+  hidePagination,
+}, ref) => {
   // custom table config hook
   const {
     _cols,
@@ -161,6 +162,8 @@ export const Table = ({
     usePagination,
   )
 
+  const tableRef = useRef(null)
+
   // remember hidden
   useEffect(() => {
     if (remember.hidden) {
@@ -173,11 +176,29 @@ export const Table = ({
       setCachedSortBy(_sortBy)
     }
   }, [_sortBy, remember.sortBy])
+
   useEffect(() => {
     if (sortBy.length) {
       toggleSortBy(sortBy[0].id, sortBy[0].desc, false)
     }
   }, [sortBy])
+
+  useImperativeHandle(ref, () => ({
+    ref: tableRef,
+    headerGroups,
+    page,
+    allColumns,
+    prepareRow,
+    toggleSortBy,
+    toggleHideColumn,
+    setGlobalFilter,
+    preGlobalFilteredRows,
+    setPageSize,
+    gotoPage,
+    visibleColumns,
+    state: { pageSize, globalFilter, hiddenColumns: _hidden, sortBy: _sortBy },
+    rows,
+  }))
 
   const onChageRowsPerPage = (e, val) => {
     e.stopPropagation()
@@ -187,7 +208,7 @@ export const Table = ({
   }
 
   return (
-    <div className={`table-root-container ${tableStyle.tableRootContainer} ${classes.root}`}>
+    <div ref={tableRef} className={`table-root-container bg-secondary-50 inline-flex flex-col ${tableStyle.tableRootContainer} ${classes.root}`}>
       {(_data.length > 0 && toolbar) && (
         <TableToolbar
           rows={rows}
@@ -245,12 +266,14 @@ export const Table = ({
               </tbody>
               <tfoot className={`table-footer ${classes.footer}`}>
                 <tr className="table-footer-row">
-                  {(0 < rows.length && rows.length < data.length ? rows.length > pageSize : rows.length > 0) && (
+                  {(0 < rows.length && rows.length < data.length ? rows.length > pageSize : rows.length > 0) && !hidePagination && (
                     <td className={`table-footer-cell border-${defaultStyles.borderType} border-secondary-200`} colSpan={100}>
                       <Pagination
-                        items={rows}
+                        itemsLength={rows.length}
                         pageSize={pageSize}
-                        onChangePage={(_, page) =>  gotoPage(page.currentPage - 1)}
+                        onChangePage={(_, val) => {
+                          gotoPage(val.pager.currentPage - 1)
+                        }}
                         onChangeRowsPerPage={(e, val) => onChageRowsPerPage(e, val)}
                         rowsPerPage={rowsPerPage}
                       />
@@ -270,7 +293,7 @@ export const Table = ({
       )}
     </div>
   )
-}
+})
 
 const childrenColumnCheck = (props, _, componentName) => {
   if (props.children && props.columns) {
@@ -306,6 +329,7 @@ Table.propTypes = {
   rowsPerPage: PropTypes.arrayOf(PropTypes.number),
   initialPageSize: PropTypes.number,
   highlightColumn: PropTypes.number,
+  hidePagination: PropTypes.bool,
 }
 
 Table.defaultProps = {
@@ -328,6 +352,7 @@ Table.defaultProps = {
   },
   stickyHeader: false,
   initialPageSize: 10,
+  hidePagination: false,
 }
 Table.Column = TableColumn
 Table.filters = { DefaultFilter, SelectionFilter, RangeFilter, QuantitaveFilter, QualitativeFilter }
