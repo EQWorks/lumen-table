@@ -1206,10 +1206,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-"@eqworks/lumen-labs@^0.1.0-alpha.39":
-  version "0.1.0-alpha.39"
-  resolved "https://registry.yarnpkg.com/@eqworks/lumen-labs/-/lumen-labs-0.1.0-alpha.39.tgz#17998b0ffb186debb6d8bd849898d76ec055f595"
-  integrity sha512-WGOpGfm3z2AgldOCyVtPkRV/azKL9kaO419XV0EWBqyilsCqy7N09AbbAYTq9eLt3O/72vAbQDBjCYBGZVkTfQ==
+"@eqworks/lumen-labs@^0.1.0-alpha.47":
+  version "0.1.0-alpha.47"
+  resolved "https://registry.yarnpkg.com/@eqworks/lumen-labs/-/lumen-labs-0.1.0-alpha.47.tgz#ea869b7326c7ea4ef26bb1e7cdf8eb5dfd144b24"
+  integrity sha512-Ee+O3u6ecRSX6kAO693Mm2HtRsi5pBuj/c8aoo/bPCDFm1O1Mb0es6j2pE1BCXsaRo9TN6lSD2x19ikc7SCWDQ==
   dependencies:
     "@headlessui/react" "^1.4.0"
     clsx "^1.1.1"

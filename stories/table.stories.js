@@ -728,12 +728,12 @@ export const customPagination = () => {
   return (
     <div>
       <Table ref={tableRef} data={provinces} initialPageSize={10} stickyHeader hidePagination/>
-      {getTable && (
+      {rows && (
         <Pagination
-          items={rows}
+          itemsLength={rows.length}
           pageSize={pageSize}
           onChangePage={(_, page) => {
-            gotoPage(page.currentPage - 1) 
+            gotoPage(page.pager.currentPage - 1) 
           }}
           onChangeRowsPerPage={(e, val) => onChageRowsPerPage(e, val)}
           rowsPerPage={[5,10,20,50]}

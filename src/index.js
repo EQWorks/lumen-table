@@ -269,9 +269,11 @@ export const Table = forwardRef(({
                   {(0 < rows.length && rows.length < data.length ? rows.length > pageSize : rows.length > 0) && !hidePagination && (
                     <td className={`table-footer-cell border-${defaultStyles.borderType} border-secondary-200`} colSpan={100}>
                       <Pagination
-                        items={rows}
+                        itemsLength={rows.length}
                         pageSize={pageSize}
-                        onChangePage={(_, page) => gotoPage(page.currentPage - 1)}
+                        onChangePage={(_, val) => {
+                          gotoPage(val.pager.currentPage - 1)
+                        }}
                         onChangeRowsPerPage={(e, val) => onChageRowsPerPage(e, val)}
                         rowsPerPage={rowsPerPage}
                       />
