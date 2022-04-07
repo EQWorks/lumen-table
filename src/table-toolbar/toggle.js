@@ -6,8 +6,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 
-import { Button, makeStyles } from '@eqworks/lumen-labs'
-import DialogBase from '@eqworks/lumen-labs/dist/base-components/dialog-base'
+import { Button, makeStyles, BaseComponents } from '@eqworks/lumen-labs'
 
 import Switch from '@material-ui/core/Switch'
 import Badge from '@material-ui/core/Badge'
@@ -69,7 +68,7 @@ export const Toggle = ({ allColumns, toggleHideColumn }) => {
 
   return (
     <>
-      <DialogBase classes={dialogClasses} button={_button}>
+      <BaseComponents.DialogBase classes={dialogClasses} button={_button}>
         <List className={classes.list}>
           {allColumns.map((c) => {
             const labelID = `toggle-label-${c.id}`
@@ -97,7 +96,7 @@ export const Toggle = ({ allColumns, toggleHideColumn }) => {
             )
           })}
         </List>
-      </DialogBase>
+      </BaseComponents.DialogBase>
     </>
   )
 }
