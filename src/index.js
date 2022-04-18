@@ -40,7 +40,7 @@ const deObjectify = (data) => data.map((d) => {
   const r = { ...d }
   Object.keys(d).forEach((k) => {
     if (typeof d[k] === 'object' && d[k] != null) {
-      r[k] = JSON.stringify(d[k])
+      r[k] = d[k]
     }
   })
   return r
@@ -91,6 +91,7 @@ export const Table = forwardRef(({
   toolbar,
   children,
   downloadable,
+  downloadName,
   hiddenColumns,
   tableProps,
   headerGroupProps,
@@ -216,6 +217,7 @@ export const Table = forwardRef(({
           visibleColumns={visibleColumns}
           toggleHideColumn={toggleHideColumn}
           downloadable={downloadable}
+          downloadName={downloadName}
           data={data}
           preGlobalFilteredRows={preGlobalFilteredRows}
           globalFilter={globalFilter || ''}
@@ -307,6 +309,7 @@ Table.propTypes = {
   children: childrenColumnCheck,
   data: PropTypes.array,
   downloadable: PropTypes.bool,
+  downloadName: PropTypes.string,
   hiddenColumns: PropTypes.arrayOf(PropTypes.string),
   tableProps: PropTypes.object,
   toolbar: PropTypes.bool,
@@ -346,6 +349,7 @@ Table.defaultProps = {
   remember: {},
   extendColumns: false,
   downloadFn: saveData,
+  downloadName: '',
   defaultStyles: {
     headerColor: 'white',
     borderType: 'horizontal',

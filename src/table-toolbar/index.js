@@ -28,6 +28,7 @@ const TableToolbar = ({
   // Download
   downloadable,
   downloadFn,
+  downloadName,
   data,
   visibleColumns,
   rows,
@@ -57,6 +58,7 @@ const TableToolbar = ({
           visibleColumns={visibleColumns}
           rows={rows}
           downloadFn={downloadFn}
+          downloadName={downloadName}
         />
       )}
     </Toolbar>
