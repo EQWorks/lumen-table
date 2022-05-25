@@ -91,7 +91,6 @@ export const Table = forwardRef(({
   toolbar,
   children,
   downloadable,
-  downloadName,
   hiddenColumns,
   tableProps,
   headerGroupProps,
@@ -209,7 +208,7 @@ export const Table = forwardRef(({
   }
 
   return (
-    <div ref={tableRef} className={`table-root-container bg-secondary-50 inline-flex flex-col ${tableStyle.tableRootContainer} ${classes.root}`}>
+    <div ref={tableRef} className={`table-root-container bg-secondary-50 ${tableStyle.tableRootContainer} ${classes.root}`}>
       {(_data.length > 0 && toolbar) && (
         <TableToolbar
           rows={rows}
@@ -217,7 +216,6 @@ export const Table = forwardRef(({
           visibleColumns={visibleColumns}
           toggleHideColumn={toggleHideColumn}
           downloadable={downloadable}
-          downloadName={downloadName}
           data={data}
           preGlobalFilteredRows={preGlobalFilteredRows}
           globalFilter={globalFilter || ''}
@@ -309,7 +307,6 @@ Table.propTypes = {
   children: childrenColumnCheck,
   data: PropTypes.array,
   downloadable: PropTypes.bool,
-  downloadName: PropTypes.string,
   hiddenColumns: PropTypes.arrayOf(PropTypes.string),
   tableProps: PropTypes.object,
   toolbar: PropTypes.bool,
@@ -349,7 +346,6 @@ Table.defaultProps = {
   remember: {},
   extendColumns: false,
   downloadFn: saveData,
-  downloadName: '',
   defaultStyles: {
     headerColor: 'white',
     borderType: 'horizontal',
