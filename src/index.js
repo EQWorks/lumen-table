@@ -40,7 +40,7 @@ const deObjectify = (data) => data.map((d) => {
   const r = { ...d }
   Object.keys(d).forEach((k) => {
     if (typeof d[k] === 'object' && d[k] != null) {
-      r[k] = d[k]
+      r[k] = JSON.stringify(d[k])
     }
   })
   return r
