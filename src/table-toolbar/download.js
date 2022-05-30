@@ -10,11 +10,10 @@ import Badge from '@material-ui/core/Badge'
 import SaveAltRoundedIcon from '@material-ui/icons/SaveAltRounded'
 
 
-export const saveData = ({ data, rows, allColumns, visibleColumns, visCols = false, filteredRows = false }) => {
+export const saveData = ({ data, rows, allColumns, visibleColumns, downloadName, visCols = false, filteredRows = false }) => {
   const cols = (visCols && visibleColumns.length > 0) ? visibleColumns : allColumns
   const headers = cols.map((c) => c.render('Header'))
   const valueKeys = cols.map((c) => c.id)
-
   let csvContent = ''
 
   headers.forEach((h) => {
@@ -34,7 +33,7 @@ export const saveData = ({ data, rows, allColumns, visibleColumns, visCols = fal
   const url = `data:text/csv;charset=utf-8,${encodeURIComponent(csvContent)}`
   const link = document.createElement('a')
   link.setAttribute('href', url)
-  link.setAttribute('download', 'data.csv')
+  link.setAttribute('download', `${downloadName}.csv` || 'data.csv')
   document.body.appendChild(link)
 
   link.click()
@@ -62,14 +61,14 @@ const buttonClasses = Object.freeze({
   button: 'button-container',
 })
 
-const Download = ({ data, allColumns, visibleColumns, rows, downloadFn }) => {
+const Download = ({ data, allColumns, visibleColumns, rows, downloadFn, downloadName }) => {
   const allowVisCols = 0 < visibleColumns.length && visibleColumns.length < allColumns.length
   const allowFilteredRows = 0 < rows.length && rows.length < data.length
   const allowOptions = allowVisCols || allowFilteredRows
 
   const handleDownload = ({ visCols = false, filteredRows = false }) => (e) => {
     e.stopPropagation()
-    downloadFn({ data, rows, allColumns, visibleColumns, visCols, filteredRows })
+    downloadFn({ data, rows, allColumns, visibleColumns, visCols, filteredRows, downloadName })
   }
 
   const allText = () => {
@@ -139,6 +138,7 @@ Download.propTypes = {
   visibleColumns: PropTypes.array,
   rows: PropTypes.array,
   downloadFn: PropTypes.func,
+  downloadName: PropTypes.string,
 }
 Download.defaultProps = {
   data: [],

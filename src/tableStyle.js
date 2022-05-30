@@ -7,8 +7,8 @@ const tableStyle = makeStyles(({
         position: 'relative',
         width: '100%',
         fontSize: '0.857rem',
-        lineHeight: '1.143rem',
-        letterSpacing: '0.029rem',
+        lineHeight: '1rem',
+        letterSpacing: '0.4px',
         borderStyle: 'solid',
         borderWidth: '1px',
         borderRadius: '4px',
@@ -16,15 +16,19 @@ const tableStyle = makeStyles(({
         borderSpacing: 0,
 
         '& tr': {
+          borderStyle: 'solid',
+          borderCollapse: 'separate',
+          borderSpacing: 0,
+
           '& td, th': {
+            padding: '0.75rem 0 0.75rem 1rem',
             borderStyle: 'solid',
             borderCollapse: 'separate',
             borderSpacing: 0,
-            padding: '0.75rem 0 0.75rem 1rem',
-          },
 
-          '& .table-header-cell, .table-body-cell': {
-            minWidth: '9.375rem',
+            '&:last-child': {
+              paddingRight: '1rem',
+            },
           },
 
           '& .border-horizontal': {
@@ -34,7 +38,7 @@ const tableStyle = makeStyles(({
           '& .border-vertical': {
             borderWidth: '0 1px 0 0',
           },
-
+  
           '& .border-vertical:last-child': {
             borderRight: '0',
           },
@@ -46,6 +50,7 @@ const tableStyle = makeStyles(({
 
         '& .table-header': {
           fontWeight: 700,
+
           '& .table-header-row': {
             '& .table-header-cell': {
               '& .table-header-item': {
@@ -65,6 +70,7 @@ const tableStyle = makeStyles(({
           '& .table-body-row': {
             '& .table-body-cell': {
               '& .table-body-item': {
+                wordWrap: 'break-word',
               },
             },
           },
@@ -72,6 +78,11 @@ const tableStyle = makeStyles(({
 
         '& .table-footer': {
           '& .table-footer-row': {
+            borderWidth: '1px 0 0 0',
+            borderStyle: 'solid',
+            borderCollapse: 'separate',
+            borderSpacing: 0,
+
             '& .table-footer-cell': {
             },
 
