@@ -1,9 +1,7 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import FilterListRoundedIcon from '@material-ui/icons/FilterListRounded'
-
-import { makeStyles, BaseComponents } from '@eqworks/lumen-labs'
+import { makeStyles, BaseComponents, Icons } from '@eqworks/lumen-labs'
 
 import SelectionFilter from './filters/selection-filter'
 import RangeFilter from './filters/range-filter'
@@ -76,7 +74,7 @@ const TableFilterLabel = ({ column, index, length }) => {
       ref={anchorRef}
       classes={buttonClasses}
     >
-      <FilterListRoundedIcon color={column.filterValue ? 'primary' : 'disabled'} />
+      <Icons.Filter size='lg' />
     </BaseComponents.ButtonBase>
   )
 
