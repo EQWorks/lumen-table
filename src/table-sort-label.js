@@ -19,7 +19,7 @@ const TableSortLabel = ({ isSorted, isSortedDesc }) => {
     return isSortedDesc ? (
       <Icons.ArrowDownRegular className='text-interactive-600' size='lg' />
     ) : (
-      <Icons.ArrowUp className='text-interactive-600' size='lg' />
+      <Icons.ArrowUpRegular className='text-interactive-600' size='lg' />
     )
   }
   return (<BaseComponents.ButtonBase className={classes.root}>{renderIcon()}</BaseComponents.ButtonBase>)

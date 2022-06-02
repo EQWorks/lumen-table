@@ -20,7 +20,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@eqworks/lumen-labs": "^0.1.0-alpha.50",
+    "@eqworks/lumen-labs": "^0.1.0-alpha.52",
     "prop-types": "^15.7.2",
     "react-table": "^7.6.0",
     "use-cached": "^2.0.0"
