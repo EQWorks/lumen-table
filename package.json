@@ -1,6 +1,6 @@
 {
   "name": "@eqworks/lumen-table",
-  "version": "2.0.0-alpha.11",
+  "version": "2.0.0-alpha.12",
   "main": "dist/index.js",
   "source": "src/index.js",
   "files": [
@@ -20,7 +20,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@eqworks/lumen-labs": "^0.1.0-alpha.50",
+    "@eqworks/lumen-labs": "^0.1.0-alpha.52",
     "prop-types": "^15.7.2",
     "react-table": "^7.6.0",
     "use-cached": "^2.0.0"
@@ -32,7 +32,6 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.9.4",
     "@material-ui/core": "^4.11.3",
-    "@material-ui/icons": "^4.11.2",
     "@size-limit/preset-small-lib": "^4.6.0",
     "@storybook/addon-actions": "^6.0.26",
     "@storybook/addon-essentials": "^6.0.26",
@@ -48,7 +47,6 @@
   },
   "peerDependencies": {
     "@material-ui/core": "^4.11.3",
-    "@material-ui/icons": "^4.11.2",
     "react": "^16.14.0"
   },
   "size-limit": [

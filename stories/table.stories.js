@@ -4,7 +4,6 @@ import { Parser, transforms } from 'json2csv'
 import Accordion from '@material-ui/core/Accordion'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
-import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded'
 import { Table } from '../src'
 
 import provinces from './data/provinces'
@@ -12,7 +11,7 @@ import provincesRange from './data/provinces-range'
 import provincesDates from './data/province-dates'
 import provincesJson from './data/provinces-json'
 import { DateRangeFilter, filterDates } from '../src/filters/date-range-filter'
-import { Button, Pagination, makeStyles } from '@eqworks/lumen-labs'
+import { Button, Pagination, makeStyles, Icons } from '@eqworks/lumen-labs'
 
 export default {
   title: 'Table',
@@ -672,7 +671,7 @@ export const renderJson = () => {
             return (
               <Accordion>
                 <AccordionSummary
-                  expandIcon={<ExpandMoreRoundedIcon />}
+                  expandIcon={<Icons.Expand size='md' />}
                 >
                   Details
                 </AccordionSummary>

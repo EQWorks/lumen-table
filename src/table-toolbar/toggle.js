@@ -6,11 +6,10 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 
-import { Button, makeStyles, BaseComponents } from '@eqworks/lumen-labs'
+import { Button, makeStyles, BaseComponents, Icons } from '@eqworks/lumen-labs'
 
 import Switch from '@material-ui/core/Switch'
 import Badge from '@material-ui/core/Badge'
-import SettingsIcon from '@material-ui/icons/Settings'
 
 
 const classes = makeStyles({
@@ -56,7 +55,7 @@ export const Toggle = ({ allColumns, toggleHideColumn }) => {
             variant='dot'
             invisible={allColumns.every((c) => c.isVisible || c.noToggle)}
           >
-            <SettingsIcon fontSize='small' />
+            <Icons.Gear size='lg' />
           </Badge>
         }
         aria-haspopup='menu'

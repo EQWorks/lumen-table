@@ -1206,10 +1206,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-"@eqworks/lumen-labs@^0.1.0-alpha.50":
-  version "0.1.0-alpha.50"
-  resolved "https://registry.yarnpkg.com/@eqworks/lumen-labs/-/lumen-labs-0.1.0-alpha.50.tgz#178bd77a20aaa0dc422afba3794a6e2b820e9750"
-  integrity sha512-XeFGxQVFl5Wr68tplXK0pY4dxtEmgaUF9I8vR9ItKlx2iR1GjQ5PBspyWtVIT5NOn9hbcx4IWveawMltaqwWgw==
+"@eqworks/lumen-labs@^0.1.0-alpha.52":
+  version "0.1.0-alpha.52"
+  resolved "https://registry.yarnpkg.com/@eqworks/lumen-labs/-/lumen-labs-0.1.0-alpha.52.tgz#308b6ca6df127145f38534f14252be867fd25477"
+  integrity sha512-Mu0E8iujPN9hHq5qv7roxOhYK8UP4GMY+j0fas1v47O0zsk5LjTelxTPqE7MlOPJJM0GpO2hdVHoSxa+h4tncg==
   dependencies:
     "@headlessui/react" "^1.4.0"
     clsx "^1.1.1"
@@ -1312,13 +1312,6 @@
     prop-types "^15.7.2"
     react-is "^16.8.0 || ^17.0.0"
     react-transition-group "^4.4.0"
-
-"@material-ui/icons@^4.11.2":
-  version "4.11.2"
-  resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-4.11.2.tgz#b3a7353266519cd743b6461ae9fdfcb1b25eb4c5"
-  integrity sha512-fQNsKX2TxBmqIGJCSi3tGTO/gZ+eJgWmMJkgDiOfyNaunNaxcklJQFaFogYcFl0qFuaEz1qaXYXboa/bUXVSOQ==
-  dependencies:
-    "@babel/runtime" "^7.4.4"
 
 "@material-ui/styles@^4.11.3":
   version "4.11.3"

@@ -4,10 +4,9 @@ import PropTypes from 'prop-types'
 import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
 
-import { Button, makeStyles, BaseComponents } from '@eqworks/lumen-labs'
+import { Button, makeStyles, BaseComponents, Icons } from '@eqworks/lumen-labs'
 
 import Badge from '@material-ui/core/Badge'
-import SaveAltRoundedIcon from '@material-ui/icons/SaveAltRounded'
 
 
 export const saveData = ({ data, rows, allColumns, visibleColumns, downloadName, visCols = false, filteredRows = false }) => {
@@ -93,7 +92,7 @@ const Download = ({ data, allColumns, visibleColumns, rows, downloadFn, download
         size='lg'
         endIcon={
           <Badge color='secondary' variant='dot' invisible={!allowOptions}>
-            <SaveAltRoundedIcon fontSize='small' />
+            <Icons.DownloadBold size='lg' />
           </Badge>
         }
         onClick={allowOptions ? undefined : handleDownload({ visCols: false, filteredRows: false })}
