@@ -8,6 +8,7 @@ ignores: [
     "eslint",
     "eslint-*",
     "jest",
+    "jest-*",
     "size-limit",
     "json2csv",
 ]

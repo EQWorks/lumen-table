@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 
+import { filterDates } from './utils'
 import { DateRange } from '@eqworks/lumen-labs'
-
 
 DateRangeFilter.propTypes = {
   column: PropTypes.object.isRequired,
@@ -26,7 +26,7 @@ const reducer = (id) => (acc, row) => {
   return acc
 }
 
-export function DateRangeFilter({ column: { filterValue, preFilteredRows, setFilter, id } }) {
+function DateRangeFilter({ column: { filterValue, preFilteredRows, setFilter, id } }) {
   const { min, max } = useMemo(() => preFilteredRows.reduce(reducer(id), {}))
   const [filterMin, filterMax] = filterValue || []
   
@@ -39,5 +39,4 @@ export function DateRangeFilter({ column: { filterValue, preFilteredRows, setFil
   )
 }
 
-export const filterDates = (rows, _, [min, max]) => rows
-  .filter(({ values: { date } }) => new Date(date) >= new Date(min) && new Date(date) <= new Date(max))
+export { filterDates, DateRangeFilter }
