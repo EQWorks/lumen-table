@@ -10,7 +10,7 @@ import provinces from './data/provinces'
 import provincesRange from './data/provinces-range'
 import provincesDates from './data/province-dates'
 import provincesJson from './data/provinces-json'
-import { DateRangeFilter, filterDates } from '../src/filters/date-range-filter'
+import { filterDates, DateRangeFilter } from '../src/filters/date-range-filter'
 import { Button, Pagination, makeStyles, Icons } from '@eqworks/lumen-labs'
 
 export default {
