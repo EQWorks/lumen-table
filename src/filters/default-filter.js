@@ -31,7 +31,7 @@ const DefaultFilter = ({ filterValue, preFilteredRows, setFilter, id }) => {
   // This may not be a problem for server side pagination when
   // only the current page is downloaded.
   return (
-    <div className={classes.defaultFilterContainer}>
+    <div className={`default-filter__root-container ${classes.defaultFilterContainer}`}>
       <TextField
         classes={textFieldClasses}
         id={`table-search${id ? `-${id}` : ''}`}
