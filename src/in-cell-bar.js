@@ -7,14 +7,14 @@ import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 const useStyles = ({ bgColor, barLength }) => makeStyles({
   bar: {
     backgroundColor: bgColor,
-    height: '14px',
+    height: '0.875rem',
     width: `${barLength}%`,
-    marginRight: '4px',
+    marginRight: '0.25rem',
   },
   value: {
     fontWeight: 400,
-    fontSize: '12px',
-    lineHeight: '14px',
+    fontSize: '0.75rem',
+    lineHeight: '0.875rem',
     textAlign: 'center',
     color: getTailwindConfigColor('secondary-700'),
   },
