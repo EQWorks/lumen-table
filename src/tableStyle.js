@@ -1,11 +1,13 @@
 import { makeStyles } from '@eqworks/lumen-labs'
 
-const tableStyle = makeStyles(({
+const tableStyle = ({ hidePagination, centerHeader }) => makeStyles(({
   tableRootContainer: {
-    '& .table-container': {
-      '& .table-root': {
+    '& .table__container': {
+      '& .table__content-container': {
         position: 'relative',
         width: '100%',
+        height: hidePagination ? '25.313rem' : 'auto',
+        display: 'inline-block',
         fontSize: '0.857rem',
         lineHeight: '1rem',
         letterSpacing: '0.4px',
@@ -14,6 +16,7 @@ const tableStyle = makeStyles(({
         borderRadius: '4px',
         borderCollapse: 'separate',
         borderSpacing: 0,
+        overflowY: 'auto',
 
         '& tr': {
           borderStyle: 'solid',
@@ -48,14 +51,19 @@ const tableStyle = makeStyles(({
           },
         },
 
-        '& .table-header': {
+        '& .table__header': {
+          width: '100%',
+          display: 'table',
+          tableLayout: 'fixed',
           fontWeight: 700,
 
-          '& .table-header-row': {
-            '& .table-header-cell': {
-              '& .table-header-item': {
+          '& .table__header-row': {
+            '& .table__header-cell': {
+              '& .table__header-item': {
                 display: 'flex',
                 alignItems: 'center',
+                justifyContent: centerHeader ? 'center' : 'flex-start',
+                textTransform: 'capitalize',
               },
             },
           },
@@ -66,24 +74,27 @@ const tableStyle = makeStyles(({
           top: 0,
         },
 
-        '& .table-body': {
-          '& .table-body-row': {
-            '& .table-body-cell': {
-              '& .table-body-item': {
+        '& .table__body': {
+          '& .table__body-row': {
+            width: '100%',
+            display: 'table',
+            tableLayout: 'fixed',
+            '& .table__body-cell': {
+              '& .table__body-item': {
                 wordWrap: 'break-word',
               },
             },
           },
         },
 
-        '& .table-footer': {
-          '& .table-footer-row': {
+        '& .table__footer': {
+          '& .table__footer-row': {
             borderWidth: '1px 0 0 0',
             borderStyle: 'solid',
             borderCollapse: 'separate',
             borderSpacing: 0,
 
-            '& .table-footer-cell': {
+            '& .table__footer-cell': {
             },
 
             '& .border-none': {
@@ -98,12 +109,12 @@ const tableStyle = makeStyles(({
       },
     },
 
-    '& .empty-container': {
+    '& .empty__container': {
       fontSize: '0.875rem',
       fontWeight: '400',
       lineHeight: '1.5',
   
-      '& .content-container': {
+      '& .content__container': {
         padding: '1.25rem',
       },
     },
