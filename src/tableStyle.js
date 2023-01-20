@@ -10,7 +10,7 @@ const tableStyle = ({ hidePagination, centerHeader }) => makeStyles(({
         display: 'inline-block',
         fontSize: '0.857rem',
         lineHeight: '1rem',
-        letterSpacing: '0.4px',
+        letterSpacing: '0.025rem',
         borderStyle: 'solid',
         borderWidth: '1px',
         borderRadius: '4px',
@@ -93,9 +93,6 @@ const tableStyle = ({ hidePagination, centerHeader }) => makeStyles(({
             borderStyle: 'solid',
             borderCollapse: 'separate',
             borderSpacing: 0,
-
-            '& .table__footer-cell': {
-            },
 
             '& .border-none': {
               borderWidth: '1px 0 0 0',
