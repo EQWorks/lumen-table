@@ -194,6 +194,7 @@ export const Table = forwardRef(({
   )
   const tableClasses = tableStyle({ 
     hidePagination, 
+    headerTitle,
     centerHeader: defaultStyles.centerHeader, 
   })
   const tableRef = useRef(null)
@@ -256,8 +257,24 @@ export const Table = forwardRef(({
     })
   )
 
+  const renderTableHeaderItem = (col, index, totalHeaders) => {
+    const formatType = formatData[col.id]?.type ? ` (${formatData[col.id]?.type})` : ''
+    return (
+      <div className="table__header-item">
+        {`${col.render('Header')}${formatType}`}
+        {col.canSort && (<TableSortLabel {...col} />)}
+        {col.canFilter && (<TableFilterLabel column={col} index={index} length={totalHeaders}/>)}
+      </div>
+    )
+  }
+
   return (
-    <div ref={tableRef} className={`table__root-container bg-secondary-50 ${tableClasses.tableRootContainer} ${classes.tableRootContainer}`}>
+    <div 
+      ref={tableRef} 
+      className={`${tableClasses.tableRootContainer} ${classes.tableRootContainer}
+        ${headerTitle ? 'shadow-blue-20' : ''} table__root-container bg-secondary-50`
+      }
+    >
       {(_data.length > 0 && toolbar) && (
         <TableToolbar
           rows={rows}
@@ -283,10 +300,10 @@ export const Table = forwardRef(({
       )}
       {visibleColumns.length > 0 ? (
         <>
-          <div className={`table__container ${classes.tableContainer}`}>
-            <table className={`table__content-container border-secondary-200 shadow-light-10 ${classes.tableContentContainer}`} {...getTableProps(tableProps)}>
-              <thead className={`table__header text-secondary-500 
-                ${classes.header} ${(stickyHeader || hidePagination) && 'sticky-header'}
+          <div className={`${classes.tableContainer} table__container`}>
+            <table className={`${classes.tableContentContainer} table__content-container border-secondary-200 shadow-light-10`} {...getTableProps(tableProps)}>
+              <thead className={`${classes.tableHeaderContainer} table__header text-secondary-500 
+                ${(stickyHeader || hidePagination) && 'sticky-header'}
                 ${defaultStyles.headerColor === 'grey' && 'bg-secondary-100'}
                 ${defaultStyles.headerColor === 'white' && 'bg-secondary-50 shadow-light-40'}
               `}>
@@ -297,21 +314,17 @@ export const Table = forwardRef(({
                     <tr key={`header-row-${index}`} className="table__header-row" {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
                       {headerGroup.headers.map((column, index) => (
                         <th key={`header-cell-${index}`} className={`table__header-cell border-${defaultStyles.borderType} border-secondary-200`} {...column.getHeaderProps(column.getSortByToggleProps())}>
-                          <div className="table__header-item">
-                            {column.render('Header')}
-                            {column.canSort && (<TableSortLabel {...column} />)}
-                            {column.canFilter && (<TableFilterLabel column={column} index={index} length={totalHeaders}/>)}
-                          </div>
+                          {renderTableHeaderItem(column, index, totalHeaders)}
                         </th>
                       ))}
                     </tr>
                   )
                 })}
               </thead>
-              <tbody className={`table__body ${classes.body}`} {...getTableBodyProps()}>
+              <tbody className={`${classes.tableBodyContainer} table__body`} {...getTableBodyProps()}>
                 {renderTableRow(hidePagination ? rows : page)}
               </tbody>
-              <tfoot className={`table__footer ${classes.footer}`}>
+              <tfoot className={`${classes.tableFooterContainer} table__footer`}>
                 <tr className="table__footer-row">
                   {(0 < rows.length && rows.length < data.length ? rows.length > pageSize : rows.length > 0) && !hidePagination && (
                     <td className={`table__footer-cell border-${defaultStyles.borderType} border-secondary-200`} colSpan={100}>
@@ -389,7 +402,14 @@ Table.propTypes = {
 }
 
 Table.defaultProps = {
-  classes: {},
+  classes: {
+    tableRootContainer: '',
+    tableContainer: '',
+    tableContentContainer: '',
+    tableHeaderContainer: '',
+    tableBodyContainer: '',
+    tableFooterContainer: '',
+  },
   columns: null,
   children: null,
   data: [],
@@ -408,9 +428,10 @@ Table.defaultProps = {
     centerHeader: false,
   },
   stickyHeader: false,
+  rowsPerPage: [5, 10, 15, 20, 25],
   initialPageSize: 10,
   hidePagination: false,
-  barColumns: null,
+  barColumns: false,
   formatData: {},
   barColumnsColor: getTailwindConfigColor('primary-400'),
   headerTitle: false,
