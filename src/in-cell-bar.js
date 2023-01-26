@@ -37,6 +37,9 @@ const adjustBarColor = (amount, color) => {
 const getFormattedValue = (value, format, header) => {
   const formatFunc = format[header]
   if (Object.keys(format).length && formatFunc) {
+    if (formatFunc?.func) {
+      return formatFunc.func(value)
+    }
     return formatFunc(value)
   }
   return value
