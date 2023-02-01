@@ -14,8 +14,8 @@ import { Pagination } from '@eqworks/lumen-labs'
 
 import TableColumn from './table-column'
 import TableToolbar from './table-toolbar'
-import TableSortLabel from './table-sort-label'
-import TableFilterLabel from './table-filter-label'
+import ColSortLabel from './filters/col-sort-label'
+import ColFilterLabel from './filters/col-filter-label'
 import DefaultFilter from './filters/default-filter'
 import SelectionFilter from './filters/selection-filter'
 import RangeFilter from './filters/range-filter'
@@ -262,8 +262,8 @@ export const Table = forwardRef(({
     return (
       <div className="table__header-item">
         {`${col.render('Header')}${formatType}`}
-        {col.canSort && (<TableSortLabel {...col} />)}
-        {col.canFilter && (<TableFilterLabel column={col} index={index} length={totalHeaders}/>)}
+        {col.canSort && (<ColSortLabel {...col} />)}
+        {col.canFilter && (<ColFilterLabel column={col} index={index} length={totalHeaders}/>)}
       </div>
     )
   }
@@ -314,7 +314,7 @@ export const Table = forwardRef(({
                     <tr key={`header-row-${index}`} className="table__header-row" {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
                       {headerGroup.headers.map((column, index) => (
                         <th key={`header-cell-${index}`} className={`table__header-cell border-${defaultStyles.borderType} border-secondary-200`} {...column.getHeaderProps(column.getSortByToggleProps())}>
-                          {renderTableHeaderItem(column, index, totalHeaders)}
+                          {renderTableHeaderItem(column, index, totalHeaders)}                      
                         </th>
                       ))}
                     </tr>
