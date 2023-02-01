@@ -11,7 +11,7 @@ const classes = makeStyles({
   },
 })
 
-const TableSortLabel = ({ isSorted, isSortedDesc }) => {
+const ColSortLabel = ({ isSorted, isSortedDesc }) => {
   const renderIcon = () => {
     if (!isSorted) {
       return (<Icons.ArrowUpDownRegular size='lg' />)
@@ -25,13 +25,13 @@ const TableSortLabel = ({ isSorted, isSortedDesc }) => {
   return (<BaseComponents.ButtonBase className={classes.root}>{renderIcon()}</BaseComponents.ButtonBase>)
 }
 
-TableSortLabel.propTypes = {
+ColSortLabel.propTypes = {
   isSorted: PropTypes.bool,
   isSortedDesc: PropTypes.bool,
 }
-TableSortLabel.defaultProps = {
+ColSortLabel.defaultProps = {
   isSorted: false,
   isSortedDesc: false,
 }
 
-export default TableSortLabel
+export default ColSortLabel
