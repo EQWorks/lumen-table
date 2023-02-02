@@ -34,7 +34,7 @@ const getHeader = (s) => [
   s.slice(1).replace(/_/g, ' '),
 ].join('')
 
-const renderInCellBar = (props, barColumns, barColumnsColor, formatData, c) => 
+const renderInCellBar = (props, barColumns, formatData, barColumnsColor, c) => 
   <InCellBar 
     {...props} 
     barColumns={barColumns} 
@@ -43,11 +43,10 @@ const renderInCellBar = (props, barColumns, barColumnsColor, formatData, c) =>
     {...c} 
   />
 
-const inferColumns = (data, barColumns) => Object.keys(data[0] || {}).map((accessor) => ({
+const inferColumns = (data, barColumns, formatData) => Object.keys(data[0] || {}).map((accessor) => ({
   accessor,
   Header: getHeader(accessor),
-  ...barColumns ? { Cell: (props) => renderInCellBar(props, barColumns),
-  } : {},
+  Cell: (props) => renderInCellBar(props, barColumns, formatData),
 }))
 const colFilter = (c) => c.type === TableColumn || c.type.name === 'TableColumn'
 const deObjectify = (data) => data.map((d) => {
@@ -74,13 +73,13 @@ const useTableConfig = ({
   // memoized columns and data for useTable hook
   const _data = useMemo(() => deObjectify(data), [data])
   const _cols = useMemo(() => {
-    const inferred = inferColumns(data, barColumns)
+    const inferred = inferColumns(data, barColumns, formatData)
     if (!children && !columns) {
       return inferred
     }
     const explicit = Array.isArray(columns) && columns.length > 0
-      ? columns.map(c => ({ ...c, ...barColumns && { Cell: (props) => 
-        renderInCellBar(props, barColumns, barColumnsColor, formatData, c) } }))
+      ? columns.map(c => ({ ...c, Cell: (props) => 
+        renderInCellBar(props, barColumns, formatData, barColumnsColor, c) }))
       : Children.toArray(children).filter(colFilter).map((c) => c.props)
 
     if (extendColumns) {
@@ -136,6 +135,7 @@ export const Table = forwardRef(({
   headerTitle,
   title,
 }, ref) => {
+  console.log('barColumns: ', barColumns)
   // custom table config hook
   const {
     _cols,
@@ -193,7 +193,6 @@ export const Table = forwardRef(({
     usePagination,
   )
   const tableClasses = tableStyle({ 
-    hidePagination, 
     headerTitle,
     centerHeader: defaultStyles.centerHeader, 
   })

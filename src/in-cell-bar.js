@@ -57,9 +57,9 @@ const getColorAmount = (max, value) => {
   return amount
 }
 
-const InCellBar = ({ data, column, value, barColumns, barColumnsColor, formatData }) => {
+const InCellBar = ({ data, column, value, barColumns, formatData, barColumnsColor }) => {
   const _value = getFormattedValue(value, formatData, column.Header)
-  if (isNaN(Number(value)) || (barColumns.length && !barColumns.includes(column.id))) {
+  if (isNaN(Number(value)) || (barColumns.length && !barColumns.includes(column.id)) || !barColumns) {
     return <p>{_value}</p>
   }
   const _maxVals = useMemo(() => computeMaxVals(data, column.id, maxValsPerColumn), [data, column, maxValsPerColumn])
