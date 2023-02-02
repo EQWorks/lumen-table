@@ -1,6 +1,6 @@
 import { makeStyles } from '@eqworks/lumen-labs'
 
-const tableStyle = ({ hidePagination, headerTitle, centerHeader }) => makeStyles(({
+const tableStyle = ({ headerTitle, centerHeader }) => makeStyles(({
   tableRootContainer: {
     '& .table__container': {
       margin: headerTitle ? '0.625rem 0.625rem' : 'initial',
@@ -8,7 +8,7 @@ const tableStyle = ({ hidePagination, headerTitle, centerHeader }) => makeStyles
       '& .table__content-container': {
         position: 'relative',
         width: '100%',
-        height: hidePagination ? '25.313rem' : 'auto',
+        height: 'auto',
         display: 'inline-block',
         fontSize: '0.857rem',
         lineHeight: '1rem',
