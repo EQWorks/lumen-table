@@ -85,8 +85,8 @@ InCellBar.propTypes = {
     PropTypes.number,
   ]).isRequired,
   barColumns: PropTypes.oneOfType([
-    PropTypes.bool.isRequired,
-    PropTypes.array.isRequired,
+    PropTypes.bool,
+    PropTypes.array,
   ]),
   barColumnsColor: PropTypes.string,
   formatData: PropTypes.object,
@@ -95,6 +95,7 @@ InCellBar.propTypes = {
 InCellBar.defaultProps = {
   formatData: {},
   barColumnsColor: getTailwindConfigColor('primary-400'),
+  barColumns: false,
 }
 
 export default InCellBar

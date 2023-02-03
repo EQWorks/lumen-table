@@ -40,7 +40,8 @@ export default {
  * [defaultStyles] - object, controls predefined table styles
       headerColor: oneOf(['grey', 'white']), changes table header background color - default: 'white'
       borderType: oneOf(['none', 'horizontal', 'vertical', 'around']), changes table cells border display - default: 'horizontal'
-      centerHeader: bool, controls table header each title col to be centered - default: false
+      centerHeader: bool, controls table header each title col to be centered - default: false,
+      compactTable: bool, controls table cell height/width - default: false,
     }),
  * [stickyHeader] - bool, controls sticky table header for when pagination is not present = scrollable - default: false
  * [rowsPerPage] - arrayOf(number), defines the selectable number of rows per page when pagination is present - default: [5, 10, 15, 20, 25]
@@ -55,33 +56,9 @@ export default {
  * [title] - string, set title for headerTitle
 */
 
-const compactStyleClasses = makeStyles(({
-  tableRootContainer: {
-    '& .table__container': {
-      '& .table__content-container': {
-        '& .table__header-compact': {
-          '& .table__header-row': {
-            '& .table__header-cell': {
-              padding: '0.25rem 0 0.25rem 0.5rem',
-              '&:last-child': {
-                paddingRight: '0.5rem',
-              },
-            },
-          },
-        },
-    
-        '& .table__body-compact': {
-          '& .table__body-row': {
-            '& .table__body-cell': {
-              padding: '0.25rem 0 0.25rem 0.5rem',
-              '&:last-child': {
-                paddingRight: '0.5rem',
-              },
-            },
-          },
-        },
-      },
-    },
+const noPaginationStyleClasses = makeStyles(({
+  rootContainer: {
+    height: '31.25rem',
   },
 }))
 
@@ -94,31 +71,33 @@ export const bar = () => <Table data={provinces} rowsPerPage={[5,10,20,50]} barC
 export const barSelectiveColumns = () => <Table data={provinces} rowsPerPage={[5,10,20,50]} barColumns={['rate', 'new_cases']} />
 
 export const dashboardTable = () => (
-  <Table 
-    data={data}
-    columns={
-      Object.keys(data[0]).map((key) => ({
-        Header: key.replaceAll('_', ' '), 
-        accessor: key,
-        disableFilters: true,
-        disableSortBy: key === 'Age' ? false : true,
-      }))
-    }
-    sortBy={{ id: 'Age', desc: false }}
-    rowsPerPage={[5,10,20,50]}
-    barColumns={['Marketshare of Vehicle Age']}
-    hidePagination 
-    formatData={{ 
-      'Resolution': numberFormatting,
-      'Marketshare of Vehicle Age': {
-        func: percentageFormatting,
-        type: '%',
-      },
-    }}
-    toolbar={false}
-    headerTitle={true}
-    title='testing title'
-  />
+  <div className={noPaginationStyleClasses.rootContainer}>
+    <Table 
+      data={data}
+      columns={
+        Object.keys(data[0]).map((key) => ({
+          Header: key.replaceAll('_', ' '), 
+          accessor: key,
+          disableFilters: true,
+          disableSortBy: key === 'Age' ? false : true,
+        }))
+      }
+      sortBy={{ id: 'Age', desc: false }}
+      rowsPerPage={[5,10,20,50]}
+      barColumns={['Marketshare of Vehicle Age']}
+      hidePagination 
+      formatData={{ 
+        'Resolution': numberFormatting,
+        'Marketshare of Vehicle Age': {
+          func: percentageFormatting,
+          type: '%',
+        },
+      }}
+      toolbar={false}
+      headerTitle={true}
+      title='testing title'
+    />
+  </div>
 )
 
 export const customColorAndBorder = () => (
@@ -135,7 +114,6 @@ export const customColorAndBorder = () => (
     sortBy={{ id: 'Age', desc: false }}
     rowsPerPage={[5,10,20,50]}
     barColumns={['Marketshare of Vehicle Age']}
-    hidePagination 
     formatData={{ 
       'Resolution': {
         func: numberFormatting,
@@ -161,42 +139,40 @@ export const customColorAndBorder = () => (
 )
 
 export const customCompactStyle = () => (
-  <Table 
-    data={data} 
-    classes={{
-      tableRootContainer: compactStyleClasses.tableRootContainer,
-      tableHeaderContainer: 'table__header-compact',
-      tableBodyContainer: 'table__body-compact',
-    }}
-    columns={
-      Object.keys(data[0]).map((key) => ({
-        Header: key.replaceAll('_', ' '), 
-        accessor: key,
-        disableFilters: true,
-        disableSortBy: key === 'Age' ? false : true,
-      }))
-    }
-    sortBy={{ id: 'Age', desc: false }}
-    rowsPerPage={[5,10,20,50]}
-    barColumns={['Marketshare of Vehicle Age']}
-    hidePagination 
-    formatData={{ 
-      'Resolution': {
-        func: numberFormatting,
-        type: 'Km',
-      },
-      'Marketshare of Vehicle Age': {
-        func: percentageFormatting,
-        type: '%',
-      },
-    }}
-    toolbar={false}
-    title='testing title'
-    defaultStyles={
-      {
-        headerColor: 'white',
-        borderType: 'around',
+  <div className={noPaginationStyleClasses.rootContainer}>
+    <Table 
+      data={data} 
+      columns={
+        Object.keys(data[0]).map((key) => ({
+          Header: key.replaceAll('_', ' '), 
+          accessor: key,
+          disableFilters: true,
+          disableSortBy: key === 'Age' ? false : true,
+        }))
       }
-    }
-  />
+      sortBy={{ id: 'Age', desc: false }}
+      rowsPerPage={[5,10,20,50]}
+      barColumns={['Marketshare of Vehicle Age']}
+      hidePagination 
+      formatData={{ 
+        'Resolution': {
+          func: numberFormatting,
+          type: 'Km',
+        },
+        'Marketshare of Vehicle Age': {
+          func: percentageFormatting,
+          type: '%',
+        },
+      }}
+      toolbar={false}
+      title='testing title'
+      defaultStyles={
+        {
+          headerColor: 'white',
+          borderType: 'around',
+          compactTable: true,
+        }
+      }
+    />
+  </div>
 )

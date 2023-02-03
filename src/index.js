@@ -43,10 +43,10 @@ const renderInCellBar = (props, barColumns, formatData, barColumnsColor, c) =>
     {...c} 
   />
 
-const inferColumns = (data, barColumns, formatData) => Object.keys(data[0] || {}).map((accessor) => ({
+const inferColumns = (data, barColumns, formatData, barColumnsColor) => Object.keys(data[0] || {}).map((accessor) => ({
   accessor,
   Header: getHeader(accessor),
-  Cell: (props) => renderInCellBar(props, barColumns, formatData),
+  Cell: (props) => renderInCellBar(props, barColumns, formatData, barColumnsColor),
 }))
 const colFilter = (c) => c.type === TableColumn || c.type.name === 'TableColumn'
 const deObjectify = (data) => data.map((d) => {
@@ -66,14 +66,14 @@ const useTableConfig = ({
   columns, 
   remember, 
   extendColumns = false, 
-  barColumns = false, 
+  barColumns, 
   formatData,
   barColumnsColor,
 }) => {
   // memoized columns and data for useTable hook
   const _data = useMemo(() => deObjectify(data), [data])
   const _cols = useMemo(() => {
-    const inferred = inferColumns(data, barColumns, formatData)
+    const inferred = inferColumns(data, barColumns, formatData, barColumnsColor)
     if (!children && !columns) {
       return inferred
     }
@@ -91,7 +91,7 @@ const useTableConfig = ({
     }
 
     return explicit
-  }, [columns, data, children])
+  }, [columns, data, children, barColumns, formatData, barColumnsColor])
   // cached hidden state
   const [hidden, setHiddenCache] = cached({
     ...remember,
@@ -135,7 +135,6 @@ export const Table = forwardRef(({
   headerTitle,
   title,
 }, ref) => {
-  console.log('barColumns: ', barColumns)
   // custom table config hook
   const {
     _cols,
@@ -195,6 +194,7 @@ export const Table = forwardRef(({
   const tableClasses = tableStyle({ 
     headerTitle,
     centerHeader: defaultStyles.centerHeader, 
+    compactTable: defaultStyles.compactTable,
   })
   const tableRef = useRef(null)
 
@@ -299,49 +299,47 @@ export const Table = forwardRef(({
       )}
       {visibleColumns.length > 0 ? (
         <>
-          <div className={`${classes.tableContainer} table__container`}>
-            <table className={`${classes.tableContentContainer} table__content-container border-secondary-200 shadow-light-10`} {...getTableProps(tableProps)}>
-              <thead className={`${classes.tableHeaderContainer} table__header text-secondary-500 
-                ${(stickyHeader || hidePagination) && 'sticky-header'}
-                ${defaultStyles.headerColor === 'grey' && 'bg-secondary-100'}
-                ${defaultStyles.headerColor === 'white' && 'bg-secondary-50 shadow-light-40'}
-              `}>
-                {headerGroups.map((headerGroup, index) => {
-                  const totalHeaders = headerGroup.headers.length
+          <table className={`${classes.tableContentContainer} table__content-container border-secondary-200 shadow-light-10`} {...getTableProps(tableProps)}>
+            <thead className={`${classes.tableHeaderContainer} table__header text-secondary-500 
+              ${(stickyHeader || hidePagination) && 'sticky-header'}
+              ${defaultStyles.headerColor === 'grey' && 'bg-secondary-100'}
+              ${defaultStyles.headerColor === 'white' && 'bg-secondary-50 shadow-light-40'}
+            `}>
+              {headerGroups.map((headerGroup, index) => {
+                const totalHeaders = headerGroup.headers.length
 
-                  return ( 
-                    <tr key={`header-row-${index}`} className="table__header-row" {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
-                      {headerGroup.headers.map((column, index) => (
-                        <th key={`header-cell-${index}`} className={`table__header-cell border-${defaultStyles.borderType} border-secondary-200`} {...column.getHeaderProps(column.getSortByToggleProps())}>
-                          {renderTableHeaderItem(column, index, totalHeaders)}                      
-                        </th>
-                      ))}
-                    </tr>
-                  )
-                })}
-              </thead>
-              <tbody className={`${classes.tableBodyContainer} table__body`} {...getTableBodyProps()}>
-                {renderTableRow(hidePagination ? rows : page)}
-              </tbody>
-              <tfoot className={`${classes.tableFooterContainer} table__footer`}>
-                <tr className="table__footer-row">
-                  {(0 < rows.length && rows.length < data.length ? rows.length > pageSize : rows.length > 0) && !hidePagination && (
-                    <td className={`table__footer-cell border-${defaultStyles.borderType} border-secondary-200`} colSpan={100}>
-                      <Pagination
-                        itemsLength={rows.length}
-                        pageSize={pageSize}
-                        onChangePage={(_, val) => {
-                          gotoPage(val.pager.currentPage - 1)
-                        }}
-                        onChangeRowsPerPage={(e, val) => onChageRowsPerPage(e, val)}
-                        rowsPerPage={rowsPerPage}
-                      />
-                    </td>
-                  )}
-                </tr>
-              </tfoot>
-            </table>
-          </div>
+                return ( 
+                  <tr key={`header-row-${index}`} className="table__header-row" {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
+                    {headerGroup.headers.map((column, index) => (
+                      <th key={`header-cell-${index}`} className={`table__header-cell border-${defaultStyles.borderType} border-secondary-200`} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                        {renderTableHeaderItem(column, index, totalHeaders)}                      
+                      </th>
+                    ))}
+                  </tr>
+                )
+              })}
+            </thead>
+            <tbody className={`${classes.tableBodyContainer} table__body`} {...getTableBodyProps()}>
+              {renderTableRow(hidePagination ? rows : page)}
+            </tbody>
+            <tfoot className={`${classes.tableFooterContainer} table__footer`}>
+              <tr className="table__footer-row">
+                {(0 < rows.length && rows.length < data.length ? rows.length > pageSize : rows.length > 0) && !hidePagination && (
+                  <td className={`table__footer-cell border-${defaultStyles.borderType} border-secondary-200`} colSpan={100}>
+                    <Pagination
+                      itemsLength={rows.length}
+                      pageSize={pageSize}
+                      onChangePage={(_, val) => {
+                        gotoPage(val.pager.currentPage - 1)
+                      }}
+                      onChangeRowsPerPage={(e, val) => onChageRowsPerPage(e, val)}
+                      rowsPerPage={rowsPerPage}
+                    />
+                  </td>
+                )}
+              </tr>
+            </tfoot>
+          </table>
         </>
       ) : (
         <div className="empty__container shadow-10">
@@ -384,6 +382,7 @@ Table.propTypes = {
     headerColor: PropTypes.oneOf(['grey', 'white']),
     borderType: PropTypes.oneOf(['none', 'horizontal', 'vertical', 'around']),
     centerHeader: PropTypes.bool,
+    compactTable: PropTypes.bool,
   }),
   stickyHeader: PropTypes.bool,
   rowsPerPage: PropTypes.arrayOf(PropTypes.number),
@@ -425,6 +424,7 @@ Table.defaultProps = {
     headerColor: 'white',
     borderType: 'horizontal',
     centerHeader: false,
+    compactTable: false,
   },
   stickyHeader: false,
   rowsPerPage: [5, 10, 15, 20, 25],

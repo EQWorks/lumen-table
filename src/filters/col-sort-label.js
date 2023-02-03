@@ -14,15 +14,20 @@ const classes = makeStyles({
 const ColSortLabel = ({ isSorted, isSortedDesc }) => {
   const renderIcon = () => {
     if (!isSorted) {
-      return (<Icons.ArrowUpDownRegular size='lg' />)
+      return (<Icons.ArrowUpDown size='lg' />)
     }
     return isSortedDesc ? (
-      <Icons.ArrowDownRegular className='text-interactive-600' size='lg' />
+      <Icons.ArrowDown className='text-interactive-600' size='lg' />
     ) : (
-      <Icons.ArrowUpRegular className='text-interactive-600' size='lg' />
+      <Icons.ArrowUp className='text-interactive-600' size='lg' />
     )
   }
-  return (<BaseComponents.ButtonBase className={classes.root}>{renderIcon()}</BaseComponents.ButtonBase>)
+
+  return (
+    <BaseComponents.ButtonBase className={classes.root}>
+      {renderIcon()}
+    </BaseComponents.ButtonBase>
+  )
 }
 
 ColSortLabel.propTypes = {
