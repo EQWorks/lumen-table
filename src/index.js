@@ -22,6 +22,7 @@ import RangeFilter from './filters/range-filter'
 import { saveData } from './table-toolbar/download'
 import QuantitaveFilter from './filters/quantitave-filter'
 import QualitativeFilter from './filters/qualitative-filter'
+import InCellBar from './in-cell-bar'
 
 import tableStyle from './tableStyle'
 
@@ -31,9 +32,12 @@ const getHeader = (s) => [
   s.slice(1).replace(/_/g, ' '),
 ].join('')
 
-const inferColumns = (data) => Object.keys(data[0] || {}).map((accessor) => ({
+const renderInCellBar = (props, barColumns) => <InCellBar {...props} barColumns={barColumns} />
+
+const inferColumns = (data, barColumns) => Object.keys(data[0] || {}).map((accessor) => ({
   accessor,
   Header: getHeader(accessor),
+  ...barColumns ? { Cell: (props) => renderInCellBar(props, barColumns) } : {},
 }))
 const colFilter = (c) => c.type === TableColumn || c.type.name === 'TableColumn'
 const deObjectify = (data) => data.map((d) => {
@@ -46,11 +50,11 @@ const deObjectify = (data) => data.map((d) => {
   return r
 })
 
-const useTableConfig = ({ data, hiddenColumns, children, columns, remember, extendColumns = false }) => {
+const useTableConfig = ({ data, hiddenColumns, children, columns, remember, extendColumns = false, barColumns = false }) => {
   // memoized columns and data for useTable hook
   const _data = useMemo(() => deObjectify(data), [data])
   const _cols = useMemo(() => {
-    const inferred = inferColumns(data)
+    const inferred = inferColumns(data, barColumns)
     if (!children && !columns) {
       return inferred
     }
@@ -104,6 +108,7 @@ export const Table = forwardRef(({
   initialPageSize,
   highlightColumn,
   hidePagination,
+  barColumns,
 }, ref) => {
   // custom table config hook
   const {
@@ -111,7 +116,7 @@ export const Table = forwardRef(({
     _data,
     hidden,
     setHiddenCache,
-  } = useTableConfig({ data, hiddenColumns, children, columns, remember, extendColumns })
+  } = useTableConfig({ data, hiddenColumns, children, columns, remember, extendColumns, barColumns })
   // remember me
   const [cachedSortBy, setCachedSortBy] = cached({
     ...remember,
@@ -330,6 +335,10 @@ Table.propTypes = {
   initialPageSize: PropTypes.number,
   highlightColumn: PropTypes.number,
   hidePagination: PropTypes.bool,
+  barColumns: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.array,
+  ]),
 }
 
 Table.defaultProps = {
@@ -353,6 +362,7 @@ Table.defaultProps = {
   stickyHeader: false,
   initialPageSize: 10,
   hidePagination: false,
+  barColumns: null,
 }
 Table.Column = TableColumn
 Table.filters = { DefaultFilter, SelectionFilter, RangeFilter, QuantitaveFilter, QualitativeFilter }
