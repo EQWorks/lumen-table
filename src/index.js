@@ -247,7 +247,14 @@ export const Table = forwardRef(({
       return (
         <tr className="table__body-row" key={i} {...row.getRowProps()}>
           {row.cells.map((cell, i) => (
-            <td className={`table__body-cell border-${defaultStyles.borderType} border-secondary-200 text-secondary-800 ${i === (highlightColumn - 1) && 'font-bold'}`} key={i} {...cell.getCellProps()}>
+            <td 
+              key={i} 
+              className={`table__body-cell border-${defaultStyles.borderType} 
+                border-secondary-200 text-secondary-800 
+                ${i === (highlightColumn - 1) && 'font-bold'}
+              `} 
+              {...cell.getCellProps()}
+            >
               <div className="table__body-item">{cell.render('Cell')}</div>
             </td>
           ))}
