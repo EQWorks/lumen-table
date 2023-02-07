@@ -14,8 +14,8 @@ import { Pagination } from '@eqworks/lumen-labs'
 
 import TableColumn from './table-column'
 import TableToolbar from './table-toolbar'
-import TableSortLabel from './table-sort-label'
-import TableFilterLabel from './table-filter-label'
+import ColSortLabel from './filters/col-sort-label'
+import ColFilterLabel from './filters/col-filter-label'
 import DefaultFilter from './filters/default-filter'
 import SelectionFilter from './filters/selection-filter'
 import RangeFilter from './filters/range-filter'
@@ -24,7 +24,9 @@ import QuantitaveFilter from './filters/quantitave-filter'
 import QualitativeFilter from './filters/qualitative-filter'
 import InCellBar from './in-cell-bar'
 
-import tableStyle from './tableStyle'
+import tableStyle from './table-style'
+import { getTailwindConfigColor } from '@eqworks/lumen-labs/dist/utils/tailwind-config-color'
+import HeaderTitle from './header-title'
 
 
 const getHeader = (s) => [
@@ -32,12 +34,19 @@ const getHeader = (s) => [
   s.slice(1).replace(/_/g, ' '),
 ].join('')
 
-const renderInCellBar = (props, barColumns) => <InCellBar {...props} barColumns={barColumns} />
+const renderInCellBar = (props, barColumns, formatData, barColumnsColor, c) => 
+  <InCellBar 
+    {...props} 
+    barColumns={barColumns} 
+    barColumnsColor={barColumnsColor} 
+    formatData={formatData} 
+    {...c} 
+  />
 
-const inferColumns = (data, barColumns) => Object.keys(data[0] || {}).map((accessor) => ({
+const inferColumns = (data, barColumns, formatData, barColumnsColor) => Object.keys(data[0] || {}).map((accessor) => ({
   accessor,
   Header: getHeader(accessor),
-  ...barColumns ? { Cell: (props) => renderInCellBar(props, barColumns) } : {},
+  Cell: (props) => renderInCellBar(props, barColumns, formatData, barColumnsColor),
 }))
 const colFilter = (c) => c.type === TableColumn || c.type.name === 'TableColumn'
 const deObjectify = (data) => data.map((d) => {
@@ -50,16 +59,27 @@ const deObjectify = (data) => data.map((d) => {
   return r
 })
 
-const useTableConfig = ({ data, hiddenColumns, children, columns, remember, extendColumns = false, barColumns = false }) => {
+const useTableConfig = ({ 
+  data, 
+  hiddenColumns,
+  children, 
+  columns, 
+  remember, 
+  extendColumns = false, 
+  barColumns, 
+  formatData,
+  barColumnsColor,
+}) => {
   // memoized columns and data for useTable hook
   const _data = useMemo(() => deObjectify(data), [data])
   const _cols = useMemo(() => {
-    const inferred = inferColumns(data, barColumns)
+    const inferred = inferColumns(data, barColumns, formatData, barColumnsColor)
     if (!children && !columns) {
       return inferred
     }
     const explicit = Array.isArray(columns) && columns.length > 0
-      ? columns
+      ? columns.map(c => ({ ...c, Cell: (props) => 
+        renderInCellBar(props, barColumns, formatData, barColumnsColor, c) }))
       : Children.toArray(children).filter(colFilter).map((c) => c.props)
 
     if (extendColumns) {
@@ -69,8 +89,9 @@ const useTableConfig = ({ data, hiddenColumns, children, columns, remember, exte
         ...explicit,
       ]
     }
+
     return explicit
-  }, [columns, data, children])
+  }, [columns, data, children, barColumns, formatData, barColumnsColor])
   // cached hidden state
   const [hidden, setHiddenCache] = cached({
     ...remember,
@@ -109,6 +130,10 @@ export const Table = forwardRef(({
   highlightColumn,
   hidePagination,
   barColumns,
+  formatData,
+  barColumnsColor,
+  headerTitle,
+  title,
 }, ref) => {
   // custom table config hook
   const {
@@ -116,7 +141,7 @@ export const Table = forwardRef(({
     _data,
     hidden,
     setHiddenCache,
-  } = useTableConfig({ data, hiddenColumns, children, columns, remember, extendColumns, barColumns })
+  } = useTableConfig({ data, hiddenColumns, children, columns, remember, extendColumns, barColumns, barColumnsColor, formatData })
   // remember me
   const [cachedSortBy, setCachedSortBy] = cached({
     ...remember,
@@ -166,7 +191,11 @@ export const Table = forwardRef(({
     useSortBy,
     usePagination,
   )
-
+  const tableClasses = tableStyle({ 
+    headerTitle,
+    centerHeader: defaultStyles.centerHeader, 
+    compactTable: defaultStyles.compactTable,
+  })
   const tableRef = useRef(null)
 
   // remember hidden
@@ -212,8 +241,46 @@ export const Table = forwardRef(({
     }
   }
 
+  const renderTableRow = data => (
+    data.map((row, i) => {
+      prepareRow(row)
+      return (
+        <tr className="table__body-row" key={i} {...row.getRowProps()}>
+          {row.cells.map((cell, i) => (
+            <td 
+              key={i} 
+              className={`table__body-cell border-${defaultStyles.borderType} 
+                border-secondary-200 text-secondary-800 
+                ${i === (highlightColumn - 1) && 'font-bold'}
+              `} 
+              {...cell.getCellProps()}
+            >
+              <div className="table__body-item">{cell.render('Cell')}</div>
+            </td>
+          ))}
+        </tr>
+      )
+    })
+  )
+
+  const renderTableHeaderItem = (col, index, totalHeaders) => {
+    const formatType = formatData[col.id]?.type ? ` (${formatData[col.id]?.type})` : ''
+    return (
+      <div className="table__header-item">
+        {`${col.render('Header')}${formatType}`}
+        {col.canSort && (<ColSortLabel {...col} />)}
+        {col.canFilter && (<ColFilterLabel column={col} index={index} length={totalHeaders}/>)}
+      </div>
+    )
+  }
+
   return (
-    <div ref={tableRef} className={`table-root-container bg-secondary-50 ${tableStyle.tableRootContainer} ${classes.root}`}>
+    <div 
+      ref={tableRef} 
+      className={`${tableClasses.tableRootContainer} ${classes.tableRootContainer}
+        ${headerTitle ? 'shadow-blue-20' : ''} table__root-container bg-secondary-50`
+      }
+    >
       {(_data.length > 0 && toolbar) && (
         <TableToolbar
           rows={rows}
@@ -228,70 +295,62 @@ export const Table = forwardRef(({
           downloadFn={downloadFn}
         />
       )}
+      {(_data.length > 0 && headerTitle) && (
+        <HeaderTitle 
+          allColumns={allColumns}
+          preGlobalFilteredRows={preGlobalFilteredRows}
+          setGlobalFilter={setGlobalFilter}
+          globalFilter={globalFilter || ''}
+          title={title}
+        />
+      )}
       {visibleColumns.length > 0 ? (
         <>
-          <div className={`table-container ${classes.container}`}>
-            <table className={`table-root border-secondary-200 shadow-light-10 ${classes.root}`} {...getTableProps(tableProps)}>
-              <thead className={`table-header text-secondary-500 
-                ${classes.header} ${stickyHeader && 'sticky-header'}
-                ${defaultStyles.headerColor === 'grey' && 'bg-secondary-100'}
-                ${defaultStyles.headerColor === 'white' && 'bg-secondary-50 shadow-light-40'}
-              `}>
-                {headerGroups.map((headerGroup, index) => {
-                  const totalHeaders = headerGroup.headers.length
+          <table className={`${classes.tableContentContainer} table__content-container border-secondary-200 shadow-light-10`} {...getTableProps(tableProps)}>
+            <thead className={`${classes.tableHeaderContainer} table__header text-secondary-500 
+              ${(stickyHeader || hidePagination) && 'sticky-header'}
+              ${defaultStyles.headerColor === 'grey' && 'bg-secondary-100'}
+              ${defaultStyles.headerColor === 'white' && 'bg-secondary-50 shadow-light-40'}
+            `}>
+              {headerGroups.map((headerGroup, index) => {
+                const totalHeaders = headerGroup.headers.length
 
-                  return ( 
-                    <tr key={`header-row-${index}`} className="table-header-row" {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
-                      {headerGroup.headers.map((column, index) => (
-                        <th key={`header-cell-${index}`} className={`table-header-cell border-${defaultStyles.borderType} border-secondary-200`} {...column.getHeaderProps(column.getSortByToggleProps())}>
-                          <div className="table-header-item">
-                            {column.render('Header')}
-                            {column.canSort && (<TableSortLabel {...column} />)}
-                            {column.canFilter && (<TableFilterLabel column={column} index={index} length={totalHeaders}/>)}
-                          </div>
-                        </th>
-                      ))}
-                    </tr>
-                  )
-                })}
-              </thead>
-              <tbody className={`table-body ${classes.body}`} {...getTableBodyProps()}>
-                {page.map((row, i) => {
-                  prepareRow(row)
-                  return (
-                    <tr className="table-body-row" key={i} {...row.getRowProps()}>
-                      {row.cells.map((cell, i) => (
-                        <td className={`table-body-cell border-${defaultStyles.borderType} border-secondary-200 text-secondary-800 ${i === (highlightColumn - 1) && 'font-bold'}`} key={i} {...cell.getCellProps()}>
-                          <div className="table-body-item">{cell.render('Cell')}</div>
-                        </td>
-                      ))}
-                    </tr>
-                  )
-                })}
-              </tbody>
-              <tfoot className={`table-footer ${classes.footer}`}>
-                <tr className="table-footer-row">
-                  {(0 < rows.length && rows.length < data.length ? rows.length > pageSize : rows.length > 0) && !hidePagination && (
-                    <td className={`table-footer-cell border-${defaultStyles.borderType} border-secondary-200`} colSpan={100}>
-                      <Pagination
-                        itemsLength={rows.length}
-                        pageSize={pageSize}
-                        onChangePage={(_, val) => {
-                          gotoPage(val.pager.currentPage - 1)
-                        }}
-                        onChangeRowsPerPage={(e, val) => onChageRowsPerPage(e, val)}
-                        rowsPerPage={rowsPerPage}
-                      />
-                    </td>
-                  )}
-                </tr>
-              </tfoot>
-            </table>
-          </div>
+                return ( 
+                  <tr key={`header-row-${index}`} className="table__header-row" {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
+                    {headerGroup.headers.map((column, index) => (
+                      <th key={`header-cell-${index}`} className={`table__header-cell border-${defaultStyles.borderType} border-secondary-200`} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                        {renderTableHeaderItem(column, index, totalHeaders)}                      
+                      </th>
+                    ))}
+                  </tr>
+                )
+              })}
+            </thead>
+            <tbody className={`${classes.tableBodyContainer} table__body`} {...getTableBodyProps()}>
+              {renderTableRow(hidePagination ? rows : page)}
+            </tbody>
+            <tfoot className={`${classes.tableFooterContainer} table__footer`}>
+              <tr className="table__footer-row">
+                {(0 < rows.length && rows.length < data.length ? rows.length > pageSize : rows.length > 0) && !hidePagination && (
+                  <td className={`table__footer-cell border-${defaultStyles.borderType} border-secondary-200`} colSpan={100}>
+                    <Pagination
+                      itemsLength={rows.length}
+                      pageSize={pageSize}
+                      onChangePage={(_, val) => {
+                        gotoPage(val.pager.currentPage - 1)
+                      }}
+                      onChangeRowsPerPage={(e, val) => onChageRowsPerPage(e, val)}
+                      rowsPerPage={rowsPerPage}
+                    />
+                  </td>
+                )}
+              </tr>
+            </tfoot>
+          </table>
         </>
       ) : (
-        <div className="empty-container shadow-10">
-          <div className="content-container">
+        <div className="empty__container shadow-10">
+          <div className="content__container">
             No visible columns
           </div>
         </div>
@@ -329,6 +388,8 @@ Table.propTypes = {
   defaultStyles: PropTypes.shape({
     headerColor: PropTypes.oneOf(['grey', 'white']),
     borderType: PropTypes.oneOf(['none', 'horizontal', 'vertical', 'around']),
+    centerHeader: PropTypes.bool,
+    compactTable: PropTypes.bool,
   }),
   stickyHeader: PropTypes.bool,
   rowsPerPage: PropTypes.arrayOf(PropTypes.number),
@@ -339,10 +400,21 @@ Table.propTypes = {
     PropTypes.bool,
     PropTypes.array,
   ]),
+  formatData: PropTypes.object,
+  barColumnsColor: PropTypes.string,
+  headerTitle: PropTypes.bool,
+  title: PropTypes.string,
 }
 
 Table.defaultProps = {
-  classes: {},
+  classes: {
+    tableRootContainer: '',
+    tableContainer: '',
+    tableContentContainer: '',
+    tableHeaderContainer: '',
+    tableBodyContainer: '',
+    tableFooterContainer: '',
+  },
   columns: null,
   children: null,
   data: [],
@@ -358,11 +430,18 @@ Table.defaultProps = {
   defaultStyles: {
     headerColor: 'white',
     borderType: 'horizontal',
+    centerHeader: false,
+    compactTable: false,
   },
   stickyHeader: false,
+  rowsPerPage: [5, 10, 15, 20, 25],
   initialPageSize: 10,
   hidePagination: false,
-  barColumns: null,
+  barColumns: false,
+  formatData: {},
+  barColumnsColor: getTailwindConfigColor('primary-400'),
+  headerTitle: false,
+  title: '',
 }
 Table.Column = TableColumn
 Table.filters = { DefaultFilter, SelectionFilter, RangeFilter, QuantitaveFilter, QualitativeFilter }

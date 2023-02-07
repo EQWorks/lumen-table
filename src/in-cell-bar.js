@@ -1,22 +1,22 @@
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 
-import { makeStyles } from '@eqworks/lumen-labs'
+import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 
 const useStyles = ({ bgColor, barLength }) => makeStyles({
   bar: {
     backgroundColor: bgColor,
-    height: '14px',
+    height: '0.875rem',
     width: `${barLength}%`,
-    marginRight: '4px',
+    marginRight: '0.25rem',
   },
   value: {
     fontWeight: 400,
-    fontSize: '12px',
-    lineHeight: '14px',
+    fontSize: '0.75rem',
+    lineHeight: '0.875rem',
     textAlign: 'center',
-    color: '#6C6C6C', // secondary-700
+    color: getTailwindConfigColor('secondary-700'),
   },
 })
 
@@ -28,39 +28,51 @@ const computeMaxVals = (data, columnID, maxValsPerColumn) => {
   }
   return maxValsPerColumn
 }
-const computeBgIntensity = (value, range) => {
-  if (value < range[0]) {
-    return '#D6E8FD' // primary-100
-  }
-  if (value >= range[0] && value < range[1]) {
-    return '#AFD0FC' // primary-200
-  }
-  if (value >= range[1] && value < range[2]) {
-    return '#85B2F6' // primary-300
-  }
-  return '#6697EE' // primary-400
+
+const adjustBarColor = (amount, color) => {
+  return '#' + color.replace(/^#/, '').replace(/../g, color =>
+    ('0' + Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substring(1,3))
 }
 
-const InCellBar = ({ data, column, value, barColumns }) => {
-  if (isNaN(Number(value)) || (barColumns.length && !barColumns.includes(column.id))) {
-    return <p>{value}</p>
+const getFormattedValue = (value, format, header) => {
+  const formatFunc = format[header]
+  if (Object.keys(format).length && formatFunc) {
+    if (formatFunc?.func) {
+      return formatFunc.func(value)
+    }
+    return formatFunc(value)
+  }
+  return value
+}
+
+const getColorAmount = (max, value) => {
+  let amount = parseInt((max / value) * 10)
+  if (value > max || value === 0) {
+    amount = 0
   }
 
+  if (amount > 90) {
+    amount = 90
+  }
+  return amount
+}
+
+const InCellBar = ({ data, column, value, barColumns, formatData, barColumnsColor }) => {
+  const _value = getFormattedValue(value, formatData, column.Header)
+  if (isNaN(Number(value)) || (barColumns.length && !barColumns.includes(column.id)) || !barColumns) {
+    return <p>{_value}</p>
+  }
   const _maxVals = useMemo(() => computeMaxVals(data, column.id, maxValsPerColumn), [data, column, maxValsPerColumn])
-  const _intensityRange = useMemo(() => {
-    const baseIndex = Math.floor(_maxVals[column.id]/4)
-    return new Array(4).fill().map((_, i) => baseIndex * (i + 1))
-  }, [_maxVals, column])
 
   const styles = useStyles({
-    bgColor: computeBgIntensity(value, _intensityRange),
+    bgColor: adjustBarColor(getColorAmount(_maxVals[column.id], Math.ceil(Number(value))), barColumnsColor),
     barLength: ((value/_maxVals[column.id]) * 100).toFixed(2),
   })
 
   return (
     <div className='flex items-center'>
       <div className={styles.bar} />
-      <p className={styles.value}>{value}</p>
+      <p className={styles.value}>{_value}</p>
     </div>
   )
 }
@@ -73,9 +85,17 @@ InCellBar.propTypes = {
     PropTypes.number,
   ]).isRequired,
   barColumns: PropTypes.oneOfType([
-    PropTypes.bool.isRequired,
-    PropTypes.array.isRequired,
+    PropTypes.bool,
+    PropTypes.array,
   ]),
+  barColumnsColor: PropTypes.string,
+  formatData: PropTypes.object,
+}
+
+InCellBar.defaultProps = {
+  formatData: {},
+  barColumnsColor: getTailwindConfigColor('primary-400'),
+  barColumns: false,
 }
 
 export default InCellBar

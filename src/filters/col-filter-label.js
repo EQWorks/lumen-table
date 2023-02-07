@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 
 import { makeStyles, BaseComponents, Icons } from '@eqworks/lumen-labs'
 
-import SelectionFilter from './filters/selection-filter'
-import RangeFilter from './filters/range-filter'
-import QuantitaveFilter from './filters/quantitave-filter'
-import QualitativeFilter from './filters/qualitative-filter'
-import { DateRangeFilter } from './filters/date-range-filter'
-import DefaultFilter from './filters/default-filter'
+import SelectionFilter from './selection-filter'
+import RangeFilter from './range-filter'
+import QuantitaveFilter from './quantitave-filter'
+import QualitativeFilter from './qualitative-filter'
+import { DateRangeFilter } from './date-range-filter'
+import DefaultFilter from './default-filter'
 
 
 const useStyles = (index, length) => makeStyles({
@@ -41,7 +41,7 @@ const buttonClasses = Object.freeze({
   button: 'button-container',
 })
 
-const TableFilterLabel = ({ column, index, length }) => {
+const ColFilterLabel = ({ column, index, length }) => {
   const classes = useStyles(index, length)
   const anchorRef = useRef(null)
 
@@ -98,10 +98,10 @@ const TableFilterLabel = ({ column, index, length }) => {
   )
 }
 
-TableFilterLabel.propTypes = {
+ColFilterLabel.propTypes = {
   column: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   length: PropTypes.number.isRequired,
 }
 
-export default TableFilterLabel
+export default ColFilterLabel
