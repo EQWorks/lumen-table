@@ -24,7 +24,7 @@ import QuantitaveFilter from './filters/quantitave-filter'
 import QualitativeFilter from './filters/qualitative-filter'
 import InCellBar from './in-cell-bar'
 
-import tableStyle from './tableStyle'
+import tableStyle from './table-style'
 import { getTailwindConfigColor } from '@eqworks/lumen-labs/dist/utils/tailwind-config-color'
 import HeaderTitle from './header-title'
 
