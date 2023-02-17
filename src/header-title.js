@@ -10,6 +10,7 @@ import { getTailwindConfigColor } from '@eqworks/lumen-labs/dist/utils/tailwind-
 const useStyles = () => makeStyles(({
   headerTitleRootContainer: {
     position: 'relative',
+    marginBottom : '0.625rem',
     padding: '1.25rem 0.625rem',
     display: 'flex',
     justifyContent: 'center',
