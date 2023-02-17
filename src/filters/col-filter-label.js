@@ -64,7 +64,7 @@ const ColFilterLabel = ({ column, index, length }) => {
     case 'DateRangeFilter':
       return <DateRangeFilter column={column} />
     default:
-    { console.log('nothing: ', type) }
+      break
     }
   }
 
