@@ -213,11 +213,7 @@ export const Table = forwardRef(({
 
   useEffect(() => {
     const { current } = tableContainerRef
-    if (current && current.scrollWidth === current.clientWidth) {
-      setIsOverflow(false)
-    } else {
-      setIsOverflow(true)
-    }
+    setIsOverflow(!current || (current.scrollWidth !== current.clientWidth))
   }, [tableContainerRef])
 
   // remember hidden
