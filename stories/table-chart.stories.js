@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Table } from '../src'
 import provinces from './data/provinces'
-import data from './data/dashboard-data'
+import { data, largeData } from './data/dashboard-data'
 import { getTailwindConfigColor } from '@eqworks/lumen-labs/dist/utils/tailwind-config-color'
 import { makeStyles } from '@eqworks/lumen-labs'
 
@@ -66,7 +66,11 @@ const numberFormatting = val => `${Number(val)/1000}km`
 
 const percentageFormatting = val => `${Number(val).toFixed(2)}%`
 
-export const bar = () => <Table data={provinces} rowsPerPage={[5,10,20,50]} barColumns />
+export const bar = () => (
+  <div className={noPaginationStyleClasses.rootContainer}>
+    <Table data={largeData} rowsPerPage={[5,10,20,50]} barColumns hidePagination/>
+  </div>
+)
 
 export const barSelectiveColumns = () => <Table data={provinces} rowsPerPage={[5,10,20,50]} barColumns={['rate', 'new_cases']} />
 

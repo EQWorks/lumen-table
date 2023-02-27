@@ -1,4 +1,12 @@
-import React, { useState, useEffect, useMemo, Children, forwardRef, useImperativeHandle, useRef } from 'react'
+import React, { 
+  useState, 
+  useEffect, 
+  useMemo, 
+  Children, 
+  forwardRef, 
+  useImperativeHandle, 
+  useRef,
+} from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -191,12 +199,22 @@ export const Table = forwardRef(({
     useSortBy,
     usePagination,
   )
+
+  const [isOverflow, setIsOverflow] = useState(true)
+
+  const tableRef = useRef(null)
+  const tableContainerRef = useRef(null)
+
   const tableClasses = tableStyle({ 
-    headerTitle,
+    isOverflow,
     centerHeader: defaultStyles.centerHeader, 
     compactTable: defaultStyles.compactTable,
   })
-  const tableRef = useRef(null)
+
+  useEffect(() => {
+    const { current } = tableContainerRef
+    setIsOverflow(!current || (current.scrollWidth !== current.clientWidth))
+  }, [tableContainerRef])
 
   // remember hidden
   useEffect(() => {
@@ -306,7 +324,12 @@ export const Table = forwardRef(({
       )}
       {visibleColumns.length > 0 ? (
         <>
-          <table className={`${classes.tableContentContainer} table__content-container border-secondary-200 shadow-light-10`} {...getTableProps(tableProps)}>
+          <table 
+            ref={tableContainerRef} 
+            className={`${classes.tableContentContainer} table__content-container border-secondary-200 shadow-light-10`} 
+            {...getTableProps(tableProps)
+            }
+          >
             <thead className={`${classes.tableHeaderContainer} table__header text-secondary-500 
               ${(stickyHeader || hidePagination) && 'sticky-header'}
               ${defaultStyles.headerColor === 'grey' && 'bg-secondary-100'}

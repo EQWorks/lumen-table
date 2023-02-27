@@ -1,16 +1,18 @@
 import { makeStyles } from '@eqworks/lumen-labs'
 
-const tableStyle = ({ headerTitle, centerHeader, compactTable }) => makeStyles(({
+const tableStyle = ({ isOverflow, centerHeader, compactTable }) => makeStyles(({
   tableRootContainer: {
+    width: '100%',
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
+    overflow: isOverflow ? 'visible' : 'scroll',
 
     '& .table__content-container': {
       position: 'relative',
-      height: 'auto',
-      margin: headerTitle ? '0.625rem 0.625rem' : 'initial',
-      display: 'inline-block',
+      width: '100%',
+      height: '100%',
+      display: isOverflow ? 'inline-block' : 'inline-table',
       fontSize: '0.857rem',
       lineHeight: '1rem',
       letterSpacing: '0.025rem',
@@ -19,7 +21,7 @@ const tableStyle = ({ headerTitle, centerHeader, compactTable }) => makeStyles((
       borderRadius: '4px',
       borderCollapse: 'separate',
       borderSpacing: 0,
-      overflowY: 'auto',
+      overflow: 'auto',
 
       '& tr': {
         borderStyle: 'solid',
@@ -27,7 +29,7 @@ const tableStyle = ({ headerTitle, centerHeader, compactTable }) => makeStyles((
         borderSpacing: 0,
 
         '& td, th': {
-          padding: compactTable ? '0.25rem 0 0.25rem 0.5rem' : '0.75rem 0 0.75rem 1rem',
+          padding: compactTable ? '0.25rem 0.5rem 0.25rem 0.5rem' : '0.75rem 0.5rem 0.75rem 0.5rem',
           borderStyle: 'solid',
           borderCollapse: 'separate',
           borderSpacing: 0,
@@ -55,17 +57,13 @@ const tableStyle = ({ headerTitle, centerHeader, compactTable }) => makeStyles((
       },
 
       '& .table__header': {
-        width: '100%',
-        display: 'table',
-        tableLayout: 'fixed',
-        fontWeight: 700,
-
         '& .table__header-row': {
           '& .table__header-cell': {
             '& .table__header-item': {
               display: 'flex',
               alignItems: 'center',
               justifyContent: centerHeader ? 'center' : 'flex-start',
+              textAlign: centerHeader ? 'center' : 'start',
               textTransform: 'capitalize',
             },
           },
@@ -79,9 +77,6 @@ const tableStyle = ({ headerTitle, centerHeader, compactTable }) => makeStyles((
 
       '& .table__body': {
         '& .table__body-row': {
-          width: '100%',
-          display: 'table',
-          tableLayout: 'fixed',
           '& .table__body-cell': {
             '& .table__body-item': {
               wordWrap: 'break-word',
