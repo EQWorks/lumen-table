@@ -6,12 +6,11 @@ const tableStyle = ({ isOverflow, centerHeader, compactTable }) => makeStyles(({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    overflow: isOverflow ? 'visible' : 'scroll',
+    overflow: isOverflow ? 'visible' : 'auto',
 
     '& .table__content-container': {
       position: 'relative',
       width: '100%',
-      height: '100%',
       display: isOverflow ? 'inline-block' : 'inline-table',
       fontSize: '0.857rem',
       lineHeight: '1rem',
