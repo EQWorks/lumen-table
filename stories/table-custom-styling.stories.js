@@ -2,13 +2,11 @@ import React from 'react'
 
 import { Table } from '../src'
 import provinces from './data/provinces'
-import { data, largeData } from './data/dashboard-data'
-import { getTailwindConfigColor } from '@eqworks/lumen-labs/dist/utils/tailwind-config-color'
 import { makeStyles } from '@eqworks/lumen-labs'
 
 
 export default {
-  title: 'Table Chart',
+  title: 'Table Custom Styling',
   component: Table,
 }
 
@@ -68,129 +66,83 @@ export default {
  * [barColumnsColor] - string, defines bar columns main color only HEX color - default: '#6697ee'
  * [headerTitle] - bool, controls headerTitle with search filter display
  * [title] - string, set title for headerTitle
+ * [hideRowsPerPage] - bool, controls pagination rowsPerPage display
 */
 
-const noPaginationStyleClasses = makeStyles(({
-  rootContainer: {
-    height: '31.25rem',
+const customPaginationClasses = makeStyles({
+  container: {
+    justifyContent: 'flex-end',
+
+    '& .pagination__current-page-color': {
+      backgroundColor: '#F6B747',
+    },
   },
-}))
+})
 
-const numberFormatting = val => `${Number(val)/1000}km`
+const customTableClasses = makeStyles({
+  tableContainer: {
+    '& .table__root-container': {
+      '& .table__content-container': {
+        '& .table__header-container': {
+          '& .table__header-row': {
+            height: '3rem',
 
-const percentageFormatting = val => `${Number(val).toFixed(2)}%`
+            '& .table__header-cell': {
+              padding: '0.75rem 1rem',
+            },
+          },
+        },
 
-export const bar = () => (
-  <div className={noPaginationStyleClasses.rootContainer}>
-    <Table data={largeData} rowsPerPage={[5,10,20,50]} barColumns hidePagination/>
-  </div>
-)
+        '& .table__body-container': {
+          '& .table__body-row': {
+            height: '3rem',
 
-export const barSelectiveColumns = () => <Table data={provinces} rowsPerPage={[5,10,20,50]} barColumns={['rate', 'new_cases']} />
+            '& .table__body-cell': {
+              padding: '0.75rem 1rem',
+            },
+          },
+        },
 
-export const dashboardTable = () => (
-  <div className={noPaginationStyleClasses.rootContainer}>
+        '& .table__footer-container': {
+          '& .table__footer-row': {
+            height: '3.25rem',
+
+            '& .table__footer-cell': {
+              padding: '0.75rem 1rem',
+            },
+          },
+        },
+      },
+    },
+  },
+})
+
+export const CustomStyling = () => (
+  <div className={customTableClasses.tableContainer}>
     <Table 
-      data={data}
+      paginationClasses={{
+        container: customPaginationClasses.container,
+      }}
+      data={provinces}
       columns={
-        Object.keys(data[0]).map((key) => ({
+        Object.keys(provinces[0]).map((key) => ({
           Header: key.replaceAll('_', ' '), 
           accessor: key,
           disableFilters: true,
-          disableSortBy: key === 'Age' ? false : true,
+          disableSortBy: true,
         }))
-      }
-      sortBy={{ id: 'Age', desc: false }}
-      rowsPerPage={[5,10,20,50]}
-      barColumns={['Marketshare of Vehicle Age']}
-      hidePagination 
-      formatData={{ 
-        'Resolution': numberFormatting,
-        'Marketshare of Vehicle Age': {
-          func: percentageFormatting,
-          type: '%',
-        },
-      }}
+      } 
+      rowsPerPage={[5,10,20,50]} 
       toolbar={false}
-      headerTitle={true}
-      title='testing title'
-    />
-  </div>
-)
-
-export const customColorAndBorder = () => (
-  <Table 
-    data={data} 
-    columns={
-      Object.keys(data[0]).map((key) => ({
-        Header: key.replaceAll('_', ' '), 
-        accessor: key,
-        disableFilters: true,
-        disableSortBy: key === 'Age' ? false : true,
-      }))
-    }
-    sortBy={{ id: 'Age', desc: false }}
-    rowsPerPage={[5,10,20,50]}
-    barColumns={['Marketshare of Vehicle Age']}
-    formatData={{ 
-      'Resolution': {
-        func: numberFormatting,
-        type: 'Km',
-      },
-      'Marketshare of Vehicle Age': {
-        func: percentageFormatting,
-        type: '%',
-      },
-    }}
-    toolbar={false}
-    headerTitle={true}
-    title='testing title'
-    barColumnsColor={`${getTailwindConfigColor('success-400')}`} // only HEX color
-    defaultStyles={
-      {
-        headerColor: 'grey', // PropTypes.oneOf(['grey', 'white'])
-        borderType: 'around', // PropTypes.oneOf(['none', 'horizontal', 'vertical', 'around'])
-        centerHeader: true,
-      }
-    }
-  />
-)
-
-export const customCompactStyle = () => (
-  <div className={noPaginationStyleClasses.rootContainer}>
-    <Table 
-      data={data} 
-      columns={
-        Object.keys(data[0]).map((key) => ({
-          Header: key.replaceAll('_', ' '), 
-          accessor: key,
-          disableFilters: true,
-          disableSortBy: key === 'Age' ? false : true,
-        }))
-      }
-      sortBy={{ id: 'Age', desc: false }}
-      rowsPerPage={[5,10,20,50]}
-      barColumns={['Marketshare of Vehicle Age']}
-      hidePagination 
-      formatData={{ 
-        'Resolution': {
-          func: numberFormatting,
-          type: 'Km',
-        },
-        'Marketshare of Vehicle Age': {
-          func: percentageFormatting,
-          type: '%',
-        },
-      }}
-      toolbar={false}
-      title='testing title'
       defaultStyles={
         {
-          headerColor: 'white',
-          borderType: 'around',
-          compactTable: true,
+          headerColor: 'grey',
+          borderType: 'vertical',
         }
       }
+      hideRowsPerPage={true}
+      highlightColumn={1}
+      initialPageSize={5}
     />
   </div>
 )
