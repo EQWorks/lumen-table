@@ -55,7 +55,7 @@ const tableStyle = ({ isOverflow, centerHeader, compactTable }) => makeStyles(({
         },
       },
 
-      '& .table__header': {
+      '& .table__header-container': {
         '& .table__header-row': {
           '& .table__header-cell': {
             '& .table__header-item': {
@@ -74,7 +74,7 @@ const tableStyle = ({ isOverflow, centerHeader, compactTable }) => makeStyles(({
         top: 0,
       },
 
-      '& .table__body': {
+      '& .table__body-container': {
         '& .table__body-row': {
           '& .table__body-cell': {
             '& .table__body-item': {
@@ -84,7 +84,7 @@ const tableStyle = ({ isOverflow, centerHeader, compactTable }) => makeStyles(({
         },
       },
 
-      '& .table__footer': {
+      '& .table__footer-container': {
         '& .table__footer-row': {
           borderWidth: '1px 0 0 0',
           borderStyle: 'solid',

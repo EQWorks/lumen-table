@@ -119,6 +119,7 @@ const useTableConfig = ({
 
 export const Table = forwardRef(({
   classes,
+  paginationClasses,
   columns,
   data,
   toolbar,
@@ -142,6 +143,7 @@ export const Table = forwardRef(({
   barColumnsColor,
   headerTitle,
   title,
+  hideRowsPerPage,
 }, ref) => {
   // custom table config hook
   const {
@@ -263,17 +265,19 @@ export const Table = forwardRef(({
     data.map((row, i) => {
       prepareRow(row)
       return (
-        <tr className="table__body-row" key={i} {...row.getRowProps()}>
+        <tr className={`table__body-row ${classes.tableBodyRow || ''}`} key={i} {...row.getRowProps()}>
           {row.cells.map((cell, i) => (
             <td 
               key={i} 
-              className={`table__body-cell border-${defaultStyles.borderType} 
+              className={`table__body-cell ${classes.tableBodyCell || ''} border-${defaultStyles.borderType} 
                 border-secondary-200 text-secondary-800 
                 ${i === (highlightColumn - 1) && 'font-bold'}
               `} 
               {...cell.getCellProps()}
             >
-              <div className="table__body-item">{cell.render('Cell')}</div>
+              <div className={`table__body-item ${classes.tableBodyItem || ''}`}>
+                {cell.render('Cell')}
+              </div>
             </td>
           ))}
         </tr>
@@ -284,7 +288,7 @@ export const Table = forwardRef(({
   const renderTableHeaderItem = (col, index, totalHeaders) => {
     const formatType = formatData[col.id]?.type ? ` (${formatData[col.id]?.type})` : ''
     return (
-      <div className="table__header-item">
+      <div className={`table__header-item ${classes.tableHeaderItem || ''}`}>
         {`${col.render('Header')}${formatType}`}
         {col.canSort && (<ColSortLabel {...col} />)}
         {col.canFilter && (<ColFilterLabel column={col} index={index} length={totalHeaders}/>)}
@@ -295,12 +299,13 @@ export const Table = forwardRef(({
   return (
     <div 
       ref={tableRef} 
-      className={`${tableClasses.tableRootContainer} ${classes.tableRootContainer}
-        ${headerTitle ? 'shadow-blue-20' : ''} table__root-container bg-secondary-50`
+      className={`table__root-container ${classes.tableRootContainer || ''} 
+        ${tableClasses.tableRootContainer} ${headerTitle ? 'shadow-blue-20' : ''} bg-secondary-50`
       }
     >
       {(_data.length > 0 && toolbar) && (
         <TableToolbar
+          classes={classes}
           rows={rows}
           allColumns={allColumns}
           visibleColumns={visibleColumns}
@@ -326,11 +331,11 @@ export const Table = forwardRef(({
         <>
           <table 
             ref={tableContainerRef} 
-            className={`${classes.tableContentContainer} table__content-container border-secondary-200 shadow-light-10`} 
+            className={`table__content-container ${classes.tableContentContainer || ''} border-secondary-200 shadow-light-10`} 
             {...getTableProps(tableProps)
             }
           >
-            <thead className={`${classes.tableHeaderContainer} table__header text-secondary-500 
+            <thead className={`table__header-container ${classes.tableHeaderContainer || ''} text-secondary-500 
               ${(stickyHeader || hidePagination) && 'sticky-header'}
               ${defaultStyles.headerColor === 'grey' && 'bg-secondary-100'}
               ${defaultStyles.headerColor === 'white' && 'bg-secondary-50 shadow-light-40'}
@@ -339,9 +344,16 @@ export const Table = forwardRef(({
                 const totalHeaders = headerGroup.headers.length
 
                 return ( 
-                  <tr key={`header-row-${index}`} className="table__header-row" {...headerGroup.getHeaderGroupProps(headerGroupProps)}>
+                  <tr 
+                    key={`header-row-${index}`} 
+                    className={`table__header-row ${classes.tableHeaderRow || ''}`} {...headerGroup.getHeaderGroupProps(headerGroupProps)}
+                  >
                     {headerGroup.headers.map((column, index) => (
-                      <th key={`header-cell-${index}`} className={`table__header-cell border-${defaultStyles.borderType} border-secondary-200`} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                      <th 
+                        key={`header-cell-${index}`} 
+                        className={`table__header-cell ${classes.tableHeaderCell || ''} border-${defaultStyles.borderType} border-secondary-200`} 
+                        {...column.getHeaderProps(column.getSortByToggleProps())}
+                      >
                         {renderTableHeaderItem(column, index, totalHeaders)}                      
                       </th>
                     ))}
@@ -349,14 +361,15 @@ export const Table = forwardRef(({
                 )
               })}
             </thead>
-            <tbody className={`${classes.tableBodyContainer} table__body`} {...getTableBodyProps()}>
+            <tbody className={`table__body-container ${classes.tableBodyContainer || ''}`} {...getTableBodyProps()}>
               {renderTableRow(hidePagination ? rows : page)}
             </tbody>
-            <tfoot className={`${classes.tableFooterContainer} table__footer`}>
-              <tr className="table__footer-row">
+            <tfoot className={`table__footer-container ${classes.tableFooterContainer || ''}`}>
+              <tr className={`table__footer-row ${classes.tableFooterRow || ''}`}>
                 {(0 < rows.length && rows.length < data.length ? rows.length > pageSize : rows.length > 0) && !hidePagination && (
-                  <td className={`table__footer-cell border-${defaultStyles.borderType} border-secondary-200`} colSpan={100}>
+                  <td className={`table__footer-cell ${classes.tableFooterCell || ''} border-${defaultStyles.borderType} border-secondary-200`} colSpan={100}>
                     <Pagination
+                      classes={paginationClasses}
                       itemsLength={rows.length}
                       pageSize={pageSize}
                       onChangePage={(_, val) => {
@@ -364,6 +377,7 @@ export const Table = forwardRef(({
                       }}
                       onChangeRowsPerPage={(e, val) => onChageRowsPerPage(e, val)}
                       rowsPerPage={rowsPerPage}
+                      hideRowsPerPage={hideRowsPerPage}
                     />
                   </td>
                 )}
@@ -389,7 +403,8 @@ const childrenColumnCheck = (props, _, componentName) => {
 }
 
 Table.propTypes = {
-  classes: PropTypes.object,
+  classes: PropTypes.objectOf(PropTypes.string),
+  paginationClasses: PropTypes.objectOf(PropTypes.string),
   columns: childrenColumnCheck,
   children: childrenColumnCheck,
   data: PropTypes.array,
@@ -427,16 +442,32 @@ Table.propTypes = {
   barColumnsColor: PropTypes.string,
   headerTitle: PropTypes.bool,
   title: PropTypes.string,
+  hideRowsPerPage: PropTypes.bool,
 }
 
 Table.defaultProps = {
   classes: {
     tableRootContainer: '',
-    tableContainer: '',
     tableContentContainer: '',
+    tableToolBarContainer: '',
     tableHeaderContainer: '',
+    tableHeaderRow: '',
+    tableHeaderCell: '',
+    tableHeaderItem: '',
     tableBodyContainer: '',
+    tableBodyRow: '',
+    tableBodyCell: '',
+    tableBodyItem: '',
     tableFooterContainer: '',
+    tableFooterRow: '',
+    tableFooterCell: '',
+  },
+  paginationClasses: {
+    container: '',
+    item: '',
+    arrow: '',
+    pageItem: '',
+    currentPageColor: '',
   },
   columns: null,
   children: null,
@@ -465,6 +496,7 @@ Table.defaultProps = {
   barColumnsColor: getTailwindConfigColor('primary-400'),
   headerTitle: false,
   title: '',
+  hideRowsPerPage: false,
 }
 Table.Column = TableColumn
 Table.filters = { DefaultFilter, SelectionFilter, RangeFilter, QuantitaveFilter, QualitativeFilter }
