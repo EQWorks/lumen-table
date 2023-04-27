@@ -403,29 +403,8 @@ const childrenColumnCheck = (props, _, componentName) => {
 }
 
 Table.propTypes = {
-  classes: PropTypes.shape({
-    tableRootContainer: PropTypes.string,
-    tableContentContainer: PropTypes.string,
-    tableToolBarContainer: PropTypes.string,
-    tableHeaderContainer: PropTypes.string,
-    tableHeaderRow: PropTypes.string,
-    tableHeaderCell: PropTypes.string,
-    tableHeaderItem: PropTypes.string,
-    tableBodyContainer: PropTypes.string,
-    tableBodyRow: PropTypes.string,
-    tableBodyCell: PropTypes.string,
-    tableBodyItem: PropTypes.string,
-    tableFooterContainer: PropTypes.string,
-    tableFooterRow: PropTypes.string,
-    tableFooterCell: PropTypes.string,
-  }),
-  paginationClasses: PropTypes.shape({
-    container: PropTypes.string,
-    item: PropTypes.string,
-    arrow: PropTypes.string,
-    pageItem: PropTypes.string,
-    currentPageColor: PropTypes.string,
-  }),
+  classes: PropTypes.objectOf(PropTypes.string),
+  paginationClasses: PropTypes.objectOf(PropTypes.string),
   columns: childrenColumnCheck,
   children: childrenColumnCheck,
   data: PropTypes.array,
