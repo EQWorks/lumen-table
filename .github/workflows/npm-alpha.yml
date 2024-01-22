@@ -30,7 +30,7 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: '@eqworks'
           always-auth: true
-      - run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.CD_GITHUB_TOKEN }}" > .npmrc
+      - run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.CD_NPM_TOKEN_PUBLISH }}" > .npmrc
       - run: yarn publish --tag alpha --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.CD_NPM_TOKEN_PUBLISH }}
