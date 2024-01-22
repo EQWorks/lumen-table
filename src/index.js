@@ -33,7 +33,6 @@ import QualitativeFilter from './filters/qualitative-filter'
 import InCellBar from './in-cell-bar'
 
 import tableStyle from './table-style'
-import { getTailwindConfigColor } from '@eqworks/lumen-labs/dist/utils/tailwind-config-color'
 import HeaderTitle from './header-title'
 
 
@@ -493,7 +492,7 @@ Table.defaultProps = {
   hidePagination: false,
   barColumns: false,
   formatData: {},
-  barColumnsColor: getTailwindConfigColor('primary-400'),
+  barColumnsColor: '#6697ee',
   headerTitle: false,
   title: '',
   hideRowsPerPage: false,

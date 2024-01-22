@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 
-import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
+import { makeStyles } from '@eqworks/lumen-labs'
 
 
 const useStyles = ({ bgColor, barLength }) => makeStyles({
@@ -16,7 +16,7 @@ const useStyles = ({ bgColor, barLength }) => makeStyles({
     fontSize: '0.75rem',
     lineHeight: '0.875rem',
     textAlign: 'center',
-    color: getTailwindConfigColor('secondary-700'),
+    color: '#6c6c6c',
   },
 })
 
@@ -94,7 +94,7 @@ InCellBar.propTypes = {
 
 InCellBar.defaultProps = {
   formatData: {},
-  barColumnsColor: getTailwindConfigColor('primary-400'),
+  barColumnsColor: '#6697ee',
   barColumns: false,
 }
 

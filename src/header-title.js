@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@eqworks/lumen-labs'
 
 import DefaultFilter from './filters/default-filter'
-import { getTailwindConfigColor } from '@eqworks/lumen-labs/dist/utils/tailwind-config-color'
 
 
 const useStyles = () => makeStyles(({
@@ -18,7 +17,7 @@ const useStyles = () => makeStyles(({
 
     '& .title__container': {
       fontSize: '1.125rem',
-      color: getTailwindConfigColor('secondary-900'),
+      color: '#2a2a2a',
       fontWeight: 'bold',
       letterSpacing: '0.016rem',
     },
