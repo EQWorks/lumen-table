@@ -1,6 +1,6 @@
 {
   "name": "@eqworks/lumen-table",
-  "version": "2.0.0-alpha.21",
+  "version": "2.0.0-alpha.22",
   "main": "dist/index.js",
   "source": "src/index.js",
   "files": [
@@ -21,7 +21,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@eqworks/lumen-labs": "^0.1.0-alpha.105",
+    "@eqworks/lumen-labs": "^0.1.0-alpha.104",
     "prop-types": "^15.7.2",
     "react-table": "^7.6.0",
     "use-cached": "^2.0.0"
