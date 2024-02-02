@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
 
-import { Button, makeStyles, BaseComponents, Icons } from '@eqworks/lumen-labs'
+import { makeStyles, BaseComponents, Icons } from '@eqworks/lumen-labs'
 
 import Badge from '@material-ui/core/Badge'
 
@@ -42,7 +42,23 @@ export const saveData = ({ data, rows, allColumns, visibleColumns, downloadName,
 const classes = makeStyles({
   downloadContainer: {
     '& .button-container': {
+      padding: '0.5rem 1rem',
+      color: '#366fe4',
+      fontSize: '0.875rem',
+      lineHeight: '1.25rem',
+      letterSpacing: '0.25px',
+      borderRadius: '4px',
+      cursor: 'pointer',
       border: 0,
+
+      '&:hover': {
+        color: '#2755c4',
+        backgroundColor: '#eff8fe',
+      },
+
+      '& > span': {
+        marginRight: '0.325rem',
+      },
     },
 
     '& .dialog-container': {
@@ -61,7 +77,7 @@ const buttonClasses = Object.freeze({
 })
 
 const Download = ({ data, allColumns, visibleColumns, rows, downloadFn, downloadName }) => {
-  const allowVisCols = 0 < visibleColumns.length && visibleColumns.length < allColumns.length
+  const allowVisCols = visibleColumns.length && visibleColumns.length < allColumns.length
   const allowFilteredRows = 0 < rows.length && rows.length < data.length
   const allowOptions = allowVisCols || allowFilteredRows
 
@@ -85,21 +101,19 @@ const Download = ({ data, allColumns, visibleColumns, rows, downloadFn, download
   }
 
   const _button = (
-    <div aria-label='Save Button'>
-      <Button
-        classes={buttonClasses}
-        variant='outlined'
-        size='lg'
-        endIcon={
-          <Badge color='secondary' variant='dot' invisible={!allowOptions}>
-            <Icons.DownloadBold size='lg' />
-          </Badge>
-        }
-        onClick={allowOptions ? undefined : handleDownload({ visCols: false, filteredRows: false })}
-        aria-haspopup='menu'
+    <div 
+      className={buttonClasses.button} 
+      onClick={allowOptions ? undefined : handleDownload({ visCols: false, filteredRows: false })}
+      aria-label='Save Button'
+    >
+      <span>Download</span>
+      <Badge
+        color='secondary'
+        variant='dot'
+        invisible={!allowOptions}
       >
-        Download
-      </Button>
+        <Icons.DownloadBold size='lg' />
+      </Badge>
     </div>
   )
 
