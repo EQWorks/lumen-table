@@ -3,7 +3,6 @@ import React from 'react'
 import { Table } from '../src'
 import provinces from './data/provinces'
 import { data, largeData } from './data/dashboard-data'
-import { getTailwindConfigColor } from '@eqworks/lumen-labs/dist/utils/tailwind-config-color'
 import { makeStyles } from '@eqworks/lumen-labs'
 
 
@@ -145,7 +144,7 @@ export const customColorAndBorder = () => (
     toolbar={false}
     headerTitle={true}
     title='testing title'
-    barColumnsColor={`${getTailwindConfigColor('success-400')}`} // only HEX color
+    barColumnsColor={'#5cb743'} // only HEX color
     defaultStyles={
       {
         headerColor: 'grey', // PropTypes.oneOf(['grey', 'white'])

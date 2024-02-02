@@ -6,7 +6,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 
-import { Button, makeStyles, BaseComponents, Icons } from '@eqworks/lumen-labs'
+import { makeStyles, BaseComponents, Icons } from '@eqworks/lumen-labs'
 
 import Switch from '@material-ui/core/Switch'
 import Badge from '@material-ui/core/Badge'
@@ -15,7 +15,22 @@ import Badge from '@material-ui/core/Badge'
 const classes = makeStyles({
   toggleContainer: {
     '& .button-container': {
-      border: 0,
+      padding: '0.5rem 1rem',
+      color: '#366fe4',
+      fontSize: '0.875rem',
+      lineHeight: '1.25rem',
+      letterSpacing: '0.25px',
+      borderRadius: '4px',
+      cursor: 'pointer',
+
+      '&:hover': {
+        color: '#2755c4',
+        backgroundColor: '#eff8fe',
+      },
+
+      '& > span': {
+        marginRight: '0.325rem',
+      },
     },
 
     '& .dialog-container': {
@@ -44,24 +59,15 @@ export const Toggle = ({ allColumns, toggleHideColumn }) => {
   }
 
   const _button = (
-    <div aria-label='Edit button'>
-      <Button
-        classes={buttonClasses}
-        variant='outlined'
-        size='lg'
-        endIcon={
-          <Badge
-            color='secondary'
-            variant='dot'
-            invisible={allColumns.every((c) => c.isVisible || c.noToggle)}
-          >
-            <Icons.Gear size='lg' />
-          </Badge>
-        }
-        aria-haspopup='menu'
+    <div className={buttonClasses.button} aria-label='Edit button'>
+      <span>Edit table</span>
+      <Badge
+        color='secondary'
+        variant='dot'
+        invisible={allColumns.every((c) => c.isVisible || c.noToggle)}
       >
-        Edit table
-      </Button>
+        <Icons.Gear size='lg' />
+      </Badge>
     </div>
   )
 

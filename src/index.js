@@ -33,7 +33,6 @@ import QualitativeFilter from './filters/qualitative-filter'
 import InCellBar from './in-cell-bar'
 
 import tableStyle from './table-style'
-import { getTailwindConfigColor } from '@eqworks/lumen-labs/dist/utils/tailwind-config-color'
 import HeaderTitle from './header-title'
 
 
@@ -42,7 +41,7 @@ const getHeader = (s) => [
   s.slice(1).replace(/_/g, ' '),
 ].join('')
 
-const renderInCellBar = (props, barColumns, formatData, barColumnsColor, c) => 
+const renderInCell = (props, barColumns, formatData, barColumnsColor, c) => (
   <InCellBar 
     {...props} 
     barColumns={barColumns} 
@@ -50,11 +49,25 @@ const renderInCellBar = (props, barColumns, formatData, barColumnsColor, c) =>
     formatData={formatData} 
     {...c} 
   />
+)
+
+const getExplicitColumns = (barColumns, formatData, barColumnsColor, columns, children) => {
+  if (Array.isArray(columns) && columns.length > 0) {
+    if (barColumns.length > 0 || barColumns) {
+      return columns.map(c => ({ ...c, Cell: (props) => 
+        renderInCell(props, barColumns, formatData, barColumnsColor, columns) }))
+    }
+
+    return columns
+  }
+
+  return Children.toArray(children).filter(colFilter).map((c) => c.props)
+}
 
 const inferColumns = (data, barColumns, formatData, barColumnsColor) => Object.keys(data[0] || {}).map((accessor) => ({
   accessor,
   Header: getHeader(accessor),
-  Cell: (props) => renderInCellBar(props, barColumns, formatData, barColumnsColor),
+  ...barColumns ? { Cell: (props) => renderInCell(props, barColumns, formatData, barColumnsColor) } : {},
 }))
 const colFilter = (c) => c.type === TableColumn || c.type.name === 'TableColumn'
 const deObjectify = (data) => data.map((d) => {
@@ -85,10 +98,7 @@ const useTableConfig = ({
     if (!children && !columns) {
       return inferred
     }
-    const explicit = Array.isArray(columns) && columns.length > 0
-      ? columns.map(c => ({ ...c, Cell: (props) => 
-        renderInCellBar(props, barColumns, formatData, barColumnsColor, c) }))
-      : Children.toArray(children).filter(colFilter).map((c) => c.props)
+    const explicit = getExplicitColumns(barColumns, formatData, barColumnsColor, columns, children)
 
     if (extendColumns) {
       const expCols = explicit.map(v => v.id || v.accessor)
@@ -277,6 +287,7 @@ export const Table = forwardRef(({
             >
               <div className={`table__body-item ${classes.tableBodyItem || ''}`}>
                 {cell.render('Cell')}
+                {console.log('cell: ', cell)}
               </div>
             </td>
           ))}
@@ -493,7 +504,7 @@ Table.defaultProps = {
   hidePagination: false,
   barColumns: false,
   formatData: {},
-  barColumnsColor: getTailwindConfigColor('primary-400'),
+  barColumnsColor: '#6697ee',
   headerTitle: false,
   title: '',
   hideRowsPerPage: false,

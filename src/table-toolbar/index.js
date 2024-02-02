@@ -20,6 +20,10 @@ const customClasses = makeStyles({
     '& .toolbar__options-container': {
       display: 'flex',
       alignItems: 'center',
+
+      '& > div': {
+        position: 'initial',
+      },
     },
   },
 })
