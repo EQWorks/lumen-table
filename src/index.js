@@ -450,7 +450,10 @@ Table.propTypes = {
     PropTypes.array,
   ]),
   formatData: PropTypes.object,
-  barColumnsColor: PropTypes.string,
+  barColumnsColor: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
   headerTitle: PropTypes.bool,
   title: PropTypes.string,
   hideRowsPerPage: PropTypes.bool,
