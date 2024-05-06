@@ -4,10 +4,10 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@eqworks/lumen-labs'
 
 
-const useStyles = ({ bgColor, barLength }) => makeStyles({
+const useStyles = ({ bgColor, barLength, barHeight }) => makeStyles({
   bar: {
     backgroundColor: bgColor,
-    height: '0.875rem',
+    height: `${barHeight}rem`,
     width: `${barLength}%`,
     marginRight: '0.25rem',
   },
@@ -27,6 +27,42 @@ const computeMaxVals = (data, columnID, maxValsPerColumn) => {
     maxValsPerColumn[columnID] = max
   }
   return maxValsPerColumn
+}
+
+// Helper function to convert a hex color to RGB
+const hexToRGB = (hex) => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+  return result? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16),
+  } : null
+}
+
+// Helper function to convert RGB to hexadecimal format
+const rgbToHex = (r, g, b) => {
+  return '#' + ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)
+}
+
+const adjustFixedRange = (amount, color) => {
+  // Convert the colors to RGB format
+  const minRGB = hexToRGB(color[0])
+  const maxRGB = hexToRGB(color[1])
+
+  // Calculate the difference between the min and max colors
+  const diffR = maxRGB.r - minRGB.r
+  const diffG = maxRGB.g - minRGB.g
+  const diffB = maxRGB.b - minRGB.b
+
+  // Calculate the adjusted RGB values based on the percentage
+  const adjustedR = Math.round(minRGB.r + (diffR * ((amount * 1.25) / 100)))
+  const adjustedG = Math.round(minRGB.g + (diffG * ((amount * 1.25) / 100)))
+  const adjustedB = Math.round(minRGB.b + (diffB * ((amount * 1.25) / 100)))
+
+  // Convert the adjusted RGB values back to hexadecimal format
+  const adjustedColor = rgbToHex(adjustedR, adjustedG, adjustedB)
+
+  return adjustedColor
 }
 
 const adjustBarColor = (amount, color) => {
@@ -65,8 +101,11 @@ const InCellBar = ({ data, column, value, barColumns, formatData, barColumnsColo
   const _maxVals = useMemo(() => computeMaxVals(data, column.id, maxValsPerColumn), [data, column, maxValsPerColumn])
 
   const styles = useStyles({
-    bgColor: adjustBarColor(getColorAmount(_maxVals[column.id], Math.ceil(Number(value))), barColumnsColor),
+    bgColor: barColumnsColor.length === 2 ? 
+      adjustFixedRange(getColorAmount(_maxVals[column.id], Math.ceil(Number(value))), barColumnsColor) :
+      adjustBarColor(getColorAmount(_maxVals[column.id], Math.ceil(Number(value))), barColumnsColor),
     barLength: ((value/_maxVals[column.id]) * 100).toFixed(2),
+    barHeight: barColumnsColor.length === 2 ? 2 : 0.875,
   })
 
   return (
@@ -88,13 +127,18 @@ InCellBar.propTypes = {
     PropTypes.bool,
     PropTypes.array,
   ]),
-  barColumnsColor: PropTypes.string,
+  barColumnsColor: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
+  fixedColorRange: PropTypes.array,
   formatData: PropTypes.object,
 }
 
 InCellBar.defaultProps = {
   formatData: {},
   barColumnsColor: '#6697ee',
+  fixedColorRange: [],
   barColumns: false,
 }
 
