@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { Table } from '../src'
+import ageRange from './data/age-range'
 import provinces from './data/provinces'
 import { data, largeData } from './data/dashboard-data'
 import { makeStyles } from '@eqworks/lumen-labs'
@@ -64,7 +65,9 @@ export default {
  * [barColumns]: oneOfType([bool,array]), if true all possible columns with numeric values will have bar display.
       if array with header column key only the selected ones will have bar display.
  * [formatData] - object, format columns value based on key and format function. See storybook example for details
- * [barColumnsColor] - string, defines bar columns main color only HEX color - default: '#6697ee'
+ * [barColumnsColor] - string or array, defines bar columns main color only HEX color - default: '#6697ee'
+       if array first value represents minColor and second is max color
+       as number gets smaller it will appear closer to first value and as the number grows it appears closer to large value
  * [headerTitle] - bool, controls headerTitle with search filter display
  * [title] - string, set title for headerTitle
 */
@@ -78,6 +81,16 @@ const noPaginationStyleClasses = makeStyles(({
 const numberFormatting = val => `${Number(val)/1000}km`
 
 const percentageFormatting = val => `${Number(val).toFixed(2)}%`
+
+const agePercentageFormatting = (val, ageRange) => {
+  const totalUserCount = ageRange.reduce((sum, item) => sum + item.user_count, 0)
+
+  // Calculate the percentage for this row
+  const percentage = (val / totalUserCount) * 100
+
+  // Return both the formatted percentage string and the raw percentage value
+  return `${Number(percentage).toFixed(2)}%`
+}
 
 export const bar = () => (
   <div className={noPaginationStyleClasses.rootContainer}>
@@ -188,6 +201,68 @@ export const customCompactStyle = () => (
           headerColor: 'white',
           borderType: 'around',
           compactTable: true,
+        }
+      }
+    />
+  </div>
+)
+
+const customTableClasses = makeStyles({
+  tableRootContainer: {
+    height: 'auto',
+    overflowY: 'hidden',
+  },
+  tableContentContainer: {
+    border: 'none!important',
+  },
+  tableHeaderContainer: {
+    boxShadow: '0 1px 0 0px black',
+    position: 'static!important',
+  },
+  tableHeaderItem: {
+    color: 'black',
+    fontWeight: 'Normal',
+    justifyContent: 'center!important',
+  },
+  tableBodyCell: {
+    paddingTop: '0.75rem!important',
+    paddingBottom: '0px!important',
+  },
+})
+
+export const ageRangeData = () => (
+  <div className={noPaginationStyleClasses.rootContainer}>
+    <Table
+      classes={{
+        tableRootContainer: customTableClasses.tableRootContainer,
+        tableContentContainer: customTableClasses.tableContentContainer,
+        tableHeaderContainer: customTableClasses.tableHeaderContainer,
+        tableHeaderItem: customTableClasses.tableHeaderItem,
+        tableBodyCell: customTableClasses.tableBodyCell,
+      }} 
+      data={ageRange}
+      columns={
+        Object.keys(ageRange[0]).map((key) => ({
+          Header: key.replaceAll('_', ' '), 
+          accessor: key,
+          disableFilters: true,
+          disableSortBy: true,
+        }))
+      }
+      rowsPerPage={[5,10,20,50]}
+      barColumns={['user_count']}
+      hidePagination
+      formatData={{
+        'user count': {
+          func: (row) => agePercentageFormatting(row, ageRange),
+          type: '%',
+        },
+      }}
+      toolbar={false}
+      barColumnsColor={['#0066a4', '#b7b7b7']}
+      defaultStyles={
+        {
+          borderType: 'vertical',
         }
       }
     />
