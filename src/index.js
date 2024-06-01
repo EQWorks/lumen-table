@@ -18,6 +18,7 @@ import {
 } from 'react-table'
 import { cached } from 'use-cached'
 
+import Tooltip from '@material-ui/core/Tooltip'
 import { Pagination } from '@eqworks/lumen-labs'
 
 import TableColumn from './table-column'
@@ -154,6 +155,8 @@ export const Table = forwardRef(({
   headerTitle,
   title,
   hideRowsPerPage,
+  tooltipColumns,
+  tooltipConfig,
 }, ref) => {
   // custom table config hook
   const {
@@ -285,9 +288,17 @@ export const Table = forwardRef(({
               `} 
               {...cell.getCellProps()}
             >
-              <div className={`table__body-item ${classes.tableBodyItem || ''}`}>
-                {cell.render('Cell')}
-              </div>
+              {tooltipColumns.includes(cell.column.id) ? (
+                <Tooltip title={cell.value} placement={tooltipConfig.placement} arrow={tooltipConfig.arrow}> 
+                  <div className={`table__body-item ${classes.tableBodyItem || ''}`}>
+                    {cell.render('Cell')}
+                  </div>
+                </Tooltip>
+              ) : (
+                <div className={`table__body-item ${classes.tableBodyItem || ''}`}>
+                  {cell.render('Cell')}
+                </div>
+              )}
             </td>
           ))}
         </tr>
@@ -456,6 +467,8 @@ Table.propTypes = {
   headerTitle: PropTypes.bool,
   title: PropTypes.string,
   hideRowsPerPage: PropTypes.bool,
+  tooltipColumns: PropTypes.arrayOf(PropTypes.string),
+  tooltipConfig: PropTypes.object,
 }
 
 Table.defaultProps = {
@@ -510,6 +523,11 @@ Table.defaultProps = {
   headerTitle: false,
   title: '',
   hideRowsPerPage: false,
+  tooltipColumns: [],
+  tooltipConfig: {
+    placement: 'top',
+    arrow: false,
+  },
 }
 Table.Column = TableColumn
 Table.filters = { DefaultFilter, SelectionFilter, RangeFilter, QuantitaveFilter, QualitativeFilter }
