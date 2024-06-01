@@ -10,5 +10,6 @@ ignores: [
     "jest",
     "jest-*",
     "size-limit",
+    "storybook",
     "json2csv",
 ]
