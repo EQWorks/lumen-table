@@ -17,13 +17,14 @@
     "prepack": "yarn build",
     "test": "jest",
     "prepublishOnly": "yarn eslint src/ && yarn build",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "storybook": "storybook dev",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@eqworks/lumen-labs": "^0.1.0-alpha.104",
     "prop-types": "^15.7.2",
     "react-table": "^7.6.0",
+    "regenerator-runtime": "^0.14.1",
     "use-cached": "^2.0.0"
   },
   "devDependencies": {
@@ -34,11 +35,13 @@
     "@babel/preset-react": "^7.9.4",
     "@material-ui/core": "^4.11.3",
     "@size-limit/preset-small-lib": "^4.6.0",
-    "@storybook/addon-actions": "^6.0.26",
-    "@storybook/addon-essentials": "^6.0.26",
-    "@storybook/addon-links": "^6.0.26",
-    "@storybook/react": "^6.0.26",
-    "@storybook/storybook-deployer": "^2.8.7",
+    "@storybook/addon-actions": "^8.1.5",
+    "@storybook/addon-essentials": "^8.1.5",
+    "@storybook/addon-links": "^8.1.5",
+    "@storybook/addon-webpack5-compiler-babel": "^3.0.3",
+    "@storybook/react": "^8.1.5",
+    "@storybook/react-webpack5": "^8.1.5",
+    "@storybook/storybook-deployer": "^2.8.16",
     "babel-jest": "^25.1.0",
     "babel-loader": "^8.1.0",
     "eslint": "^7.11.0",
@@ -46,7 +49,8 @@
     "jest-cli": "^25.1.0",
     "json2csv": "^5.0.5",
     "react": "^16.14.0",
-    "size-limit": "^4.6.0"
+    "size-limit": "^4.6.0",
+    "storybook": "^8.1.5"
   },
   "peerDependencies": {
     "@material-ui/core": "^4.11.3",
