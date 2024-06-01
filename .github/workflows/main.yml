@@ -2,8 +2,6 @@ name: Main
 
 on:
   pull_request:
-    branches:
-      - main
   push:
     branches:
       - main
@@ -11,9 +9,6 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,7 +16,7 @@ jobs:
       - name: Set Node.js version
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: '.nvmrc'
           cache: 'yarn'
 
       - run: yarn install
@@ -31,9 +26,6 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -41,7 +33,7 @@ jobs:
       - name: Set Node.js version
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: '.nvmrc'
           cache: 'yarn'
 
       - run: yarn install
@@ -51,9 +43,6 @@ jobs:
 
   depcheck:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -61,7 +50,7 @@ jobs:
       - name: Set Node.js version
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: '.nvmrc'
           registry-url: https://npm.pkg.github.com/
           scope: '@eqworks'
           always-auth: true
@@ -81,7 +70,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 14.x
+          node-version-file: '.nvmrc'
       - name: Create auto-tag
         if: ${{ success() }}
         run: npx @eqworks/release tag --github -v
