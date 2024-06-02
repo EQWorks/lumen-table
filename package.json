@@ -17,7 +17,7 @@
     "prepack": "yarn build",
     "test": "jest",
     "prepublishOnly": "yarn eslint src/ && yarn build",
-    "storybook": "storybook dev",
+    "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
   "dependencies": {
