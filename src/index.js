@@ -287,7 +287,6 @@ export const Table = forwardRef(({
             >
               <div className={`table__body-item ${classes.tableBodyItem || ''}`}>
                 {cell.render('Cell')}
-                {console.log('cell: ', cell)}
               </div>
             </td>
           ))}
