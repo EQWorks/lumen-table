@@ -9,24 +9,24 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 12.x
+          node-version-file: '.nvmrc'
       - run: yarn install
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: 12.x
+          node-version-file: '.nvmrc'
           registry-url: https://registry.npmjs.org/
           scope: '@eqworks'
       - run: yarn publish --tag alpha --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.CD_NPM_TOKEN_PUBLISH }}
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: 12.x
+          node-version-file: '.nvmrc'
           registry-url: https://npm.pkg.github.com/
           scope: '@eqworks'
           always-auth: true
