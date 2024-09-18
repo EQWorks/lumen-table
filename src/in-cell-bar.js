@@ -23,7 +23,7 @@ const useStyles = ({ bgColor, barLength, barHeight }) => makeStyles({
 const maxValsPerColumn = {}
 const computeMaxVals = (data, columnID, maxValsPerColumn) => {
   if (!maxValsPerColumn[columnID]) {
-    const max = Math.max(...data.map((column) => parseInt(column[columnID])))
+    const max = Math.max(...data.map((column) => parseFloat(column[columnID])))
     maxValsPerColumn[columnID] = max
   }
   return maxValsPerColumn
@@ -102,9 +102,9 @@ const InCellBar = ({ data, column, value, barColumns, formatData, barColumnsColo
 
   const styles = useStyles({
     bgColor: barColumnsColor.length === 2 ? 
-      adjustFixedRange(getColorAmount(_maxVals[column.id], Math.ceil(Number(value))), barColumnsColor) :
-      adjustBarColor(getColorAmount(_maxVals[column.id], Math.ceil(Number(value))), barColumnsColor),
-    barLength: ((value/_maxVals[column.id]) * 100).toFixed(2),
+      adjustFixedRange(getColorAmount(_maxVals[column.id], parseFloat(value)), barColumnsColor) :
+      adjustBarColor(getColorAmount(_maxVals[column.id], parseFloat(value)), barColumnsColor),
+    barLength: ((parseFloat(value) / _maxVals[column.id]) * 100).toFixed(2),
     barHeight: barColumnsColor.length === 2 ? 2 : 0.875,
   })
 
