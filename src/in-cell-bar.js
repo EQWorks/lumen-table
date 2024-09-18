@@ -102,7 +102,7 @@ const InCellBar = ({ data, column, value, barColumns, formatData, barColumnsColo
 
   const numDigits = _value.replace(/[^0-9]/g, '').length
 
-  const scalingFactor = Math.min(90 + (numDigits * 3), 100)
+  const scalingFactor = Math.max(90 - ((numDigits - 2) * 3), 50)
 
   const styles = useStyles({
     bgColor: barColumnsColor.length === 2 ? 
