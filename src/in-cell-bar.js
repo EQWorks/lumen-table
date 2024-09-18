@@ -100,7 +100,7 @@ const InCellBar = ({ data, column, value, barColumns, formatData, barColumnsColo
   }
   const _maxVals = useMemo(() => computeMaxVals(data, column.id, maxValsPerColumn), [data, column, maxValsPerColumn])
 
-  const numDigits = _value.replace(/[^0-9]/g, '').length;
+  const numDigits = _value.replace(/[^0-9]/g, '').length
 
   const scalingFactor = Math.min(90 + (numDigits * 3), 100)
 
