@@ -100,11 +100,15 @@ const InCellBar = ({ data, column, value, barColumns, formatData, barColumnsColo
   }
   const _maxVals = useMemo(() => computeMaxVals(data, column.id, maxValsPerColumn), [data, column, maxValsPerColumn])
 
+  const numDigits = _value.replace(/[^0-9]/g, '').length;
+
+  const scalingFactor = Math.min(90 + (numDigits * 3), 100)
+
   const styles = useStyles({
     bgColor: barColumnsColor.length === 2 ? 
-      adjustFixedRange(getColorAmount(_maxVals[column.id], parseFloat(value)), barColumnsColor) :
+      adjustFixedRange(getColorAmount(_maxVals[column.id], parseFloat(value)), barColumnsColor):
       adjustBarColor(getColorAmount(_maxVals[column.id], parseFloat(value)), barColumnsColor),
-    barLength: ((parseFloat(value) / _maxVals[column.id]) * 100).toFixed(2),
+    barLength: ((parseFloat(value) / _maxVals[column.id]) * scalingFactor).toFixed(2),
     barHeight: barColumnsColor.length === 2 ? 2 : 0.875,
   })
 
