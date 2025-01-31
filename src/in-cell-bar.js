@@ -108,7 +108,7 @@ const InCellBar = ({ data, column, value, barColumns, formatData, barColumnsColo
         const logValue = Math.log(parseFloat(value) + 1)
         const normalizedValue = logValue / logMaxVal
         return Math.max(minBarLength, Math.min(maxBarLength, normalizedValue * 100))
-      }
+      },
     }
   }, [data, column, formatData])
 
