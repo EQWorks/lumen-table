@@ -20,14 +20,14 @@ const useStyles = ({ bgColor, barLength, barHeight }) => makeStyles({
   },
 })
 
-const maxValsPerColumn = {}
-const computeMaxVals = (data, columnID, maxValsPerColumn) => {
-  if (!maxValsPerColumn[columnID]) {
-    const max = Math.max(...data.map((column) => parseFloat(column[columnID])))
-    maxValsPerColumn[columnID] = max
-  }
-  return maxValsPerColumn
-}
+// const maxValsPerColumn = {}
+// const computeMaxVals = (data, columnID, maxValsPerColumn) => {
+//   if (!maxValsPerColumn[columnID]) {
+//     const max = Math.max(...data.map((column) => parseFloat(column[columnID])))
+//     maxValsPerColumn[columnID] = max
+//   }
+//   return maxValsPerColumn
+// }
 
 // Helper function to convert a hex color to RGB
 const hexToRGB = (hex) => {
