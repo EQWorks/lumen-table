@@ -20,14 +20,14 @@ const useStyles = ({ bgColor, barLength, barHeight }) => makeStyles({
   },
 })
 
-// const maxValsPerColumn = {}
-// const computeMaxVals = (data, columnID, maxValsPerColumn) => {
-//   if (!maxValsPerColumn[columnID]) {
-//     const max = Math.max(...data.map((column) => parseFloat(column[columnID])))
-//     maxValsPerColumn[columnID] = max
-//   }
-//   return maxValsPerColumn
-// }
+const maxValsPerColumn = {}
+const computeMaxVals = (data, columnID, maxValsPerColumn) => {
+  if (!maxValsPerColumn[columnID]) {
+    const max = Math.max(...data.map((column) => parseFloat(column[columnID])))
+    maxValsPerColumn[columnID] = max
+  }
+  return maxValsPerColumn
+}
 
 // Helper function to convert a hex color to RGB
 const hexToRGB = (hex) => {
@@ -98,32 +98,33 @@ const InCellBar = ({ data, column, value, barColumns, formatData, barColumnsColo
   if (isNaN(Number(value)) || (barColumns.length && !barColumns.includes(column.id)) || !barColumns) {
     return <p>{_value}</p>
   }
-  const _maxVals = useMemo(() => {
-    const maxVal = Math.max(...data.map(row => parseFloat(getFormattedValue(row[column.id], formatData, column.Header))))
-    const logMaxVal = Math.log(maxVal + 1)
-    const minBarLength = 10
-    const maxBarLength = 90
-    return {
-      [column.id]: (value) => {
-        const logValue = Math.log(parseFloat(value) + 1)
-        const normalizedValue = logValue / logMaxVal
-        return Math.max(minBarLength, Math.min(maxBarLength, normalizedValue * 100))
-      },
-    }
+
+  const _maxVals = useMemo(() => computeMaxVals(data, column.id, maxValsPerColumn), [data, column, maxValsPerColumn])
+  const maxValue = Math.max(...data.map((row) => parseFloat(row[column.id])))
+  const maxDigits = useMemo(() => {
+    return Math.max(
+      ...data.map((row) =>
+        String(getFormattedValue(row[column.id], formatData, column.Header)).replace(/[^0-9]/g, '').length
+      )
+    )
   }, [data, column, formatData])
 
-  const barLength = _maxVals[column.id](value).toFixed(2)
+  const baseScalingFactor = Math.max(90 - (maxDigits * 4), 50)
+  const normalizedValue = parseFloat(value) / maxValue
+  const scaledValue = Math.pow(normalizedValue, 0.85)
+  const barLength = (scaledValue * baseScalingFactor).toFixed(2)
 
   const styles = useStyles({
-    bgColor: barColumnsColor.length === 2 ? 
-      adjustFixedRange(getColorAmount(_maxVals[column.id], parseFloat(value)), barColumnsColor):
-      adjustBarColor(getColorAmount(_maxVals[column.id], parseFloat(value)), barColumnsColor),
+    bgColor:
+      barColumnsColor.length === 2
+        ? adjustFixedRange(getColorAmount(maxValue, parseFloat(value)), barColumnsColor)
+        : adjustBarColor(getColorAmount(maxValue, parseFloat(value)), barColumnsColor),
     barLength: barLength,
     barHeight: barColumnsColor.length === 2 ? 2 : 0.875,
   })
 
   return (
-    <div className='flex items-center'>
+    <div className="flex items-center">
       <div className={styles.bar} />
       <p className={styles.value}>{_value}</p>
     </div>
