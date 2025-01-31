@@ -98,18 +98,21 @@ const InCellBar = ({ data, column, value, barColumns, formatData, barColumnsColo
   if (isNaN(Number(value)) || (barColumns.length && !barColumns.includes(column.id)) || !barColumns) {
     return <p>{_value}</p>
   }
-  const _maxVals = useMemo(() => computeMaxVals(data, column.id, maxValsPerColumn), [data, column, maxValsPerColumn])
-  const maxDigits = useMemo(() => {
-    return Math.max(...data.map(row => 
-      String(getFormattedValue(row[column.id], formatData, column.Header))
-        .replace(/[^0-9]/g, '')
-        .length,
-    ))
+  const _maxVals = useMemo(() => {
+    const maxVal = Math.max(...data.map(row => parseFloat(getFormattedValue(row[column.id], formatData, column.Header))))
+    const logMaxVal = Math.log(maxVal + 1)
+    const minBarLength = 10
+    const maxBarLength = 90
+    return {
+      [column.id]: (value) => {
+        const logValue = Math.log(parseFloat(value) + 1)
+        const normalizedValue = logValue / logMaxVal
+        return Math.max(minBarLength, Math.min(maxBarLength, normalizedValue * 100))
+      }
+    }
   }, [data, column, formatData])
-  const baseScalingFactor = Math.max(90 - ((maxDigits - 2) * 4), 50)
-  const normalizedValue = parseFloat(value) / _maxVals[column.id]
-  const scaledValue = Math.pow(normalizedValue, 0.85)
-  const barLength = (scaledValue * baseScalingFactor).toFixed(2)
+
+  const barLength = _maxVals[column.id](value).toFixed(2)
 
   const styles = useStyles({
     bgColor: barColumnsColor.length === 2 ? 
