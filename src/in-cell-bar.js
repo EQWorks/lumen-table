@@ -105,7 +105,7 @@ const InCellBar = ({ data, column, value, barColumns, formatData, barColumnsColo
       ...data.map((row) =>
         String(getFormattedValue(row[column.id], formatData, column.Header)).replace(/[^0-9]/g, '').length
       ),
-    ),
+    )
   }, [data, column, formatData])
 
   const baseScalingFactor = Math.max(90 - (maxDigits * 4), 50)
