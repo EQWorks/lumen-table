@@ -98,15 +98,14 @@ const InCellBar = ({ data, column, value, barColumns, formatData, barColumnsColo
   if (isNaN(Number(value)) || (barColumns.length && !barColumns.includes(column.id)) || !barColumns) {
     return <p>{_value}</p>
   }
-
   const _maxVals = useMemo(() => computeMaxVals(data, column.id, maxValsPerColumn), [data, column, maxValsPerColumn])
   const maxValue = Math.max(...data.map((row) => parseFloat(row[column.id])))
   const maxDigits = useMemo(() => {
     return Math.max(
       ...data.map((row) =>
         String(getFormattedValue(row[column.id], formatData, column.Header)).replace(/[^0-9]/g, '').length
-      )
-    )
+      ),
+    ),
   }, [data, column, formatData])
 
   const baseScalingFactor = Math.max(90 - (maxDigits * 4), 50)
@@ -115,10 +114,9 @@ const InCellBar = ({ data, column, value, barColumns, formatData, barColumnsColo
   const barLength = (scaledValue * baseScalingFactor).toFixed(2)
 
   const styles = useStyles({
-    bgColor:
-      barColumnsColor.length === 2
-        ? adjustFixedRange(getColorAmount(maxValue, parseFloat(value)), barColumnsColor)
-        : adjustBarColor(getColorAmount(maxValue, parseFloat(value)), barColumnsColor),
+    bgColor: barColumnsColor.length === 2 ? 
+      adjustFixedRange(getColorAmount(_maxVals[column.id], parseFloat(value)), barColumnsColor):
+      adjustBarColor(getColorAmount(_maxVals[column.id], parseFloat(value)), barColumnsColor),
     barLength: barLength,
     barHeight: barColumnsColor.length === 2 ? 2 : 0.875,
   })
