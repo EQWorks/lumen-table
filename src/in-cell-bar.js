@@ -23,7 +23,7 @@ const useStyles = ({ bgColor, barLength, barHeight }) => makeStyles({
 const maxValsPerColumn = {}
 const computeMaxVals = (data, columnID, maxValsPerColumn) => {
   if (!maxValsPerColumn[columnID]) {
-    const max = Math.max(...data.map((column) => parseInt(column[columnID])))
+    const max = Math.max(...data.map((column) => parseFloat(column[columnID])))
     maxValsPerColumn[columnID] = max
   }
   return maxValsPerColumn
@@ -99,17 +99,30 @@ const InCellBar = ({ data, column, value, barColumns, formatData, barColumnsColo
     return <p>{_value}</p>
   }
   const _maxVals = useMemo(() => computeMaxVals(data, column.id, maxValsPerColumn), [data, column, maxValsPerColumn])
+  const maxValue = Math.max(...data.map((row) => parseFloat(row[column.id])))
+  const maxDigits = useMemo(() => {
+    return Math.max(
+      ...data.map((row) =>
+        String(getFormattedValue(row[column.id], formatData, column.Header)).replace(/[^0-9]/g, '').length,
+      ),
+    )
+  }, [data, column, formatData])
+
+  const baseScalingFactor = Math.max(90 - (maxDigits * 4), 50)
+  const normalizedValue = parseFloat(value) / maxValue
+  const scaledValue = Math.pow(normalizedValue, 0.85)
+  const barLength = (scaledValue * baseScalingFactor).toFixed(2)
 
   const styles = useStyles({
     bgColor: barColumnsColor.length === 2 ? 
-      adjustFixedRange(getColorAmount(_maxVals[column.id], Math.ceil(Number(value))), barColumnsColor) :
-      adjustBarColor(getColorAmount(_maxVals[column.id], Math.ceil(Number(value))), barColumnsColor),
-    barLength: ((value/_maxVals[column.id]) * 100).toFixed(2),
+      adjustFixedRange(getColorAmount(_maxVals[column.id], parseFloat(value)), barColumnsColor):
+      adjustBarColor(getColorAmount(_maxVals[column.id], parseFloat(value)), barColumnsColor),
+    barLength: barLength,
     barHeight: barColumnsColor.length === 2 ? 2 : 0.875,
   })
 
   return (
-    <div className='flex items-center'>
+    <div className="flex items-center">
       <div className={styles.bar} />
       <p className={styles.value}>{_value}</p>
     </div>
