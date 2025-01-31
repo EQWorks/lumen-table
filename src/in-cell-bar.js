@@ -103,7 +103,7 @@ const InCellBar = ({ data, column, value, barColumns, formatData, barColumnsColo
   const maxDigits = useMemo(() => {
     return Math.max(
       ...data.map((row) =>
-        String(getFormattedValue(row[column.id], formatData, column.Header)).replace(/[^0-9]/g, '').length
+        String(getFormattedValue(row[column.id], formatData, column.Header)).replace(/[^0-9]/g, '').length,
       ),
     )
   }, [data, column, formatData])
